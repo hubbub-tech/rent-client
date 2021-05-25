@@ -1,19 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React from 'react';
+import Navbar from './components/Navbar'
 
-function App() {
-  const [currentTime, setCurrentTime] = useState(0);
-
-  useEffect(() => {
-    fetch('/time').then(res => res.json()).then(data => {
-      setCurrentTime(data.time);
+const App = () => {
+  const [myUsers, setMyUsers] = React.useState([]);
+  React.useEffect(() => {
+    fetch('/test').then(res => res.json()).then(data => {
+      setMyUsers(data.users);
     });
   }, []);
-
+  const formatName = (unformattedName) => {
+    let _formattedName = unformattedName.split(",")
+    let formattedName = _formattedName.join(" ")
+    return formattedName;
+  };
   return (
     <div className="App">
+      <Navbar />
       <header className="App-header">
-        <p>The current time is {currentTime}.</p>
+        <h1>My Users</h1>
+        {myUsers.map((user) => (
+          <div className="users" key={user.id}>
+            <h3>Hi, {formatName(user.name)} @ {user.address_street}</h3>
+          </div>
+        ))}
       </header>
     </div>
   );

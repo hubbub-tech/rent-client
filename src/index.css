@@ -11,3 +11,99 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6
+{
+  font-family: 'Roboto Slab', serif;
+}
+
+.btn-primary {
+  background-color: #69b6e7;
+  border: #69b6e7;
+}
+
+.btn-main {
+  background-color: #ffffff;
+  border: #ffffff;
+  color: #69b6e7;
+}
+
+.btn-primary:hover .btn-main:hover {
+  background-color: #3d4fe0;
+  border: #3d4fe0;
+}
+
+a, .btn-link {
+  color: #69b6e7;
+  text-decoration: none;
+}
+
+a:hover, .btn-link:hover {
+  color: #3d4fe0;
+  text-decoration: none;
+}
+
+.badge-primary {
+  background-color: #e76977;
+}
+
+.text-alert {
+  color: #e76977;
+}
+
+.bg-hubbub {
+  color: #69b6e7;
+}
+
+a.custom-card {
+  color: inherit;
+}
+
+.zoom-in:hover {
+  transform: scale(1.05);
+  transition-duration: 300ms;
+}
+
+a.custom-card:hover {
+  color: inherit;
+  box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+.hide {
+  display: none;
+}
+
+.category:hover + .hide {
+  display: block;
+}
+
+.index-background {
+  background-image: linear-gradient(#69b6e7, #ffffff);
+}
+
+.crop-circle {
+  width: 300px;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.crop-circle img {
+  max-width: 100%;
+  margin: -30px -50px -100px 0;
+}
+
+hr.divider {
+ margin: 0em;
+ border-width: 2px;
+}
+
+@media (min-width: 300px) and (max-width: 800px) {
+   .collapse-sub {
+       display: none !important;
+   }
+}
