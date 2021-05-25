@@ -1,45 +1,38 @@
+import time
 import json
-import functools
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, redirect, session, g, request, url_for
 from blubber_orm import Testimonials, Items, Orders, Details, Users, Profiles
 
-from .auth import login_required
-from tools.build import validate_edit_account, validate_edit_password
+from api.tools.build import validate_edit_account, validate_edit_password
+from api.tools.settings import login_required, AWS
 
 bp = Blueprint('main', __name__)
 
-def editing_access(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if item.lister_id == g.user.id or session.get("admin_access") == True:
-            flash("You do not editor access to this item.")
-            return redirect("/")
-        return view(**kwargs)
-    return wrapped_view
-
-@bp.route("/", methods=["POST", "GET"])
-def index():
-    testimonials = Testimonials.get_all()
-
-    testimonials_json = []
-    for testimonial in testimonials:
-        testimonial_json = json.dump(testimonial)
-        testimonials_json.append(testimonial_json)
-
-    return {"testimonials": testimonials_json}
+@bp.route("/test", methods=["POST", "GET"])
+def test():
+    #testimonial, = Testimonials.filter({"user_id": 1})
+    #testimonial_dict = testimonial.to_dict()
+    #print(testimonial_dict)
+    #return {"testimonial": testimonial_dict}
+    _users = Users.filter({"is_blocked": False})
+    users = []
+    for user in _users:
+        user_dict = user.to_dict()
+        users.append(user_dict)
+    return {"users": users}
 
 #keep track of items being rented, items owned, item reviews and item edits
 @bp.route("/accounts/u/<username>")
 @login_required
 def account(username):
-    _, id = username.split(".")
-    searched_user = Users.get(id)
-    photo_url = "/".join([aws.S3_LINK, "users"])
+    searched_user = Users.get_by_username(username)
+    photo_url = "/".join([AWS.S3_LINK, "users"])
+
     orders = Orders.filter({"renter_id": searched_user.id})
-    rentals = searched_user.rentals
-    listings = searched_user.listings
+    listings = Items.filter({"lister_id": searched_user.id})
+    rentals = [Items.get(order.item_id) for order in orders]
     return {
         #is the current user the owner of the account?
         "user": searched_user,
@@ -52,7 +45,7 @@ def account(username):
 @bp.route("/accounts/u/edit", methods=["POST", "GET"])
 @login_required
 def edit_account():
-    photo_url = "/".join([aws.S3_LINK, "users"])
+    photo_url = "/".join([AWS.S3_LINK, "users"])
 
     if request.method == "POST":
         form_data = {
@@ -77,7 +70,7 @@ def edit_account():
                     "self": g.user,
                     "image" : image,
                     "directory" : "users",
-                    "bucket" : aws.S3_BUCKET
+                    "bucket" : AWS.S3_BUCKET
                 }
                 response = upload_image(image_data)
                 if response["is_valid"]:
@@ -125,23 +118,23 @@ def remove_pic():
 @login_required
 def hide_item(item_id, toggle):
     item_to_hide = Items.get(item_id)
-    if item_to_hide._lister_id == g.user.id or session.get("admin_access") == True:
-        boolean_conversion = {0: True, 1: False}
-        item_to_hide.is_available = boolean_conversion[toggle]
-        if boolean_conversion[toggle]:
-            flash("Item hidden. Come back when you are ready to reveal it.")
-        else:
-            flash("Item revealed. Others can now see it in inventory.")
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+    #TODO: permissioned access based on ownership or admin access
+    boolean_conversion = {0: True, 1: False}
+    item_to_hide.is_available = boolean_conversion[toggle]
+    if boolean_conversion[toggle]:
+        flash("Item hidden. Come back when you are ready to reveal it.")
+    else:
+        flash("Item revealed. Others can now see it in inventory.")
+        return redirect(f"/accounts/u/{g.user.make_username()}")
 
 #user edit items
 @bp.route("/accounts/i/edit/id=<int:item_id>", methods=["POST", "GET"])
 @login_required
-@editing_access
 def edit_item(item_id):
     format = "%m/%d/%Y"
-    photo_url = "/".join([aws.S3_LINK, "items"])
+    photo_url = "/".join([AWS.S3_LINK, "items"])
     item = Items.get(item_id)
+    #TODO: permission based on admin access and ownership
     if request.method == "POST":
         form_data = {
             "price": request.form.get("price", item.price),
@@ -159,7 +152,7 @@ def edit_item(item_id):
                 "self" : item,
                 "image" : image,
                 "directory" : "items",
-                "bucket" : aws.S3_BUCKET
+                "bucket" : AWS.S3_BUCKET
             }
             response = upload_image(image_data)
             flash(response["message"])
@@ -171,7 +164,7 @@ def edit_item(item_id):
 @bp.route("/account/i/review/id=<int:item_id>", methods=["POST", "GET"])
 @login_required
 def review_item(item_id):
-    photo_url = "/".join([aws.S3_LINK, "items"])
+    photo_url = "/".join([AWS.S3_LINK, "items"])
     item = Items.get(item_id)
     if item.lister_id != g.user.id:
         if request.method == "POST":
