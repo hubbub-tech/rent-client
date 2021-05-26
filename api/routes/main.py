@@ -7,6 +7,7 @@ from blubber_orm import Testimonials, Items, Orders, Details, Users, Profiles
 
 from api.tools.build import validate_edit_account, validate_edit_password
 from api.tools.settings import login_required, AWS
+from api.tools import blubber_instances_to_dict
 
 bp = Blueprint('main', __name__)
 
@@ -17,10 +18,7 @@ def test():
     #print(testimonial_dict)
     #return {"testimonial": testimonial_dict}
     _users = Users.filter({"is_blocked": False})
-    users = []
-    for user in _users:
-        user_dict = user.to_dict()
-        users.append(user_dict)
+    users = blubber_instances_to_dict(_users)
     return {"users": users}
 
 #keep track of items being rented, items owned, item reviews and item edits
@@ -28,24 +26,25 @@ def test():
 @login_required
 def account(username):
     searched_user = Users.get_by_username(username)
-    photo_url = "/".join([AWS.S3_LINK, "users"])
+    photo_url = AWS.get_url("users")
 
     orders = Orders.filter({"renter_id": searched_user.id})
     listings = Items.filter({"lister_id": searched_user.id})
     rentals = [Items.get(order.item_id) for order in orders]
+
     return {
         #is the current user the owner of the account?
-        "user": searched_user,
-        "orders": orders,
-        "rentals": rentals,
-        "listings": listings
+        "user": searched_user.to_dict(),
+        "orders": blubber_instances_to_dict(orders),
+        "rentals": blubber_instances_to_dict(rentals),
+        "listings": blubber_instances_to_dict(listings)
     }
 
 #edit personal account
 @bp.route("/accounts/u/edit", methods=["POST", "GET"])
 @login_required
 def edit_account():
-    photo_url = "/".join([AWS.S3_LINK, "users"])
+    photo_url = AWS.get_url("users")
 
     if request.method == "POST":
         form_data = {
@@ -81,10 +80,7 @@ def edit_account():
         else:
             flash(response["message"])
             return redirect("/accounts/u/edit")
-    return {
-        "user": g.user,
-        "photo_url": photo_url
-        }
+    return {"user": g.user.to_dict(), "photo_url": photo_url}
 
 #edit personal password
 #check that the confirmation pass and new pass match on frontend
@@ -104,7 +100,7 @@ def edit_password():
         else:
             flash(response["message"])
             return redirect("/accounts/u/password")
-    return {"user": g.user}
+    return {"user": g.user.to_dict()}
 
 #remove user profile picture
 @bp.route("/accounts/u/remove-picture")
@@ -132,7 +128,7 @@ def hide_item(item_id, toggle):
 @login_required
 def edit_item(item_id):
     format = "%m/%d/%Y"
-    photo_url = "/".join([AWS.S3_LINK, "items"])
+    photo_url = AWS.get_url("items")
     item = Items.get(item_id)
     #TODO: permission based on admin access and ownership
     if request.method == "POST":
@@ -158,13 +154,13 @@ def edit_item(item_id):
             flash(response["message"])
         flash(f"Your {item.name} has been updated!")
         return redirect(f"/account/u/{g.user.make_username()}")
-    return {"item": item, "photo_url": photo_url}
+    return {"item": item.to_dict(), "photo_url": photo_url}
 
 #review an item
 @bp.route("/account/i/review/id=<int:item_id>", methods=["POST", "GET"])
 @login_required
 def review_item(item_id):
-    photo_url = "/".join([AWS.S3_LINK, "items"])
+    photo_url = AWS.get_url("items")
     item = Items.get(item_id)
     if item.lister_id != g.user.id:
         if request.method == "POST":
@@ -177,21 +173,7 @@ def review_item(item_id):
             new_review = create_review(form_data)
             flash(f"The {item.name} that you rented has been reviewed.")
             return redirect(f"/account/u/{g.user.make_username()}")
-        return {"item": item, "photo_url": photo_url}
+        return {"item": item.to_dict(), "photo_url": photo_url}
     else:
         flash("You cannot review your own item.")
         return redirect(f"/account/u/{g.user.make_username()}")
-
-#static routes
-@bp.route('/help/faqs')
-def faqs():
-    faqs = faq_text
-    return render_template('main/faqs.html', faqs=faqs)
-
-@bp.route('/our-story')
-def story():
-    return render_template('main/story.html')
-
-@bp.route('/callouts')
-def callouts():
-    return render_template('main/callouts.html')
