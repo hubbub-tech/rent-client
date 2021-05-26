@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 
 const App = () => {
   const [myUsers, setMyUsers] = React.useState([]);
@@ -15,7 +16,7 @@ const App = () => {
   };
   return (
     <div className="App">
-      <Navbar />
+      <Navbar loggedIn={false}/>
       <header className="App-header">
         <h1>My Users</h1>
         {myUsers.map((user) => (
@@ -24,6 +25,7 @@ const App = () => {
           </div>
         ))}
       </header>
+      <Footer />
     </div>
   );
 }
