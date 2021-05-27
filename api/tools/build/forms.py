@@ -32,6 +32,35 @@ def validate_edit_password(form_data):
         "message" : message
         }
 
+def validate_registration(form_data):
+    is_valid = False
+    loaded_user, = Users.filter({"email": form_data["email"]})
+    if loaded_user:
+        message = "You might already have an account. Try logging in!"
+    else:
+        is_valid = True
+        message = "You're registered on Hubbub, now login to get started!"
+    return {
+        "is_valid" : is_valid,
+        "message" : message
+        }
+
+def validate_login(form_data):
+    is_valid = False
+    loaded_user = Users.filter({"email": form_data["email"]})
+    if loaded_user:
+        if not check_password_hash(loaded_user.password, form_data["password"]):
+            message = "Sorry, invalid password and email combination."
+        else:
+            is_valid = True
+            message = "You logged in, welcome back!"
+    else:
+        message = "Sorry, invalid password and email combination."
+    return {
+        "is_valid" : is_valid,
+        "message" : message
+        }
+
 #done 5/21
 def upload_image(image_data):
     is_valid = False

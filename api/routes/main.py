@@ -13,13 +13,11 @@ bp = Blueprint('main', __name__)
 
 @bp.route("/test", methods=["POST", "GET"])
 def test():
-    #testimonial, = Testimonials.filter({"user_id": 1})
-    #testimonial_dict = testimonial.to_dict()
-    #print(testimonial_dict)
-    #return {"testimonial": testimonial_dict}
+    _testimonials = Testimonials.get_all()
+    testimonials = blubber_instances_to_dict(_testimonials)
     _users = Users.filter({"is_blocked": False})
     users = blubber_instances_to_dict(_users)
-    return {"users": users}
+    return {"users": users, "testimonials": testimonials}
 
 #keep track of items being rented, items owned, item reviews and item edits
 @bp.route("/accounts/u/<username>")

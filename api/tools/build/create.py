@@ -1,11 +1,17 @@
 from datetime import datetime, date
 from blubber_orm import Users, Profiles, Carts
 from blubber_orm import Items, Details, Calendars
+from blubber_orm import Addresses
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
 #done
 def create_user(insert_data):
+    user_address = Addresses.filter(insert_data["address"])
+    #NOTE: an empty list returns false not none
+    if not user_address:
+        user_address = Addresses.insert(insert_data["address"])
+
     new_user = Users.insert(insert_data["user"])
 
     insert_data["profile"]["id"] = new_user.id
@@ -13,7 +19,6 @@ def create_user(insert_data):
 
     Profiles.insert(insert_data["profile"])
     Carts.insert(insert_data["cart"])
-
     return new_user
 
 #done
