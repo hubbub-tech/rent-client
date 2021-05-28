@@ -3,7 +3,9 @@ import json
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, redirect, session, g, request, url_for
-from blubber_orm import Testimonials, Items, Orders, Details, Users, Profiles
+
+from blubber_orm import Users, Profiles, Orders
+from blubber_orm import Items, Details, Testimonials
 
 from api.tools.build import validate_edit_account, validate_edit_password
 from api.tools.settings import login_required, AWS
