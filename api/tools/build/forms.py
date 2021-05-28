@@ -1,7 +1,10 @@
 import boto3
+from datetime import datetime, date, timedelta
 from botocore.exceptions import NoCredentialsError
 from werkzeug.security import check_password_hash, generate_password_hash
-from blubber_orm import Users
+from blubber_orm import Users, Items
+
+from api.tools.settings import AWS
 
 #done 5/21
 def validate_edit_account(form_data):
@@ -61,7 +64,51 @@ def validate_login(form_data):
         "message" : message
         }
 
-#done 5/21
+# for now does nothing but will be import for validation
+def validate_listing(form_data, format):
+    is_valid = True
+    message = "Successful listing! Go to the Rent Page to check it out!"
+    return {
+        "is_valid" : is_valid,
+        "message" : message
+        }
+
+def validate_rental_bounds(item, rental_range, format):
+    is_valid = False
+    min_days_to_rental_start = 2
+    max_rental_period = 365
+    rental_start_date = datetime.strptime(rental_range["date_started"], format).date()
+    rental_end_date = datetime.strptime(rental_range["date_ended"], format).date()
+    if date.today() + timedelta(days=4) >= item.calendar.date_ended:
+        Items.set(item.id, {"is_available": False})
+        message = "Sorry, the item is not currently available."
+
+    elif rental_start_date < item.calendar.start_listing:
+        message = f"""
+            The {item.name} is unavailable for the period you requested. It
+            is listed starting {item.calendar.date_started.strftime("%B %-d, %Y")} to
+            {item.calendar.date_ended.strftime("%B %-d, %Y")}.
+            """
+    elif rental_end_date > item.calendar.end_listing:
+        message = f"""
+            The {item.name} is unavailable for the period you requested. It
+            is listed starting {item.calendar.date_started.strftime("%B %-d, %Y")} to
+            {item.calendar.date_ended.strftime("%B %-d, %Y")}.
+            """
+    elif rental_start_date < date.today() + timedelta(days=min_days_to_rental_start):
+        message = f"The earliest your rental can start is {min_days_to_rental_start} days from today."
+
+    elif (rental_end_date - rental_start_date).days > max_rental_period:
+        message = f"Rentals cannot exceed {max_rental_period} days."
+
+    else:
+        is_valid = True
+        message = "Your proposed rental is within the calendar bounds."
+    return {
+        "is_valid": is_valid,
+        "message": message
+        }
+
 def upload_image(image_data):
     is_valid = False
 
@@ -71,7 +118,7 @@ def upload_image(image_data):
     bucket = image_data["bucket"]
 
     path = f"{dir}/{_self.id}.jpg"
-    s3_resource = boto3.resource("s3")
+    s3_resource = AWS.get_s3_resource()
     try:
         s3_resource.Bucket(bucket).put_object(Key=path, Body=image, ACL='public-read')
     except FileNotFoundError:

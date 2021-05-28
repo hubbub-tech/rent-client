@@ -40,6 +40,14 @@ class AWSConfig:
             AWSConfig.S3_OBJECT = s3
 
     @staticmethod
+    def get_s3_resource():
+        if AWSConfig._instance:
+            s3_resource = boto3.resource("s3")
+            return s3_resource
+        else:
+            raise Exception("An instance of the AWSConfig must be created before accessing s3.")
+
+    @staticmethod
     def get_url(path):
         url = "/".join([AWS.S3_LINK, path])
         return url
