@@ -2,6 +2,7 @@ from datetime import datetime, date
 from blubber_orm import Users, Profiles, Carts
 from blubber_orm import Items, Details, Calendars, Tags
 from blubber_orm import Addresses, Reservations
+from blubber_orm import Orders
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -71,3 +72,7 @@ def create_reservation(insert_data):
         action_message, waitlist_message = generate_proposed_period(item, first_sentence)
 
     return reservation, action_message, waitlist_message
+
+def create_order(order_data):
+    new_order = Orders.insert(order_data)
+    return new_order
