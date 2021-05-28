@@ -4,13 +4,27 @@ from datetime import datetime
 from flask import session, redirect, flash, g
 from blubber_orm import Users, Items, Details
 
+from .transact import verify_rental_token
+
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if g.user is None:
             flash('Login to view this page.')
             return redirect("/login")
-        return view(**kwargs)
+        else:
+            return view(**kwargs)
+    return wrapped_view
+
+def transaction_auth(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        token_response = verify_rental_token(kwargs["token"], g.user.id, g.user.cart._total)
+        if token_response:
+            return view(**kwargs)
+        else:
+            flash("You are not authorized to complete this transaction.")
+            return redirect("/checkout")
     return wrapped_view
 
 def login_user(user):
