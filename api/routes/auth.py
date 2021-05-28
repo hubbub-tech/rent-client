@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from flask import Blueprint, flash, redirect, render_template, session, g, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from blubber_orm import Users, Carts, Profiles
+from blubber_orm import Users
 
 from api.tools.settings import login_required, login_user, recaptcha
 from api.tools.build import validate_registration, validate_login
@@ -55,14 +55,14 @@ def register():
             }
         }
         if recaptcha.verify():
-            response = validate_registration(form_data)
-            if response["is_valid"]:
+            form_check = validate_registration(form_data)
+            if form_check["is_valid"]:
                 new_user = create_user(form_data)
                 #TODO: welcome email here
-                flash(response["message"])
+                flash(form_check["message"])
                 return redirect('/login')
             else:
-                flash(response["message"])
+                flash(form_check["message"])
         else:
             flash("Sorry, you didn't pass the recaptcha.")
             return redirect("/register")
@@ -75,8 +75,8 @@ def login():
             "email": request.form.get("email").lower(),
             "password": request.form.get("password")
         }
-        validation_response = validate_login(form_data)
-        if validation_response["is_valid"]:
+        form_check = validate_login(form_data)
+        if form_check["is_valid"]:
             user, = Users.filter({"email": form_data["email"]})
             login_response = login_user(user)
             if login_response["is_valid"]:
@@ -86,7 +86,7 @@ def login():
                 flash(login_response["message"])
                 return redirect("/login")
         else:
-            flash(validation_response["message"])
+            flash(form_check["message"])
             return redirect("/login")
     return render_template("auth/login.html") #NOTE: just use plain html here
 

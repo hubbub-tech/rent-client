@@ -32,6 +32,7 @@ def account(username):
 
     return {
         #is the current user the owner of the account?
+        "photo_url": photo_url,
         "user": searched_user.to_dict(),
         "orders": blubber_instances_to_dict(orders),
         "rentals": blubber_instances_to_dict(rentals),
@@ -69,16 +70,19 @@ def edit_account():
                     "directory" : "users",
                     "bucket" : AWS.S3_BUCKET
                 }
-                response = upload_image(image_data)
-                if response["is_valid"]:
+                upload_response = upload_image(image_data)
+                if upload_response["is_valid"]:
                     Profiles.set(g.user.id, {"has_pic": True})
-                flash(response["message"])
-            flash(response["message"])
+                flash(upload_response["message"])
+            flash(upload_response["message"])
             return redirect(f"/accounts/u/{g.user.make_username()}")
         else:
-            flash(response["message"])
+            flash(upload_response["message"])
             return redirect("/accounts/u/edit")
-    return {"user": g.user.to_dict(), "photo_url": photo_url}
+    return {
+        "user": g.user.to_dict(),
+        "photo_url": photo_url
+        }
 
 #edit personal password
 #check that the confirmation pass and new pass match on frontend
@@ -91,12 +95,12 @@ def edit_password():
             "current_password" : request.form.get("current"),
             "new_password" : request.form.get("new")
         }
-        response = validate_edit_password(form_data)
-        if response["is_valid"]:
+        form_check = validate_edit_password(form_data)
+        if form_check["is_valid"]:
             g.user.password = generate_password_hash(form_data["new_password"])
             return redirect(f"/accounts/u/{g.user.make_username()}")
         else:
-            flash(response["message"])
+            flash(form_check["message"])
             return redirect("/accounts/u/password")
     return {"user": g.user.to_dict()}
 
@@ -148,11 +152,14 @@ def edit_item(item_id):
                 "directory" : "items",
                 "bucket" : AWS.S3_BUCKET
             }
-            response = upload_image(image_data)
-            flash(response["message"])
+            upload_response = upload_image(image_data)
+            flash(upload_response["message"])
         flash(f"Your {item.name} has been updated!")
         return redirect(f"/account/u/{g.user.make_username()}")
-    return {"item": item.to_dict(), "photo_url": photo_url}
+    return {
+        "item": item.to_dict(),
+        "photo_url": photo_url
+        }
 
 #review an item
 @bp.route("/account/i/review/id=<int:item_id>", methods=["POST", "GET"])
@@ -171,7 +178,10 @@ def review_item(item_id):
             new_review = create_review(form_data)
             flash(f"The {item.name} that you rented has been reviewed.")
             return redirect(f"/account/u/{g.user.make_username()}")
-        return {"item": item.to_dict(), "photo_url": photo_url}
+        return {
+            "item": item.to_dict(),
+            "photo_url": photo_url
+            }
     else:
         flash("You cannot review your own item.")
         return redirect(f"/account/u/{g.user.make_username()}")
