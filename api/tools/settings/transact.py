@@ -3,7 +3,7 @@ from math import log, exp
 from datetime import datetime, date, timedelta
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from blubber_orm import Reservations, Items
+from blubber_orm import Reservations, Items, Orders
 
 from tools.build import set_async_timeout
 
@@ -97,3 +97,58 @@ def check_if_routed(user):
         "is_valid" : True,
         "message" : "All items in cart have been routed correctly."
         }
+
+def get_orders_for_dropoff(renter_id):
+    orders = Orders.filter({"is_dropoff_sched": False, "renter_id": renter_id})
+    if orders:
+        group_orders = {}
+        group_by_date = []
+        orders.sort(key=lambda order: order.res_date_start)
+        comparitor_date_str = orders[0].res_date_start.strftime("%Y-%m-%d")
+        for order in orders:
+            date_str = order.item_reservation_start.strftime("%Y-%m-%d")
+            if date_str == comparitor_date_str:
+                group_by_date.append(order)
+                group_orders[comparitor_date_str] = group_by_date
+            else:
+                group_by_date = []
+                group_by_date.append(order)
+                group_orders[date_str] = group_by_date
+                comparitor_date_str = date_str
+    else:
+        group_orders = None
+    return group_orders
+
+def get_orders_for_pickup(renter_id):
+    orders = Orders.filter({"is_dropoff_sched": True, "is_pickup_sched": True, "renter_id": renter_id})
+    if orders:
+        group_orders = {}
+        group_by_date = []
+        orders.sort(key=lambda order: order.res_date_end)
+        comparitor_date_str = orders[0].res_date_end.strftime("%Y-%m-%d")
+        for order in orders:
+            date_str = order.res_date_end.strftime("%Y-%m-%d")
+            if date_str == comparitor_date_str:
+                group_by_date.append(order)
+                group_orders[comparitor_date_str] = group_by_date
+            else:
+                group_by_date = []
+                group_by_date.append(order)
+                group_orders[date_str] = group_by_date
+                comparitor_date_str = date_str
+    else:
+        group_orders = None
+    return group_orders
+
+def get_delivery_schedule(availabilities):
+    """Takes a list of availabilities formatted as `TIME@DATE`"""
+    availabilities.sort(key = lambda entry: entry[-10:-1])
+    delivery_schedule = {}
+    for entry in availabilities:
+        delivery_time, delivery_date = entry.split("@")
+
+        if delivery_schedule.get(delivery_date, None):
+            delivery_schedule[delivery_date].append(delivery_time)
+        else:
+            delivery_schedule[delivery_date] = [delivery_time]
+    return delivery_schedule

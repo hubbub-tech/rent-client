@@ -2,7 +2,7 @@ from datetime import datetime, date
 from blubber_orm import Users, Profiles, Carts
 from blubber_orm import Items, Details, Calendars, Tags
 from blubber_orm import Addresses, Reservations
-from blubber_orm import Orders
+from blubber_orm import Orders, Logistics, Dropoffs, Pickups
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -73,6 +73,34 @@ def create_reservation(insert_data):
 
     return reservation, action_message, waitlist_message
 
-def create_order(order_data):
-    new_order = Orders.insert(order_data)
+def create_order(insert_data):
+    new_order = Orders.insert(insert_data)
     return new_order
+
+def create_logistics(insert_data, orders, dropoff=None, pickup=None):
+    new_logistics = Logistics.insert(insert_data)
+    if dropoff:
+        dropoff_data = {
+            "dt_sched": new_logistics.dt_scheduled,
+            "renter_id": new_logistics.renter_id,
+            "dropoff_date": dropoff
+        }
+        new_dropoff_logistics = Dropoffs.insert(dropoff_data)
+        new_dropoff_logistics.schedule_orders(orders)
+        result = new_dropoff_logistics
+    elif pickup:
+        pickup_data = {
+            "dt_sched": new_logistics.dt_scheduled,
+            "renter_id": new_logistics.renter_id,
+            "pickup_date": pickup
+        }
+        new_pickup_logistics = Pickups.insert(pickup_data)
+        new_pickup_logistics.schedule_orders(orders)
+        result = new_pickup_logistics
+    else:
+        Logistics.delete({
+            "dt_sched": new_logistics.dt_scheduled,
+            "renter_id": new_logistics.renter_id
+        })
+        result = None
+    return result
