@@ -45,9 +45,9 @@ def categories(category):
 @bp.route("/inventory/i/id=<int:item_id>", methods=["POST", "GET"])
 def details(item_id):
     format = "%m/%d/%Y"
+    reservation = None
     item = Items.get(item_id)
     photo_url = AWS.get_url("items")
-
     if request.method == "POST":
         rental_range = {
             "date_started" : request.form.get("start"),

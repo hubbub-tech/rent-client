@@ -7,6 +7,8 @@ def make_celery():
     return my_celery
 
 def create_app():
+    # template_dir = os.path.abspath('../public') # or might be another level up, not sure
+    # app = Flask(__name__, template_folder=template_dir)
     app = Flask(__name__)
 
     celery.conf.update(app.config)
