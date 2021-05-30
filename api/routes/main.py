@@ -114,7 +114,7 @@ def remove_pic():
     return redirect(f"/accounts/u/{g.user.make_username()}")
 
 #users hide items
-@bp.route("/accounts/i/id=<int:item_id>&hide=<int:toggle>")
+@bp.route("/accounts/i/hide/id=<int:item_id>&status=<int:toggle>")
 @login_required
 def hide_item(item_id, toggle):
     item_to_hide = Items.get(item_id)
@@ -157,14 +157,14 @@ def edit_item(item_id):
             upload_response = upload_image(image_data)
             flash(upload_response["message"])
         flash(f"Your {item.name} has been updated!")
-        return redirect(f"/account/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/{g.user.make_username()}")
     return {
         "item": item.to_dict(),
         "photo_url": photo_url
         }
 
 #review an item
-@bp.route("/account/i/review/id=<int:item_id>", methods=["POST", "GET"])
+@bp.route("/accounts/i/review/id=<int:item_id>", methods=["POST", "GET"])
 @login_required
 def review_item(item_id):
     photo_url = AWS.get_url("items")
@@ -179,11 +179,11 @@ def review_item(item_id):
             }
             new_review = create_review(form_data)
             flash(f"The {item.name} that you rented has been reviewed.")
-            return redirect(f"/account/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/{g.user.make_username()}")
         return {
             "item": item.to_dict(),
             "photo_url": photo_url
             }
     else:
         flash("You cannot review your own item.")
-        return redirect(f"/account/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/{g.user.make_username()}")

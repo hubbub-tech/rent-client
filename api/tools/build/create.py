@@ -2,7 +2,8 @@ from datetime import datetime, date
 from blubber_orm import Users, Profiles, Carts
 from blubber_orm import Items, Details, Calendars, Tags
 from blubber_orm import Addresses, Reservations
-from blubber_orm import Orders, Logistics, Dropoffs, Pickups
+from blubber_orm import Orders, Extensions
+from blubber_orm import Logistics, Dropoffs, Pickups
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -72,6 +73,24 @@ def create_reservation(insert_data):
         action_message, waitlist_message = generate_proposed_period(item, first_sentence)
 
     return reservation, action_message, waitlist_message
+
+def create_extension(insert_data):
+    reservation_keys = {
+        "date_started": insert_data["res_date_start"],
+        "date_ended": insert_data["res_date_end"],
+        "renter_id": insert_data["renter_id"],
+        "item_id": insert_data["item_id"]
+    }
+    order = Orders.get(insert_data["order_id"])
+    Reservations.set(reservation_keys, {"is_extended": True})
+    new_extension = Extensions.insert(insert_data)
+
+    pickup = Pickups.by_order(order)
+    logistics_to_delete = pickup.logistics # will cascade to pickup obj
+    Logistics.delete({
+        "dt_sched": logistics_to_delete.dt_scheduled,
+        "renter_id": logistics_to_delete.renter_id})
+    return new_extension
 
 def create_order(insert_data):
     new_order = Orders.insert(insert_data)
