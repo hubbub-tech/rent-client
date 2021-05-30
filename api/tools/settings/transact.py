@@ -106,7 +106,7 @@ def get_orders_for_dropoff(renter_id):
         orders.sort(key=lambda order: order.res_date_start)
         comparitor_date_str = orders[0].res_date_start.strftime("%Y-%m-%d")
         for order in orders:
-            date_str = order.item_reservation_start.strftime("%Y-%m-%d")
+            date_str = order.res_date_start.strftime("%Y-%m-%d")
             if date_str == comparitor_date_str:
                 group_by_date.append(order)
                 group_orders[comparitor_date_str] = group_by_date
@@ -124,10 +124,10 @@ def get_orders_for_pickup(renter_id):
     if orders:
         group_orders = {}
         group_by_date = []
-        orders.sort(key=lambda order: order.res_date_end)
-        comparitor_date_str = orders[0].res_date_end.strftime("%Y-%m-%d")
+        orders.sort(key=lambda order: order.ext_date_end)
+        comparitor_date_str = orders[0].ext_date_end.strftime("%Y-%m-%d")
         for order in orders:
-            date_str = order.res_date_end.strftime("%Y-%m-%d")
+            date_str = order.ext_date_end.strftime("%Y-%m-%d")
             if date_str == comparitor_date_str:
                 group_by_date.append(order)
                 group_orders[comparitor_date_str] = group_by_date
