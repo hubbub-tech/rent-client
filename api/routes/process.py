@@ -270,37 +270,28 @@ def extension_processor(order_id, start, end):
         flash("Couldn't find that reservation. Try extending again.")
         return redirect(f"/accounts/o/extend/id={order_id}")
 
-    #         #async schedule return procedure email notice
-    #         orders_by_end_date = get_ending_orders(g.user.id)
-    #         for end_date_str, orders in orders_by_end_date.items():
-    #             filing_date_str = date.today().strftime("%B %-d, %Y")
-    #             orders.sort(key = lambda order: (order.item_reservation_end - order.item_reservation_start).days)
-    #             min_rental_duration = (orders[0].item_reservation_end - orders[0].item_reservation_start).days
-    #             if min_rental_duration <= 7: #7 days is a cutoff, under which we want more notice not 3/4th way in
-    #                 notice_offset = min_rental_duration - 1
-    #             else:
-    #                 notice_offset = round(min_rental_duration * 0.25)
-    #             return_clock = datetime.strptime(end_date_str, "%Y-%m-%d") - timedelta(days=notice_offset)
-    #             item_names_list = [order.item_name for order in orders]
-    #             return_data = {
-    #                 "renter_name" : g.user.get_name().title(),
-    #                 "renter_email" : g.user.email,
-    #                 "filing_date" : filing_date_str,
-    #                 "rental_end_date" : end_date_str,
-    #                 "remaining_days" : notice_offset,
-    #                 "item_names" : ", ".join(item_names_list)
-    #                 }
-    #             return_email_data = get_renter_notice(return_data)
-    #             send_async_email.apply_async(eta=return_clock, kwargs=return_email_data)
-    #         flash("Check your email to see your receipt and drop-off scheduling! Thanks!")
-    #         return redirect("/thank-you")
-    #     return render_template("rent/dropoff.html",
-    #         recent_orders_dates=recent_orders_dates,
-    #         formatted_dates=formatted_dates,
-    #         recent_orders=recent_orders,
-    #         am_slots=am_slots,
-    #         pm_slots=pm_slots
-    #         )
-    # else:
-    #     flash("You don't have any recent orders that need drop-off logistics.")
-    #     return redirect("/checkout") #TODO: bounce to another page
+@bp.route("/accounts/o/return/id=<int:order_id>")
+@login_required
+def return_order(order_id):
+    format = "%m/%d/%Y"
+    order = Orders.get(order_id)
+    item = Items.get(order.item_id)
+    if g.user.id == order.renter_id:
+        if request.method == "POST":
+            return_date_str = request.form.get("return_date")
+            return_date = datetime.strptime(return_date_str, format).date()
+            early_return_data = {
+                "renter_id": g.user.id,
+                "item_id": item.id,
+                "date_started": order.res_date_start, # will return order.res_date_end if no ext
+                "date_ended": return_date
+            }
+            create_reservation(early_return_data)
+        return {
+            "order": order.to_dict(),
+            "item": item.to_dict()
+        } # tells the user how much extension will cost, then they can confirm or not
+    else:
+        flash("You can only manage orders that you placed.")
+        return redirect(f"/accounts/u/{g.user.make_username()}")
+        

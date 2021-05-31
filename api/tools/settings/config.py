@@ -76,7 +76,7 @@ class AWSConfig:
 
 #FLASK CONFIGS------------------------------------
 
-class Config(ReCaptchaConfig):
+class Config:
     #ReCaptcha
     RECAPTCHA_SITE_KEY = os.environ['RECAPTCHA_PUBLIC_KEY']
     RECAPTCHA_SECRET_KEY = os.environ['RECAPTCHA_PRIVATE_KEY']
