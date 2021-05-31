@@ -50,7 +50,7 @@ const ShopCategories = () => {
   );
 }
 
-const Shop = (urlPrefix, items, listers) => {
+const Shop = ({urlPrefix, items, listers}) => {
   return (
     <main>
       <div className="container-md">

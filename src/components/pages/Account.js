@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AccountHeader = (imgHost, user, profile, cart) => {
+const AccountHeader = ({imgHost, user, profile, cart}) => {
   const imgLink = imgHost + "/" + user.id.toString() + ".jpg";
   if (profile.has_pic) {
     const profilePicture = () => {
@@ -38,7 +38,7 @@ const AccountHeader = (imgHost, user, profile, cart) => {
   );
 }
 
-const AccountSettings = (isAccountOwner, user, profile) => {
+const AccountSettings = ({isAccountOwner, user, profile}) => {
   if (isAccountOwner === false) {
     return (
       <div className="row justify-content-center g-0">
@@ -72,7 +72,7 @@ const AccountSettings = (isAccountOwner, user, profile) => {
   }
 }
 
-const UserRentals = (isAccountOwner, user, rentals) => {
+const UserRentals = ({isAccountOwner, user, rentals}) => {
   if (isAccountOwner) {
     const accordionIndex = (index) => "item-accordion-" + index.toString();
     const headerIndex = (itemId, index) => "header-" + itemId.toString() + "-" + index.toString();
@@ -166,11 +166,11 @@ const AccountPrivileges = (isAccountOwner) => {
   }
 }
 
-const AccountListings = (isAccountOwner, user, listings) => {
+const AccountListings = ({isAccountOwner, user, listings}) => {
   if (listings.length > 0) {
     return (
       <div className="col-md mt-2">
-        <h3>{user.name}'s Listings ({listings.length})</h3>
+        <h3>{user.name} Listings ({listings.length})</h3>
         {rentals.map((item, index) => (
           <div className="accordion mb-3" id="item-accordion-{{ loop.index }}" key={index}>
             <div className="accordion-item">

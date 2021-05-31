@@ -1,7 +1,7 @@
 import React from 'react';
 import CategoryCard from './parts/CategoryCard';
 
-const TestimonialSlides = (testimonials) => {
+const TestimonialSlides = ({testimonials}) => {
   const myTestimonials = [
     {
       "date_created": "2021-01-15",
@@ -14,11 +14,11 @@ const TestimonialSlides = (testimonials) => {
       "user_id": 2
     }
   ];
-  const testimonialIndex = (index) => {
+  const testimonialIndex = ({index}) => {
     return "carousel-testimonial-" + index.toString();
   }
 
-  const activateCarousel = (target) => {
+  const activateCarousel = ({target}) => {
     let carousel = document.getElementById(target);
     let activation = "active";
     let classList = carousel.className.split(" ");
@@ -67,7 +67,7 @@ const MainBanner = () => {
   );
 }
 
-const MainContent = (testimonials) => {
+const MainContent = ({testimonials}) => {
   return (
     <div className="container-md">
       <div className="row mt-5">
@@ -128,7 +128,7 @@ const MainContent = (testimonials) => {
   );
 }
 
-const Main = (testimonials) => {
+const Main = ({testimonials}) => {
   return (
     <main>
       <MainBanner />

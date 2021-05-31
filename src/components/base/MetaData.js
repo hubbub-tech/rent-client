@@ -1,6 +1,6 @@
 import React from 'react';
 
-const MetaData = (pageName) => {
+const MetaData = ({pageName}) => {
   return (
     <div>
       <link rel="shortcut icon" href="../static/icons/favicon.ico"/>

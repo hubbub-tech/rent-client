@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ShopCard = (imgHost, item, lister) => {
+const ShopCard = ({imgHost, item, lister}) => {
   const itemDetailsLink = "/inventory/item." + item.id.toString()
   const listerAccountLink = "/account/u." + item.lister_id.toString()
   const imgLink = imgHost + "/" + item.id.toString() + ".jpg"

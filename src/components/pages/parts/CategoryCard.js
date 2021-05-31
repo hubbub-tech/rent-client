@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CategoryCard = (category) => {
+const CategoryCard = ({category}) => {
   const categoryLink = "/inventory" + category.link
   const categoryTitle = category.title
   const categorySourceLink = "static/items/" + category.title + ".png"

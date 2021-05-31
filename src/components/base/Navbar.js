@@ -1,6 +1,6 @@
 import React from 'react';
 
-const LogInLinks = (isLoggedIn) => {
+const LogInLinks = ({isLoggedIn}) => {
   if (isLoggedIn) {
     return (
       <li className="nav-item dropdown">
