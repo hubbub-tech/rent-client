@@ -117,7 +117,7 @@ def schedule_dropoffs():
             #logistics_email_data = get_renter_logistics(g.user, form_data)
             #send_async_email.apply_async(kwargs=logistics_email_data)
             #TODO: send return procedure email
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/id={g.user.id}")
         elif request.method == "GET":
             items = {}
             for date_str in orders_grouped_by_date.keys():
@@ -134,7 +134,7 @@ def schedule_dropoffs():
         return redirect("/inventory") # only take post and get requests
     else:
         flash("No rentals need dropoff scheduling right now. Check out inventory to rent something!")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/id={g.user.id}")
 
 @bp.route("/accounts/u/rentals")
 @login_required
@@ -154,7 +154,7 @@ def active_rentals():
         }
     else:
         flash("No rentals need pickup scheduling right now. Check out inventory to rent something!")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/id={g.user.id}")
 
 @bp.route("/schedule/pickups/<date_str>", methods=["POST", "GET"])
 @login_required
@@ -188,7 +188,7 @@ def schedule_pickups(date_str):
             #logistics_email_data = get_renter_logistics(g.user, form_data)
             #send_async_email.apply_async(kwargs=logistics_email_data)
             #TODO: send return procedure email
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/id={g.user.id}")
         elif request.method == "GET":
             for order in orders:
                 items.append(Items.get(order.item_id).to_dict())
@@ -200,7 +200,7 @@ def schedule_pickups(date_str):
         }
     else:
         flash("No rentals need pickup scheduling right now. Check out inventory to rent something!")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/id={g.user.id}")
 
 @bp.route("/accounts/o/extend/id=<int:order_id>", methods=["POST", "GET"])
 @login_required
@@ -233,7 +233,7 @@ def extend_order(order_id):
         } # tells the user how much extension will cost, then they can confirm or not
     else:
         flash("You can only manage orders that you placed.")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/id={g.user.id}")
 
 # Navigate here via, "extend now" button on frontend
 @bp.route("/extend/o/processor/id=<int:order_id>&start=<start>&end=<end>")
@@ -262,10 +262,10 @@ def extension_processor(order_id, start, end):
             extension = create_extension(ext_data)
             #TODO: email notification about extension
             flash(f"Your {item.name} was successfully extended!")
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/id={g.user.id}")
         else:
             flash(f"Sorry, it seems someone just got to the {item.name} before you.")
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/id={g.user.id}")
     else:
         flash("Couldn't find that reservation. Try extending again.")
         return redirect(f"/accounts/o/extend/id={order_id}")
@@ -293,4 +293,4 @@ def return_order(order_id):
         } # tells the user how much extension will cost, then they can confirm or not
     else:
         flash("You can only manage orders that you placed.")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/id={g.user.id}")

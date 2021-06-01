@@ -7,7 +7,6 @@ const getInitialClassList = (index) => {
   } else {
     classList = "carousel-item";
   }
-
   return classList;
 }
 

@@ -22,10 +22,10 @@ def test():
     return {"users": users, "testimonials": testimonials}
 
 #keep track of items being rented, items owned, item reviews and item edits
-@bp.route("/accounts/u/<username>")
+@bp.route("/accounts/u/id=<int:id>")
 @login_required
-def account(username):
-    searched_user = Users.get_by_username(username)
+def account(id):
+    searched_user = Users.get(id)
     photo_url = AWS.get_url("users")
 
     orders = Orders.filter({"renter_id": searched_user.id})
@@ -77,7 +77,7 @@ def edit_account():
                     Profiles.set(g.user.id, {"has_pic": True})
                 flash(upload_response["message"])
             flash(upload_response["message"])
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/id={g.user.id}")
         else:
             flash(upload_response["message"])
             return redirect("/accounts/u/edit")
@@ -100,7 +100,7 @@ def edit_password():
         form_check = validate_edit_password(form_data)
         if form_check["is_valid"]:
             g.user.password = generate_password_hash(form_data["new_password"])
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/id={g.user.id}")
         else:
             flash(form_check["message"])
             return redirect("/accounts/u/password")
@@ -111,7 +111,7 @@ def edit_password():
 @login_required
 def remove_pic():
     Profiles.set(g.user.id, {"has_pic": False})
-    return redirect(f"/accounts/u/{g.user.make_username()}")
+    return redirect(f"/accounts/u/id={g.user.id}")
 
 #users hide items
 @bp.route("/accounts/i/hide/id=<int:item_id>&status=<int:toggle>")
@@ -122,10 +122,10 @@ def hide_item(item_id, toggle):
     boolean_conversion = {0: True, 1: False}
     item_to_hide.is_available = boolean_conversion[toggle]
     if boolean_conversion[toggle]:
-        flash("Item hidden. Come back when you are ready to reveal it.")
+        flash("Item has been hidden. Come back when you are ready to reveal it.")
     else:
-        flash("Item revealed. Others can now see it in inventory.")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        flash("Item has been revealed. Others can now see it in inventory.")
+        return redirect(f"/accounts/u/id={g.user.id}")
 
 #user edit items
 @bp.route("/accounts/i/edit/id=<int:item_id>", methods=["POST", "GET"])
@@ -157,7 +157,7 @@ def edit_item(item_id):
             upload_response = upload_image(image_data)
             flash(upload_response["message"])
         flash(f"Your {item.name} has been updated!")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/id={g.user.id}")
     return {
         "item": item.to_dict(),
         "photo_url": photo_url
@@ -179,11 +179,11 @@ def review_item(item_id):
             }
             new_review = create_review(form_data)
             flash(f"The {item.name} that you rented has been reviewed.")
-            return redirect(f"/accounts/u/{g.user.make_username()}")
+            return redirect(f"/accounts/u/id={g.user.id}")
         return {
             "item": item.to_dict(),
             "photo_url": photo_url
             }
     else:
         flash("You cannot review your own item.")
-        return redirect(f"/accounts/u/{g.user.make_username()}")
+        return redirect(f"/accounts/u/id={g.user.id}")

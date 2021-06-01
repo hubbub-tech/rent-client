@@ -4,4 +4,14 @@ const formatName = (unformattedName) => {
   return formattedName;
 };
 
-const strToDate = (dateStr) => new Date(dateStr);
+// Eventually build in messages
+const isActiveRental = (startDate, endDate) => {
+  const todayDate = new Date();
+  if (startDate < todayDate && endDate > todayDate) {
+    return True;
+  } else if (startDate > todayDate) {
+    return False;
+  } else {
+    return False;
+  }
+}

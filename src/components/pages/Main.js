@@ -13,7 +13,7 @@ const Main = ({testimonials}) => {
           <h1 className="text-center">Top Categories</h1>
           <p className="text-center">Rent from the most active categories on Hubbub!</p>
           <CategoryCard category={{"link": "/kitchen", "title": "Kitchen", "alt": "Pots"}} />
-          <CategoryCard category={{"link": "/everything", "title": "Everything", "alt": "Fridge"}} />
+          <CategoryCard category={{"link": "", "title": "Everything", "alt": "Fridge"}} />
           <CategoryCard category={{"link": "/entertainment", "title": "Entertainment", "alt": "Kindle Fire"}} />
           <CategoryCard category={{"link": "/misc", "title": "Random", "alt": "Lights"}} />
           <CategoryCard category={{"link": "/school", "title": "School", "alt": "Calculator"}} />

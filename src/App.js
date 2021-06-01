@@ -1,4 +1,5 @@
 import React from 'react';
+import {useState, useEffect} from 'react';
 import Navbar from './components/base/Navbar';
 import Footer from './components/base/Footer';
 import Main from './components/pages/Main';
@@ -6,8 +7,8 @@ import Main from './components/pages/Main';
 
 const App = () => {
   //const [myUsers, setMyUsers] = React.useState([]);
-  const [myTestimonials, setMyTestimonials] = React.useState([]);
-  React.useEffect(() => {
+  const [myTestimonials, setMyTestimonials] = useState(null);
+  useEffect(() => {
     fetch('/test').then(res => res.json()).then(data => {
       setMyTestimonials(data.testimonials);
     });
