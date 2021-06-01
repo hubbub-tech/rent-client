@@ -31,7 +31,8 @@ def create_item(insert_data):
 
     new_item = Items.insert(insert_data["item"])
     #TODO: add tags to item after creation
-
+    lister = Users.get(new_item.lister_id)
+    lister.make_lister()
     insert_data["details"]["id"] = new_item.id
     insert_data["calendar"]["id"] = new_item.id
 
@@ -94,6 +95,8 @@ def create_extension(insert_data):
 
 def create_order(insert_data):
     new_order = Orders.insert(insert_data)
+    renter = Users.get(new_order.renter_id)
+    renter.make_renter()
     return new_order
 
 def create_logistics(insert_data, orders, dropoff=None, pickup=None):

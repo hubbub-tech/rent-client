@@ -61,7 +61,7 @@ def order_confirmation(token, payment_method):
                 "renter_id": reservation.renter_id,
                 "item_id": reservation.item_id,
                 "is_online_pay": payment_method,
-                "lister_id": item._lister_id,
+                "lister_id": item.lister_id,
                 "date_placed": date.today(),
             }
             order = create_order(order_data)
@@ -294,4 +294,3 @@ def return_order(order_id):
     else:
         flash("You can only manage orders that you placed.")
         return redirect(f"/accounts/u/{g.user.make_username()}")
-        
