@@ -3,3 +3,5 @@ const formatName = (unformattedName) => {
   let formattedName = _formattedName.join(" ")
   return formattedName;
 };
+
+const strToDate = (dateStr) => new Date(dateStr);
