@@ -19,7 +19,7 @@ const TestimonialCarousel = ({testimonials}) => {
           {testimonials.map((testimonial, index) => (
             <div className={getInitialClassList(index)} key={`carousel-testimonial-${index}`}>
               <p className="text-center fs-3">{ testimonial.description }</p>
-              <p className="text-center fs-5">{ testimonial.user_id }, { testimonial.date_created }</p>
+              <p className="text-center fs-5">{ testimonial.user.name } - { testimonial.user.city }, { testimonial.user.state }</p>
             </div>
           ))}
         </div>
