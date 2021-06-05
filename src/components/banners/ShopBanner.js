@@ -1,5 +1,7 @@
 import React from 'react';
 
+import SearchForm from '../forms/SearchForm';
+
 const ShopBanner = () => {
   const waitlistLink = "https://docs.google.com/forms/d/e/1FAIpQLSflErYv4mNyPlAlPmSEO_q1xmOIYOMmafoI1-te_fx44VvKhw/viewform"
   return (
@@ -23,20 +25,7 @@ const ShopBanner = () => {
             <li className="nav-item"><a className="nav-link" href="/inventory/games">Games</a></li>
             <li className="nav-item"><a className="nav-link" href="/inventory/miscellaneous">Random</a></li>
           </div>
-          <form className="d-flex" method="POST" action="/inventory">
-            <div className="input-group mx-5">
-              <input
-                type="text"
-                className="form-control"
-                name="search"
-                placeholder="Search items..."
-                aria-label="Search items..."
-                minLength="1"
-                maxLength="29"
-                aria-describedby="button-addon2" />
-              <button className="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
-            </div>
-          </form>
+          <SearchForm />
         </ul>
       </div>
     </div>
