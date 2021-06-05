@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-from flask import Blueprint, flash, redirect, render_template, session, g, request
+from flask import Blueprint, flash, redirect, get_flashed_messages, session, g, request
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from blubber_orm import Users
@@ -12,31 +12,69 @@ bp = Blueprint('auth', __name__)
 
 @bp.before_app_request
 def load_logged_in_user():
-    user_id = session.get('user_id')
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = Users.get(user_id)
+    g.user_id = session.get('user_id', None)
 
-@bp.route('/register', methods=['POST', 'GET'])
+@bp.get('/login_status')
+def login_status():
+    g.user_id = session.get('user_id', None)
+    is_logged_in = not g.user_id is None
+    cart_size = session.get('cart_size', None)
+    return {
+        "flashes": get_flashed_messages(),
+        "is_logged_in": is_logged_in,
+        "cart_size": cart_size
+    }
+
+@bp.post('/login')
+def login():
+    data = request.json
+    if data:
+        form_data = {
+            "email": data["user"]["email"],
+            "password": data["user"]["password"]
+        }
+        print("form", form_data)
+        form_check = validate_login(form_data)
+        if form_check["is_valid"]:
+            user, = Users.filter({"email": form_data["email"]})
+            login_response = login_user(user)
+            if login_response["is_valid"]:
+                flash(login_response["message"])
+                return {
+                    "is_logged_in": True,
+                    "cart_size": user.cart.size(),
+                    "flashes": [login_response["message"]]
+                }, 201
+            else:
+                flash(login_response["message"])
+        else:
+            flash(form_check["message"])
+        return {"is_logged_in": False}, 406 #NOTE: wrong data
+    else:
+        return {"is_logged_in": False}, 406 #NOTE: no data
+
+@bp.post('/register')
 def register():
-    if request.method == "POST":
-        first_name = request.form.get("first_name")
-        last_name = request.form.get("last_name")
-        hashed_pass = generate_password_hash(request.form.get("password")) #confirm on the frontend
+    data = request.json
+    if data:
+        print("json user", data["user"])
+        first_name = data["user"]["firstName"]
+        last_name = data["user"]["lastName"]
+        unhashed_pass = data["user"]["password"] #TODO: confirm on the frontend
+        hashed_pass = generate_password_hash(unhashed_pass)
         form_data = {
             "user": {
                 "name": f"{first_name},{last_name}",
-                "email": request.form.get("email").lower(),
-                "payment": request.form.get("payment"),
+                "email": data["user"]["email"],
+                "payment": data["user"]["payment"],
                 "password": hashed_pass,
-                "address_num": request.form.get("num"),
-                "address_street": request.form.get("street"),
-                "address_apt": request.form.get("apt"),
-                "address_zip": request.form.get("zip")
+                "address_num": data["address"]["num"],
+                "address_street": data["address"]["street"],
+                "address_apt": data["address"]["apt"],
+                "address_zip": data["address"]["zip"]
             },
             "profile": {
-                "phone": request.form.get("phone"),
+                "phone": data["profile"]["phone"],
                 "bio": "I love Hubbub!",
                 "id": None
             },
@@ -46,54 +84,29 @@ def register():
                 "id": None
             },
             "address": {
-                "num": request.form.get("num"),
-                "street": request.form.get("street"),
-                "apt": request.form.get("apt"),
-                "city": request.form.get("city"),
-                "state": request.form.get("state"),
-                "zip": request.form.get("zip")
+                "num": data["address"]["num"],
+                "street": data["address"]["street"],
+                "apt": data["address"]["apt"],
+                "city": data["address"]["city"],
+                "state": data["address"]["state"],
+                "zip": data["address"]["zip"]
             }
         }
-        if recaptcha.verify():
-            form_check = validate_registration(form_data)
-            if form_check["is_valid"]:
-                new_user = create_user(form_data)
-                #TODO: welcome email here
-                flash(form_check["message"])
-                return redirect('/login')
-            else:
-                flash(form_check["message"])
-        else:
-            flash("Sorry, you didn't pass the recaptcha.")
-            return redirect("/register")
-    return render_template('auth/register.html') #NOTE: just use plain html here
-
-@bp.route('/login', methods=['POST', 'GET'])
-def login():
-    if request.method == "POST":
-        form_data = {
-            "email": request.form.get("email").lower(),
-            "password": request.form.get("password")
-        }
-        form_check = validate_login(form_data)
+        #if recaptcha.verify():
+        form_check = validate_registration(form_data["user"])
         if form_check["is_valid"]:
-            user, = Users.filter({"email": form_data["email"]})
-            login_response = login_user(user)
-            if login_response["is_valid"]:
-                flash(login_response["message"])
-                return redirect("/")
-            else:
-                flash(login_response["message"])
-                return redirect("/login")
+            new_user = create_user(form_data)
+            #TODO: welcome email here
+            flash(form_check["message"])
+            return {"is_registered": True}, 201
         else:
             flash(form_check["message"])
-            return redirect("/login")
-    return render_template("auth/login.html") #NOTE: just use plain html here
+    return {"is_registered": False}, 406
 
 @bp.route("/logout")
 @login_required
 def logout():
     session.clear()
-    return redirect("/login")
+    return {"is_logged_in": False}
 
 #TODO: rebuild account recovery
