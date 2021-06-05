@@ -37,7 +37,7 @@ def validate_edit_password(form_data):
 
 def validate_registration(form_data):
     is_valid = False
-    loaded_user, = Users.filter({"email": form_data["email"]})
+    loaded_user = Users.filter({"email": form_data["email"]})
     if loaded_user:
         message = "You might already have an account. Try logging in!"
     else:
@@ -50,7 +50,7 @@ def validate_registration(form_data):
 
 def validate_login(form_data):
     is_valid = False
-    loaded_user = Users.filter({"email": form_data["email"]})
+    loaded_user, = Users.filter({"email": form_data["email"]})
     if loaded_user:
         if not check_password_hash(loaded_user.password, form_data["password"]):
             message = "Sorry, invalid password and email combination."
