@@ -90,7 +90,7 @@ hr.divider {
 
 .parallax {
   /* The image used */
-  background-image: url("static/backgrounds/confirmation.jpg");
+  /* background-image: url("static/backgrounds/confirmation.jpg"); */
   background-color: #ffffff;
 
   /* Set a specific height */
@@ -105,7 +105,7 @@ hr.divider {
 
 .parallax-info {
   /* The image used */
-  background-image: url("static/backgrounds/list.jpg");
+  /* background-image: url("static/backgrounds/list.jpg"); */
   background-color: #ffffff;
 
   /* Set a specific height */
@@ -120,7 +120,7 @@ hr.divider {
 
 .parallax-faqs {
   /* The image used */
-  background-image: url("static/backgrounds/faq.jpeg");
+  /* background-image: url("static/backgrounds/faq.jpeg"); */
   background-color: #ffffff;
 
   /* Set a specific height */
