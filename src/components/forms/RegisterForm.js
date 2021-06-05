@@ -52,7 +52,7 @@ const RegisterForm = () => {
     <form onSubmit={submit} >
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="step-1 card-body">
-          <FormErrors errors={errors.server} />
+          <FormErrors errors={errors.server} color={"red"} />
           <div className="row">
             <div className="col">
               <div className="form-floating mb-3">
@@ -90,11 +90,20 @@ const RegisterForm = () => {
               id="floatingInputEmail"
               name="user[email]"
               placeholder="ah1754@columbia.edu"
-              onChange={e => setUser({ ...user, email: e.target.value })}
+              onChange={e => {
+                  setUser({ ...user, email: e.target.value });
+                  if(e.target.value.includes("@")) {
+                    setErrors({ ...errors, email: [] });
+                  } else {
+                    setErrors({ ...errors, email: ["Please enter a valid email address."] });
+                  }
+                }
+              }
               minLength="5"
               maxLength="49" required />
             <label htmlFor="floatingInputEmail">Email address</label>
           </div>
+          <FormErrors errors={errors.email} color={"grey"} />
           <AddressForm address={address} setAddress={setAddress} />
           <div className="form-floating mb-3">
             <input
@@ -135,8 +144,16 @@ const RegisterForm = () => {
               className="form-control"
               id="floatingPasswordConfirmation"
               name="user[confirm]"
-              onChange={e => setUser({ ...user, confirm: e.target.value })}
-              minLength="8"
+              onChange={e => {
+                  setUser({ ...user, confirm: e.target.value });
+                  if(e.target.value === user.password) {
+                    setErrors({ ...errors, password: [] });
+                  } else {
+                    setErrors({ ...errors, password: ["Your passwords do not match."] });
+                  }
+                }
+              }
+              minLength="1"
               maxLength="49" required />
             <label htmlFor="floatingPasswordConfirmation">Confirm Password</label>
           </div>
@@ -145,6 +162,7 @@ const RegisterForm = () => {
               Passwords must have at least 8 characters with at least 1 number.
             </font>
           </small>
+          <FormErrors errors={errors.password} color={"red"} />
           <div className="form-check mt-3">
             <input
               className="form-check-input"
@@ -155,7 +173,7 @@ const RegisterForm = () => {
               Yes, I have read and agree to the terms outlined in the
               <Link to="https://docs.google.com/document/d/1rRKafml--o5q6L3HA8EtFHCedQTncR8rUZhAeVsEqfI/edit?usp=sharing"
               target="_blank"
-              rel="noreferrer">Community Guidelines Agreement</Link>.
+              rel="noreferrer"> Community Guidelines Agreement</Link>.
             </label>
           </div>
           <br />

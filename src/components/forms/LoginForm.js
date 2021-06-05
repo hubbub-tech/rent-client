@@ -35,7 +35,7 @@ const LoginForm = ({setIsLoggedIn, setFlashMessages, setCartSize}) => {
     <form onSubmit={submit} >
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="card-body">
-          <FormErrors errors={errors} />
+          <FormErrors errors={errors} color={"red"} />
           <div className="form-floating mb-3">
               <input
                 type="email"
