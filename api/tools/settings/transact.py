@@ -5,23 +5,24 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from blubber_orm import Reservations, Items, Orders, Users
 
-from api import celery, create_app
+#from api import make_celery, create_app
 
-@celery.task
+#@celery.task
 def set_async_timeout(user_id):
-    """Background task to unlock items if user does not transact."""
-    try:
-        async_app = create_app()
-        with async_app.app_context():
-            user = Users.get(user_id)
-            for item in user.cart.contents:
-                item.unlock()
-        print(f"All items in {user.name}'s cart have been unlocked again.") # TODO: log this
-        return True
-    except:
-        #TODO: write a proper exception handling statement here
-        print("The timeout failed.")
-        return False
+    # """Background task to unlock items if user does not transact."""
+    # try:
+    #     async_app = create_app()
+    #     with async_app.app_context():
+    #         user = Users.get(user_id)
+    #         for item in user.cart.contents:
+    #             item.unlock()
+    #     print(f"All items in {user.name}'s cart have been unlocked again.") # TODO: log this
+    #     return True
+    # except:
+    #     #TODO: write a proper exception handling statement here
+    #     print("The timeout failed.")
+    #     return False
+    pass
 
 def exp_decay(retail_price, time_now, discount=.50, time_total=28):
     #Where discount is issued at time_total
