@@ -9,7 +9,7 @@ from .transact import verify_rental_token
 def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        if g.user is None:
+        if g.user_id is None:
             flash('Login to view this page.')
             return redirect("/login")
         else:
@@ -19,7 +19,8 @@ def login_required(view):
 def transaction_auth(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
-        token_response = verify_rental_token(kwargs["token"], g.user.id, g.user.cart._total)
+        user = Users.get(g.user_id)
+        token_response = verify_rental_token(kwargs["token"], g.user_id, user.cart._total)
         if token_response:
             return view(**kwargs)
         else:
@@ -35,6 +36,7 @@ def login_user(user):
     else:
         session.clear()
         session["user_id"] = user.id
+        session["cart_size"] = user.cart.size()
         message = "You're logged in, welcome back!"
     Users.set(user.id, {"dt_last_active": datetime.now(tz=pytz.UTC)})
     return {
