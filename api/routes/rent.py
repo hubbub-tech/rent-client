@@ -2,7 +2,7 @@ from datetime import datetime, date, timedelta
 from flask import Blueprint, flash, g, redirect, request, session, Markup
 
 from blubber_orm import Users, Orders
-from blubber_orm import Items, Tags
+from blubber_orm import Items, Tags, Details, Calendars
 
 from api.tools.settings import create_rental_token
 from api.tools.settings import login_required, AWS
@@ -14,18 +14,19 @@ bp = Blueprint('rent', __name__)
 @bp.route("/inventory", defaults={"search": None}, methods=["POST", "GET"])
 @bp.route("/inventory/search=<search>", methods=["POST", "GET"])
 def inventory(search):
+    listers = Users.get_all() #TODO: only get listers
     photo_url = AWS.get_url("items")
     if search:
         listings = search_items(search)
     else:
         listings = Items.filter({"is_available": True})
-
     if request.method == "POST":
         search = request.form.get("search", "all") #if search is None, search='all'
         if search:
             return redirect(f"/inventory/search={search}")
     return {
-        "listings": blubber_instances_to_dict(listings),
+        "items": blubber_instances_to_dict(listings),
+        "listers": blubber_instances_to_dict(listers),
         "photo_url": photo_url
         }
 
@@ -42,8 +43,24 @@ def categories(category):
         "photo_url": photo_url
         }
 
-@bp.route("/inventory/i/id=<int:item_id>", methods=["POST", "GET"])
-def details(item_id):
+@bp.route("/inventory/i/id=<int:item_id>")
+def item_details(item_id):
+    item = Items.get(item_id)
+    lister = Users.get(item.lister_id).to_dict()
+    details = Details.get(item_id).to_dict()
+    calendar = Calendars.get(item_id)
+    next_start, next_end = calendar.next_availability()
+    calendar = calendar.to_dict()
+    calendar["next_available_start"] = next_start.strftime("%Y-%m-%d")
+    calendar["next_available_end"] = next_end.strftime("%Y-%m-%d")
+    return {
+        "lister": lister,
+        "details": details,
+        "calendar": calendar
+    }
+
+@bp.route("/inventory/i/view/id=<int:item_id>", methods=["POST", "GET"])
+def view_item(item_id):
     format = "%m/%d/%Y"
     reservation = None
     item = Items.get(item_id)
@@ -99,7 +116,7 @@ def add_to_cart(item_id, start, end):
         g.user.cart.add_without_reservation(item)
         message = "The item has been added to your cart!"
     flash(message)
-    return redirect(f"/inventory/i/id={item_id}")
+    return redirect(f"/inventory/i/view/id={item_id}")
 
 #TODO: in the new version of the backend, user must propose new dates to reset
 #takes data from changed reservation by deleting the temporary res created previously

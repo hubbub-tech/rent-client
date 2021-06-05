@@ -13,13 +13,13 @@ from api.tools import blubber_instances_to_dict
 
 bp = Blueprint('main', __name__)
 
-@bp.route("/test", methods=["POST", "GET"])
-def test():
+@bp.route("/index", methods=["POST", "GET"])
+def index():
     _testimonials = Testimonials.get_all()
     testimonials = blubber_instances_to_dict(_testimonials)
-    _users = Users.filter({"is_blocked": False})
-    users = blubber_instances_to_dict(_users)
-    return {"users": users, "testimonials": testimonials}
+    # _users = Users.filter({"is_blocked": False})
+    # users = blubber_instances_to_dict(_users)
+    return {"testimonials": testimonials}
 
 #keep track of items being rented, items owned, item reviews and item edits
 @bp.route("/accounts/u/id=<int:id>")
