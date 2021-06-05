@@ -18,12 +18,9 @@ def inventory(search):
     photo_url = AWS.get_url("items")
     if search:
         listings = search_items(search)
+        print("search", search)
     else:
         listings = Items.filter({"is_available": True})
-    if request.method == "POST":
-        search = request.form.get("search", "all") #if search is None, search='all'
-        if search:
-            return redirect(f"/inventory/search={search}")
     return {
         "items": blubber_instances_to_dict(listings),
         "listers": blubber_instances_to_dict(listers),

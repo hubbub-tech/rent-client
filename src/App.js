@@ -11,8 +11,6 @@ import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
 
-//import MetaData from './components/base/MetaData';
-
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [flashMessages, setFlashMessages] = useState([]);
@@ -31,12 +29,8 @@ const App = () => {
         <Navbar isLoggedIn={isLoggedIn} cartSize={cartSize} />
         <Flash flashMessages={flashMessages} />
         <Switch>
-          <Route exact path="/">
-            <Main />
-          </Route>
-          <Route exact path="/inventory">
-            <Shop />
-          </Route>
+          <Route exact path="/"><Main /></Route>
+          <Route exact path="/inventory"><Shop /></Route>
           <Route exact path="/login">
             <Login
               isLoggedIn={isLoggedIn}
@@ -47,9 +41,7 @@ const App = () => {
           <Route exact path="/register">
             <Register isLoggedIn={isLoggedIn} />
           </Route>
-          <Route exact path="/logout">
-            <Logout />
-          </Route>
+          <Route exact path="/logout"><Logout /></Route>
         </Switch>
         <Footer />
       </div>

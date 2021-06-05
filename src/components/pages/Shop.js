@@ -21,10 +21,7 @@ const Shop = () => {
         <hr />
         <div className="row">
           {items.map((item) => (
-            <ShopCard
-              imgPath={urlBase}
-              item={item}
-              key={item.id} />
+            <ShopCard imgPath={urlBase} item={item} key={item.id} />
           ))}
         </div>
       </div>

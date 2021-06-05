@@ -103,7 +103,7 @@ def register():
             flash(form_check["message"])
     return {"is_registered": False}, 406
 
-@bp.route("/logout")
+@bp.get("/logout")
 @login_required
 def logout():
     session.clear()
