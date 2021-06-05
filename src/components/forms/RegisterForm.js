@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
 import AddressForm from './AddressForm';
+import FormErrors from '../errors/FormErrors';
 
 const RegisterForm = () => {
   let history = useHistory();
@@ -22,7 +23,13 @@ const RegisterForm = () => {
     "state": "NY",
     "zip": null
   });
-  const [profile, setProfile] = useState({"phone": null})
+  const [profile, setProfile] = useState({"phone": null});
+  const [errors, setErrors] = useState({
+    "email": [],
+    "password": [],
+    "address": [],
+    "server": []
+  });
 
   const submit = (e) => {
     e.preventDefault()
@@ -32,11 +39,12 @@ const RegisterForm = () => {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => {
-      console.log({ user, profile, address })
       if (res.ok) {
         res.json().then(data => history.push('/login'));
       } else {
-        console.log("REGISTER FAILED");
+        res.json().then(data => {
+          setErrors({ ...errors, server: data.errors });
+        });
       }
     })
   }
@@ -44,6 +52,7 @@ const RegisterForm = () => {
     <form onSubmit={submit} >
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="step-1 card-body">
+          <FormErrors errors={errors.server} />
           <div className="row">
             <div className="col">
               <div className="form-floating mb-3">
@@ -82,7 +91,7 @@ const RegisterForm = () => {
               name="user[email]"
               placeholder="ah1754@columbia.edu"
               onChange={e => setUser({ ...user, email: e.target.value })}
-              minLength="1"
+              minLength="5"
               maxLength="49" required />
             <label htmlFor="floatingInputEmail">Email address</label>
           </div>
@@ -94,8 +103,8 @@ const RegisterForm = () => {
               id="floatingInputPhone"
               name="profile[phone]"
               onChange={e => setProfile({ ...profile, phone: e.target.value })}
-              minLength="1"
-              maxLength="49" required />
+              minLength="10"
+              maxLength="20" required />
             <label htmlFor="floatingInputPhone">Phone Number</label>
           </div>
           <div className="form-floating mb-3">
@@ -131,7 +140,12 @@ const RegisterForm = () => {
               maxLength="49" required />
             <label htmlFor="floatingPasswordConfirmation">Confirm Password</label>
           </div>
-          <div className="form-check">
+          <small className="card-text">
+            <font size="-1">
+              Passwords must have at least 8 characters with at least 1 number.
+            </font>
+          </small>
+          <div className="form-check mt-3">
             <input
               className="form-check-input"
               type="radio"

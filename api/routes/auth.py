@@ -46,12 +46,11 @@ def login():
                     "flashes": [login_response["message"]]
                 }, 201
             else:
-                flash(login_response["message"])
+                return {"errors": [login_response["message"]]}, 406 #NOTE: wrong data
         else:
-            flash(form_check["message"])
-        return {"is_logged_in": False}, 406 #NOTE: wrong data
+            return {"errors": [form_check["message"]]}, 406 #NOTE: wrong data
     else:
-        return {"is_logged_in": False}, 406 #NOTE: no data
+        return {"errors": ["Nothing was entered! We need input to log you in."]}, 406 #NOTE: no data
 
 @bp.post('/register')
 def register():

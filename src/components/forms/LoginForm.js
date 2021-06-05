@@ -2,9 +2,12 @@ import React from 'react';
 import { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
+import FormErrors from '../errors/FormErrors';
+
 const LoginForm = ({setIsLoggedIn, setFlashMessages, setCartSize}) => {
   let history = useHistory();
-  const [user, setUser] = useState({"email": null, "password": null})
+  const [user, setUser] = useState({"email": null, "password": null});
+  const [errors, setErrors] = useState([]);
 
   const submit = (e) => {
     e.preventDefault()
@@ -22,14 +25,17 @@ const LoginForm = ({setIsLoggedIn, setFlashMessages, setCartSize}) => {
           history.push('/');
         });
       } else {
-        console.log("LOGIN FAILED");
+        res.json().then(data => {
+          setErrors(data.errors)
+        });
       }
-    })
+    });
   }
   return (
     <form onSubmit={submit} >
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="card-body">
+          <FormErrors errors={errors} />
           <div className="form-floating mb-3">
               <input
                 type="email"
@@ -42,11 +48,6 @@ const LoginForm = ({setIsLoggedIn, setFlashMessages, setCartSize}) => {
                 maxLength="49" required />
               <label htmlFor="floatingInput">Email address</label>
           </div>
-          <small className="card-text">
-            <font size="-1">
-              Passwords must be longer than 8 characters and contain at least one number.
-            </font>
-          </small>
           <div className="form-floating mb-3">
             <input
               type="password"
