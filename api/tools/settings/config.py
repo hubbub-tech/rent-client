@@ -49,7 +49,7 @@ class AWSConfig:
 
     @staticmethod
     def get_url(path):
-        url = "/".join([AWS.S3_LINK, path])
+        url = "/".join([AWSConfig.S3_LINK, path])
         return url
 #
 # class MailConfig:
