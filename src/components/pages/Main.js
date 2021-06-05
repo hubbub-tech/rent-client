@@ -1,10 +1,18 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+
 import MainBanner from '../banners/MainBanner';
 import CategoryCard from '../cards/CategoryCard';
 import NewsletterForm from '../forms/NewsletterForm';
 import TestimonialCarousel from '../carousels/TestimonialCarousel';
 
-const Main = ({testimonials}) => {
+const Main = () => {
+  const [testimonials, setTestimonials] = useState([]);
+  useEffect(() => {
+    fetch('/index')
+    .then(res => res.json())
+    .then(data => setTestimonials(data.testimonials));
+  }, []);
   return (
     <main>
       <MainBanner />

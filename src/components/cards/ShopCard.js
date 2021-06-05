@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ShopCard = ({imgPath, item, lister}) => {
+const ShopCard = ({imgPath, item}) => {
 return (
     <div className="col-lg-3 col-md-6">
       <a className="custom-card" href={`/inventory/i/id=${item.id}`}>
@@ -9,9 +9,8 @@ return (
           <div className="card-body">
             <h6 className="card-title">{item.name}</h6>
             <p className="card-text mt-3 mb-1">From</p>
-            <p className="card-text mb-1">{item.price}/day, SOMETHING/week</p>
-            <p className="card-text">SOMETHING/mo, SOMETHING/3-mos</p>
-            <p className="card-text">Listed by <a href={`/accounts/u/id=${lister.id}`}>{lister.name}</a></p>
+            <p className="card-text mb-1">{item.price}/day</p>
+            <p className="card-text">Listed by SOMEONE</p>
             <hr className="my-2" />
             <small className="card-text text-success">Available starting SOMETIME</small>
           </div>

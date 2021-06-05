@@ -1,40 +1,7 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const LogInLinks = ({isLoggedIn}) => {
-  if (isLoggedIn) {
-    return (
-      <li className="nav-item dropdown">
-          <a className="nav-link dropdown-toggle" href="/" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">Account</a>
-          <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a className="dropdown-item" href="/account/u.{{ g.user.id }}">View Profile</a>
-            <a className="dropdown-item" href="/account/u.edit">Edit Profile</a>
-            <a className="dropdown-item" href="/account/u.password">Change Password</a>
-            <a className="dropdown-item" href="/return/logistics">Returns Scheduling</a>
-            <div className="dropdown-divider"></div>
-            <a className="dropdown-item" href="/checkout">My Cart</a>
-            <a className="dropdown-item" href="/logout">Logout</a>
-          </ul>
-        </li>
-    );
-  } else {
-    return (
-      <div>
-          <li className="nav-item">
-            <a className="nav-link" href="/login">Login</a>
-          </li>
-          <li className="nav-item">
-            <a className="nav-link" href="/register">Sign Up</a>
-          </li>
-        </div>
-    );
-  }
-}
-
-const CartFill = () => {
-  return <span className="badge badge-primary badge-pill mx-2">100</span>
-}
-
-const Navbar = (isLoggedIn) => {
+const Navbar = ({isLoggedIn, cartSize}) => {
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light"
@@ -56,12 +23,41 @@ const Navbar = (isLoggedIn) => {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/inventory">Rent</a>
+              <Link className="nav-link active" aria-current="page" to="/inventory">Rent</Link>
             </li>
             {
               //<li className="nav-item"><a className="nav-link" href="/become-a-lister">List</a></li>
             }
-            <LogInLinks isLoggedIn={isLoggedIn} />
+            {isLoggedIn &&
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="/"
+                  id="navbarDropdownMenuLink"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">Account</a>
+                <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <a className="dropdown-item" href="/account/u.{{ g.user.id }}">View Profile</a>
+                  <a className="dropdown-item" href="/account/u.edit">Edit Profile</a>
+                  <a className="dropdown-item" href="/account/u.password">Change Password</a>
+                  <a className="dropdown-item" href="/return/logistics">Returns Scheduling</a>
+                  <div className="dropdown-divider"></div>
+                  <a className="dropdown-item" href="/checkout">My Cart</a>
+                  <a className="dropdown-item" href="/logout">Logout</a>
+                </ul>
+              </li>
+            }
+            {!isLoggedIn &&
+              <li className="nav-item">
+                <Link className="nav-link" to="/login">Login</Link>
+              </li>
+            }
+            {!isLoggedIn &&
+              <li className="nav-item">
+                <Link className="nav-link" to="/register">Sign Up</Link>
+              </li>
+            }
           </ul>
           <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
             <a href="/checkout">
@@ -78,7 +74,9 @@ const Navbar = (isLoggedIn) => {
               </svg>
             </a>
           </ul>
-          <CartFill />
+          {isLoggedIn &&
+            <span className="badge badge-primary badge-pill mx-2">{cartSize}</span>
+          }
         </div>
       </div>
     </nav>
