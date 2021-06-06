@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import 'bootstrap/scss/bootstrap.scss'
+import 'react-dates/lib/css/_datepicker.css';
 import './index.css';
+
 import App from './App';
 
 ReactDOM.render(

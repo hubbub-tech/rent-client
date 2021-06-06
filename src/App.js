@@ -7,6 +7,7 @@ import Navbar from './components/base/Navbar';
 import Footer from './components/base/Footer';
 import Main from './components/pages/Main';
 import Shop from './components/pages/Shop';
+import ItemDetails from './components/pages/ItemDetails';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/pages/Logout';
@@ -31,6 +32,11 @@ const App = () => {
         <Switch>
           <Route exact path="/"><Main /></Route>
           <Route exact path="/inventory"><Shop /></Route>
+          <Route exact path="/inventory/i/id=:itemId">
+            <ItemDetails
+              isLoggedIn={isLoggedIn}
+              setFlashMessages={setFlashMessages} />
+          </Route>
           <Route exact path="/login">
             <Login
               isLoggedIn={isLoggedIn}
