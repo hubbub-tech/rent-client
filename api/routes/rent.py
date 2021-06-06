@@ -7,12 +7,12 @@ from blubber_orm import Items, Tags, Details, Calendars
 from api.tools.settings import create_rental_token
 from api.tools.settings import login_required, AWS
 from api.tools.build import create_reservation, validate_rental_bounds
-from api.tools import blubber_instances_to_dict
+from api.tools import blubber_instances_to_dict, json_date_to_python_date
 
 bp = Blueprint('rent', __name__)
 
-@bp.route("/inventory", defaults={"search": None}, methods=["POST", "GET"])
-@bp.route("/inventory/search=<search>", methods=["POST", "GET"])
+@bp.get("/inventory", defaults={"search": None})
+@bp.get("/inventory/search=<search>")
 def inventory(search):
     listers = Users.get_all() #TODO: only get listers
     photo_url = AWS.get_url("items")
@@ -40,80 +40,100 @@ def categories(category):
         "photo_url": photo_url
         }
 
-@bp.route("/inventory/i/id=<int:item_id>")
-def item_details(item_id):
+@bp.get("/inventory/i/id=<int:item_id>")
+def view_item(item_id):
+    photo_url = AWS.get_url("items")
     item = Items.get(item_id)
-    lister = Users.get(item.lister_id).to_dict()
-    details = Details.get(item_id).to_dict()
+    lister = Users.get(item.lister_id)
+    item = item.to_dict()
+    item["lister_name"] = lister.name
+    details = Details.get(item_id)
     calendar = Calendars.get(item_id)
     next_start, next_end = calendar.next_availability()
+    details = details.to_dict()
     calendar = calendar.to_dict()
     calendar["next_available_start"] = next_start.strftime("%Y-%m-%d")
     calendar["next_available_end"] = next_end.strftime("%Y-%m-%d")
     return {
-        "lister": lister,
+        "item": item,
         "details": details,
-        "calendar": calendar
+        "calendar": calendar,
+        "photo_url": photo_url
     }
 
-@bp.route("/inventory/i/view/id=<int:item_id>", methods=["POST", "GET"])
-def view_item(item_id):
-    format = "%m/%d/%Y"
+@bp.post("/inventory/i/validate/id=<int:item_id>")
+@login_required
+def validate_rental(item_id):
+    flashes = []
+    errors = []
+    code = 406
     reservation = None
-    item = Items.get(item_id)
-    photo_url = AWS.get_url("items")
-    if request.method == "POST":
+    g.user_id = session.get('user_id')
+    data = request.json
+    if data:
+        date_started = json_date_to_python_date(data["startDate"])
+        date_ended = json_date_to_python_date(data["endDate"])
+
+        item = Items.get(item_id)
         rental_range = {
-            "date_started" : request.form.get("start"),
-            "date_ended" : request.form.get("end")
-            }
-        form_check = validate_rental_bounds(item, rental_range, format) # start < end on frontend
+            "date_started": date_started,
+            "date_ended": date_ended
+        }
+        form_check = validate_rental_bounds(item, rental_range)
         if form_check["is_valid"]:
             rental_data = {
-                "renter_id": g.user.id,
+                "renter_id": g.user_id,
                 "item_id": item.id,
-                "date_started": datetime.strptime(rental_range["date_started"], format).date(),
-                "date_ended": datetime.strptime(rental_range["date_ended"], format).date()
+                "date_started": date_started,
+                "date_ended": date_ended
             }
-            reservation, action, waitlist_ad = create_reservation(insert_data)
+            reservation, action, waitlist_ad = create_reservation(rental_data)
             if reservation:
                 reservation = reservation.to_dict()
+                code = 201
             else:
-                flash(Markup(waitlist_ad))
-            flash(action)
+                flashes.append(waitlist_ad)
+            flashes.append(action)
         else:
-            flash(form_check["message"])
+            flashes.append(form_check["message"])
+    else:
+        errors = ["Nothing was entered! We need input to log you in."]
     return {
         "reservation": reservation,
-        "item": item.to_dict(),
-        "photo_url": photo_url,
-        "booked_days": item.calendar.get_booked_days(stripped=False)
-        }
+        "flashes": flashes,
+        "errors": errors
+    }, code
 
-@bp.route("/add/i/id=<int:item_id>", defaults={"start": None, "end": None})
-@bp.route("/add/i/id=<int:item_id>&start=<start>&end=<end>")
+@bp.post("/add/i/id=<int:item_id>")
 @login_required
-def add_to_cart(item_id, start, end):
-    format = "%Y-%m-%d"
+def add_to_cart(item_id):
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
     item = Items.get(item_id)
-    if start and end:
-        if not item in g.user.cart.contents:
-            reservation_keys = {
-                "renter_id": g.user.id,
-                "item_id": item_id,
-                "date_started": datetime.strptime(start, format).date(),
-                "date_ended": datetime.strptime(end, format).date()
-            }
-            reservation = Reservations.get(reservation_keys)
-            g.user.cart.add(reservation)
-            message = "The item has been added to your cart!"
-        else:
+    data = request.json
+    if data["startDate"] and data["endDate"]:
+        date_started = json_date_to_python_date(data["startDate"])
+        date_ended = json_date_to_python_date(data["endDate"])
+        if user.cart.contains(item):
             message = "The item is already in your cart."
+        else:
+            reservation_keys = {
+                "renter_id": g.user_id,
+                "item_id": item_id,
+                "date_started": date_started,
+                "date_ended": date_ended
+            }
+            reservation = Reservations.get(reservation_keys) #NOTE: assumes res exists
+            user.cart.add(reservation)
+            message = "The item has been added to your cart!"
     else:
-        g.user.cart.add_without_reservation(item)
-        message = "The item has been added to your cart!"
-    flash(message)
-    return redirect(f"/inventory/i/view/id={item_id}")
+        if user.cart.contains(item):
+            message = "The item is already in your cart."
+        else:
+            print("cart", user.cart.contents)
+            user.cart.add_without_reservation(item)
+            message = "The item has been added to your cart!"
+    return {"flashes": [message]}, 201
 
 #TODO: in the new version of the backend, user must propose new dates to reset
 #takes data from changed reservation by deleting the temporary res created previously
@@ -185,9 +205,11 @@ def remove_from_cart(item_id, start, end):
 @login_required
 def checkout():
     reservations = [] #for json
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
     photo_url = AWS.get_url("items")
-    ready_to_order_items = g.user.cart.get_reserved_contents()
-    for item in g.user.cart.contents:
+    ready_to_order_items = user.cart.get_reserved_contents()
+    for item in user.cart.contents:
         if item in ready_to_order_items:
             reservation, = Reservations.filter({
                 "renter_id": g.user.id,
@@ -198,7 +220,7 @@ def checkout():
             if item.calendar.scheduler(reservation) == False:
                 g.user.cart.remove(reservation)
                 g.user.cart.add_without_reservation(item)
-            elif not reservation in item.calendar.reservations:
+            elif not reservation.is_calendared:
                 if item.calendar.scheduler(reservation) is None:
                     Items.set(item.id, {"is_available": False})
                     g.user.cart.remove(reservation)

@@ -65,7 +65,7 @@ def validate_login(form_data):
         }
 
 # for now does nothing but will be import for validation
-def validate_listing(form_data, format):
+def validate_listing(form_data):
     is_valid = True
     message = "Successful listing! Go to the Rent Page to check it out!"
     return {
@@ -73,23 +73,23 @@ def validate_listing(form_data, format):
         "message" : message
         }
 
-def validate_rental_bounds(item, rental_range, format):
+def validate_rental_bounds(item, rental_range):
     is_valid = False
     min_days_to_rental_start = 2
     max_rental_period = 365
-    rental_start_date = datetime.strptime(rental_range["date_started"], format).date()
-    rental_end_date = datetime.strptime(rental_range["date_ended"], format).date()
+    rental_start_date = rental_range["date_started"]
+    rental_end_date = rental_range["date_ended"]
     if date.today() + timedelta(days=4) >= item.calendar.date_ended:
         Items.set(item.id, {"is_available": False})
         message = "Sorry, the item is not currently available."
 
-    elif rental_start_date < item.calendar.start_listing:
+    elif rental_start_date < item.calendar.date_started:
         message = f"""
             The {item.name} is unavailable for the period you requested. It
             is listed starting {item.calendar.date_started.strftime("%B %-d, %Y")} to
             {item.calendar.date_ended.strftime("%B %-d, %Y")}.
             """
-    elif rental_end_date > item.calendar.end_listing:
+    elif rental_end_date > item.calendar.date_ended:
         message = f"""
             The {item.name} is unavailable for the period you requested. It
             is listed starting {item.calendar.date_started.strftime("%B %-d, %Y")} to
