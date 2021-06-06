@@ -49,8 +49,11 @@ def create_review(review_data):
     return new_review
 
 def create_reservation(insert_data):
-    reservation = Reservations.get(insert_data)
-    if reservation is None:
+    reservation = Reservations.filter(insert_data)
+    if reservation:
+        reservation, = reservation
+        is_valid_reservation = True
+    else:
         item = Items.get(insert_data["item_id"])
         rental_duration = (insert_data["date_ended"] - insert_data["date_started"]).days
         insert_data["charge"] = exp_decay(item.price, rental_duration)
@@ -60,11 +63,9 @@ def create_reservation(insert_data):
 
         #scheduler() checks if the res conflicts with other reservations
         is_valid_reservation = item.calendar.scheduler(reservation)
-    else:
-        is_valid_reservation = True
 
     if is_valid_reservation:
-        action_message = "Great, the item is available! If it's not in your cart already make sure you 'Add to Cart'!"
+        action_message = "Great, the item is available! If it isn't in your cart already make sure you 'Add to Cart'!"
         waitlist_message = None
     else:
         #TODO: maybe delete the reservation if it isnt schedulable?
