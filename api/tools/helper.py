@@ -17,3 +17,7 @@ def json_date_to_python_date(js_date_str):
         python_date_str = js_date_str
     python_date = datetime.strptime(python_date_str, format).date()
     return python_date
+
+def is_item_in_itemlist(item, itemlist):
+    item_id_list = [item.id for item in itemlist]
+    return item.id in item_id_list
