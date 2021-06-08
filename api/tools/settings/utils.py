@@ -2,7 +2,7 @@ import pytz
 import functools
 from datetime import datetime
 from flask import session, redirect, flash, g
-from blubber_orm import Users, Items, Details
+from blubber_orm import Users, Items, Details, Tags
 
 from .transact import verify_rental_token
 
@@ -46,7 +46,7 @@ def login_user(user):
 
 def search_items(search_key):
     searchable = f"%{search_key}%"
-    if entry != 'all':
+    if search_key != 'all':
         # search by tag
         unfiltered_items = []
         tags = Tags.like("tag_name", searchable)
