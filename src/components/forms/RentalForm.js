@@ -5,7 +5,7 @@ import 'react-dates/initialize';
 
 import '../../dates.css';
 
-const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
+const RentalForm = ({calendar, setFlashMessages, setReservation, isUpdating}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [focusedInput, setFocusedInput] = useState(null);
@@ -16,7 +16,8 @@ const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
   };
   const submit = (e) => {
     e.preventDefault()
-    fetch(`/inventory/i/validate/id=${calendar.item_id}`, {
+    let fetchUrl = isUpdating ? `/update/i/id=${calendar.item_id}` : `/validate/i/id=${calendar.item_id}`;
+    fetch(fetchUrl, {
       method: 'POST',
       body: JSON.stringify({ startDate, endDate }),
       headers: { 'Content-Type': 'application/json' }

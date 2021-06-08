@@ -20,12 +20,12 @@ const Main = () => {
         <div className="row mt-5">
           <h1 className="text-center">Top Categories</h1>
           <p className="text-center">Rent from the most active categories on Hubbub!</p>
-          <CategoryCard category={{"link": "/kitchen", "title": "Kitchen", "alt": "Pots"}} />
+          <CategoryCard category={{"link": "/search=kitchen", "title": "Kitchen", "alt": "Pots"}} />
           <CategoryCard category={{"link": "", "title": "Everything", "alt": "Fridge"}} />
-          <CategoryCard category={{"link": "/entertainment", "title": "Entertainment", "alt": "Kindle Fire"}} />
-          <CategoryCard category={{"link": "/misc", "title": "Random", "alt": "Lights"}} />
-          <CategoryCard category={{"link": "/school", "title": "School", "alt": "Calculator"}} />
-          <CategoryCard category={{"link": "/living", "title": "Living", "alt": "Weights"}} />
+          <CategoryCard category={{"link": "/search=entertainment", "title": "Entertainment", "alt": "Kindle Fire"}} />
+          <CategoryCard category={{"link": "/search=random", "title": "Random", "alt": "Lights"}} />
+          <CategoryCard category={{"link": "/search=school", "title": "School", "alt": "Calculator"}} />
+          <CategoryCard category={{"link": "/search=living", "title": "Living", "alt": "Weights"}} />
         </div>
         <hr/>
         <div className="row mt-5 d-flex justify-content-center">

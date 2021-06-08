@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import SearchForm from '../forms/SearchForm';
+
 const Navbar = ({isLoggedIn, cartSize}) => {
   return (
     <nav
@@ -23,7 +25,11 @@ const Navbar = ({isLoggedIn, cartSize}) => {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/inventory">Rent</Link>
+              <a
+                className="btn btn-secondary text-white mx-1 nav-link active"
+                aria-current="page"
+                href="/inventory"
+                role="button">Rent Now</a>
             </li>
             {
               //<li className="nav-item"><a className="nav-link" href="/become-a-lister">List</a></li>
@@ -60,6 +66,7 @@ const Navbar = ({isLoggedIn, cartSize}) => {
             }
           </ul>
           <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
+            <SearchForm />
             <a href="/checkout">
               <svg
                 width="2rem"

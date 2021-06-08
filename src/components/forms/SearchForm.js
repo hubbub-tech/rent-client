@@ -24,7 +24,7 @@ const SearchForm = () => {
           maxLength="29"
           aria-describedby="button-addon2" />
         <button
-          className="btn btn-outline-secondary"
+          className="btn btn-secondary"
           type="submit"
           id="button-addon2">Search</button>
       </div>
