@@ -22,7 +22,7 @@ const VisibilityOptions = ({item}) => {
   }
 }
 
-const ListingAccordion = ({isOwner, item, calendar}) => {
+const ListingAccordion = ({isOwner, item}) => {
   return (
     <div className="accordion mb-3" id={`item-accordion-${item.id}`}>
       <div className="accordion-item">
@@ -33,8 +33,8 @@ const ListingAccordion = ({isOwner, item, calendar}) => {
             data-bs-toggle="collapse"
             data-bs-target={`#collapse-${item.id}`}
             aria-expanded="true"
-            aria-controls={`collapse-${item.id}`} >{{ item.name }}
-            {!listing.is_available &&
+            aria-controls={`collapse-${item.id}`} >{ item.name }
+            {!item.is_available &&
               <span className="text-danger text-end mx-2">(Inactive)</span>
             }
           </button>
@@ -46,7 +46,7 @@ const ListingAccordion = ({isOwner, item, calendar}) => {
           data-bs-parent={`#item-accordion-${item.id}`}>
           <div className="accordion-body">
             <p className="card-text">Priced @ {item.price} per day</p>
-            <small className="card-text my-1">Currently available from {calendar.date_started} to {calendar.date_ended}.</small>
+            <small className="card-text my-1">Currently available from {item.calendar.date_started} to {item.calendar.date_ended}.</small>
           </div>
           <hr className="divider"/>
           <a href={`/inventory/i/id=${ item.id }`}>
@@ -59,7 +59,7 @@ const ListingAccordion = ({isOwner, item, calendar}) => {
               </a>
             : null
           }
-          <hr class="divider"/>
+          <hr className="divider"/>
           {isOwner
             ? <VisibilityOptions item={item} />
             : <div className="accordion-body my-1">

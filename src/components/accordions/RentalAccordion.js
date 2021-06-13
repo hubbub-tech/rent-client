@@ -11,7 +11,7 @@ const EarlyReturnOptional = ({orderEndDate}) => {
   }
 }
 
-const RentalAccordion = ({order, item}) => {
+const RentalAccordion = ({order}) => {
   const orderStartDate = new Date(order.res_date_start);
   const orderEndDate = new Date(order.res_date_end);
 
@@ -25,7 +25,7 @@ const RentalAccordion = ({order, item}) => {
             data-bs-toggle="collapse"
             data-bs-target={`#collapse-${order.item_id}-${order.id}`}
             aria-expanded="true"
-            aria-controls={`collapse-${order.item_id}-${order.id}`}>{item.name}</button>
+            aria-controls={`collapse-${order.item_id}-${order.id}`}>ITEM NAME</button>
         </p>
         <div
           id={`collapse-${order.item_id}-${order.id}`}
@@ -45,7 +45,7 @@ const RentalAccordion = ({order, item}) => {
             <div className="accordion-body my-1"><p className="card-text">Review Item</p></div>
           </a>
           <hr className="divider"/>
-          <EarlyReturnOptional orderEndDate={orderEndDate} />
+          <EarlyReturnOptional orderEndDate={order.res_date_end} />
         </div>
       </div>
     </div>

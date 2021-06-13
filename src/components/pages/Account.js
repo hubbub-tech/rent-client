@@ -1,21 +1,47 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
-import AccountBanner from '../banners/AccountBanner';
-import RentalAccordion from '../accordions/RentalAccordion';
+import ProfileCard from '../cards/ProfileCard';
 import ListingAccordion from '../accordions/ListingAccordion';
 import AccountSettings from '../toolbars/AccountSettings';
 
-const Account = ({urlBase, isOwner, user, profile, orders, rentals, listings, calendars}) => {
+const Account = ({isOwner}) => {
+  const { userId } = useParams();
+  const [user, setUser] = useState({"profile": {}, "cart": {}});
+  const [urlBase, setUrlBase] = useState(null);
+  const [listings, setListings] = useState([]);
+
+  useEffect(() => {
+    fetch(`/accounts/u/id=${userId}`)
+    .then(res => res.json())
+    .then(data => {
+      setUser(data.user);
+      setListings(data.listings);
+      setUrlBase(data.photo_url);
+    });
+  }, [userId]);
+
   return (
     <main>
-      <AccountBanner urlBase={urlBase} user={user} profile={profile} />
+      <div className="container-fluid index-background">
+        <div className="row">
+          <div className="col-lg-4 col-sm-3"></div>
+          <div className="col-lg-4 col-sm-6 mt-5">
+            <div className="mx-auto d-block" style={{"width": "300px", "height": "300px"}}>
+              <ProfileCard urlBase={urlBase} user={user} />
+            </div>
+          </div>
+          <div className="col-lg-4 col-sm-3"></div>
+        </div>
+      </div>
       <div className="container-md">
-        <AccountSettings isOwner={isOwner} user={user} profile={profile} />
+        <AccountSettings isOwner={isOwner} user={user} />
         <div className="row justify-content-center">
           <p className="text-center text-muted mb-1"><small>Bio</small></p>
           <div className="col-sm-6 col-12">
             <p className="text-center text-muted mt-0">
-              <small>{{ user.profile.bio }}</small>
+              <small>{ user.profile.bio }</small>
             </p>
           </div>
         </div>
@@ -28,27 +54,10 @@ const Account = ({urlBase, isOwner, user, profile, orders, rentals, listings, ca
           </div>
         </div>
         <hr />
-        {isOwner &&
-          <div className="row">
-            <div className="col-md mt-2">
-              <h3>Rental History</h3>
-              {rentals.map((item, index) => (
-                <RentalAccordion
-                  order={orders[item.id]}
-                  item={item}
-                  key={index} />
-              ))}
-            </div>
-          </div>
-        }
         <div className="col-md mt-2">
           <h3>{user.name} Listings ({listings.length})</h3>
           {listings.map((item) => (
-            <ListingAccordion
-              isOwner={isOwner}
-              item={item}
-              calendar={calendars[item.id]}
-              key={index} />
+            <ListingAccordion isOwner={isOwner} item={item} key={item.id} />
           ))}
         </div>
       </div>
