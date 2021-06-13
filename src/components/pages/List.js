@@ -1,0 +1,61 @@
+import React from "react";
+import { useState, useEffect } from 'react';
+
+import ListForm from "../forms/ListForm";
+
+const List = ({ setFlashMessages }) => {
+  const [tags, setTags] = useState([]);
+  const [address, setAddress] = useState({});
+
+  useEffect(() => {
+    fetch('/list')
+    .then(res => res.json())
+    .then(data => {
+      setTags(data.tags);
+      setAddress(data.address);
+      console.log({"got address": data.address})
+    });
+  }, []);
+  return (
+    <main>
+      <br />
+      <h1 className="text-center">List</h1>
+      <p className="text-center">Start your side hustle <i><mark>today</mark></i>.</p>
+      <div className="container" style={{"maxWidth": "900px"}}>
+        <div className="row justify-content-md-center">
+          <div className="col-lg-4">
+            <h5 className="text-center">Quick Tips</h5>
+              <ul className="instructions">
+                <li>
+                  Be sure to set your item at its original retail price. This helps us
+                  set the most precise listing value for your item.
+                </li>
+                <br />
+                <li>
+                  Provide a good description for your item. This is an opportunity to
+                  capture details that maybe don't come through in the photo. Its
+                  probably best to keep it tweet length.
+                </li>
+                <br />
+                <li>
+                  Take a clear, unobstructed photo of your item for the listing with
+                  a solid background and good lighting. Portrait photos preferred.
+                  These small steps will make it more attractive for customers!
+                </li>
+                <br />
+                <li>
+                  Photos must be formatted as <mark><i>.jpg, .png, or .jpeg</i></mark> to be accepted.
+                </li>
+              </ul>
+          </div>
+          <div className="col-lg-8">
+            <ListForm setFlashMessages={setFlashMessages} />
+          </div>
+        </div>
+      </div>
+      <br />
+    </main>
+  );
+}
+
+export default List;

@@ -4,50 +4,66 @@ from blubber_orm import Users, Tags
 
 from api.tools.settings import login_required
 from api.tools.build import validate_listing
-from api.tools import blubber_instances_to_dict
+from api.tools import blubber_instances_to_dict, json_date_to_python_date
 
 bp = Blueprint('list', __name__)
 
-@bp.route('/list', methods=['POST', 'GET'])
+@bp.get('/list')
 @login_required
 def list():
-    format = "%m/%d/%Y"
     tags = Tags.get_all() #TODO: only get top 8 category tags
-    if request.method == "POST":
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+
+    return {
+        "tags": blubber_instances_to_dict(tags),
+        "address": user.address.to_dict()
+    }
+
+
+@bp.post('/list/submit')
+@login_required
+def list_submit():
+    format = "%Y-%m-%d"
+    flashes = []
+    data = request.json
+    if data:
+        new_date_started = json_date_to_python_date(data["startDate"])
+        new_date_ended = json_date_to_python_date(data["endDate"])
         form_data = {
             "item": {
-                "lister_id": g.user.id,
-                "name": request.form.get("name"),
-                "price": request.form.get("price"),
-                "address_num": request.form.get("num"),
-                "address_street": request.form.get("street"),
-                "address_apt": request.form.get("apt"),
-                "address_zip": request.form.get("zip")
+                "lister_id": g.user_id,
+                "name": data["name"],
+                "price": data["price"],
+                "address_num": data["num"],
+                "address_street": data["street"],
+                "address_apt": data["apt"],
+                "address_zip": data["zip"]
             },
             "details": {
-                "description": request.form.get("description"),
-                "condition": request.form.get("condition"),
-                "volume": request.form.get("volume"),
-                "weight": request.form.get("weight"),
+                "description": data["description"],
+                "condition": data["condition"],
+                "volume": data["volume"],
+                "weight": data["weight"],
                 "id": None
             },
             "calendar": {
-                "date_started": request.form.get("start"),
-                "date_ended": request.form.get("end"),
+                "date_started": new_date_started,
+                "date_ended": new_date_ended,
                 "id": None
             },
             "address": {
-                "num": request.form.get("num"),
-                "street": request.form.get("street"),
-                "apt": request.form.get("apt"),
-                "city": request.form.get("city"),
-                "state": request.form.get("state"),
-                "zip": request.form.get("zip")
+                "num": data["num"],
+                "street": data["street"],
+                "apt": data["apt"],
+                "city": data["city"],
+                "state": data["state"],
+                "zip": data["zip"]
             },
-            "tags": request.form.getlist("tags"),
-            "is_listed_from_user_address": request.form.get("use_my_address")
+            "tags": data["selectedTags"],
+            "is_listed_from_user_address": data["isDefaultAddress"]
         }
-        image = request.files.get("image")
+        image = data["image"]
         form_check = validate_listing(form_data, format) #validate `start` < `end` on frontend
         if form_check["is_valid"]:
             date_started_str = form_data["calendar"]["date_started"]
@@ -65,15 +81,17 @@ def list():
             upload_response = upload_image(image_data)
             if upload_response["is_valid"]:
                 #TODO: send lister confirmation email
-                flash(form_check["message"])
-                return redirect('/list/success')
+                flashes.append(form_check["message"])
+                return {"flashes": flashes}, 201
             else:
-                flash(upload_response["message"])
-                return redirect("/")
+                flashes.append(upload_response["message"])
+                return {"flashes": flashes}, 406
         else:
-            flash(form_check["message"])
-            return redirect("/become-a-lister")
-    return {"tags": blubber_instances_to_dict(tags)}
+            flashes.append(form_check["message"])
+            return {"flashes": flashes}, 406
+    else:
+        flashes.append("No data was sent.")
+        return {"flashes": flashes}, 406
 
 #TODO: create static page for list/info
 #TODO: create static page for list/complete or list/success
