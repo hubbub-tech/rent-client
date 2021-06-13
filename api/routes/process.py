@@ -13,39 +13,42 @@ from api.tools import blubber_instances_to_dict
 bp = Blueprint('process', __name__)
 
 #Accepts payment choice from the checkout form
-@bp.route("/checkout/router&token=<token>&method=<payment_method>")
+@bp.route("/checkout/router/token=<token>")
 @transaction_auth
 @login_required
-def order_router(token, payment_method):
+def order_router(token):
     cart_response = lock_checkout(g.user)
     if cart_response["is_valid"]:
         #Redirect depending on payment method
         if method == "online":
-            return redirect(f"/checkout/payment&token={token}")
+            return redirect(f"/checkout/payment/token={token}")
         else:
             # default to in-person payment, skip to confirmation
             for item in g.user.cart.contents:
                 item.is_routed = True
-            return redirect(f"/checkout/confirmation&token={token}&method={method}")
+            return redirect(f"/checkout/confirmation/token={token}")
     else:
         flash(cart_response["message"])
         return redirect("/checkout")
 
 
 #Accepts payment choice from the checkout form
-@bp.route("/checkout/payment&token=<token>")
+@bp.route("/checkout/payment/token=<token>")
 @transaction_auth
 @login_required
 def order_payment(token):
     pass #TODO: payment method API in here and route items in cart
 
-@bp.route("/checkout/confirmation&token=<token>&method=<payment_method>")
+@bp.route("/checkout/confirmation/token=<token>")
 @transaction_auth
 @login_required
-def order_confirmation(token, payment_method):
-    cart_data = {}
-    routing_response = check_if_routed(g.user)
-    if routing_response["is_valid"]:
+def order_confirmation(token):
+    flashes = []
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    cart_response = lock_checkout(user)
+    if cart_response["is_valid"]:
+        cart_data = {}
         _cart_contents = g.user.cart.contents # need this because cart size changes
         for item in _cart_contents:
             _reservation = Reservations.filter({
@@ -60,7 +63,7 @@ def order_confirmation(token, payment_method):
                 "res_date_end": reservation.date_ended,
                 "renter_id": reservation.renter_id,
                 "item_id": reservation.item_id,
-                "is_online_pay": payment_method,
+                "is_online_pay": False,
                 "lister_id": item.lister_id,
                 "date_placed": date.today(),
             }
@@ -78,11 +81,11 @@ def order_confirmation(token, payment_method):
             g.user.cart.remove(reservation)
             item.unlock()
         #TODO: send email receipt to renter
-        flash("Successfully rented all items! Now, just let us know when we can drop them off.")
-        return redirect("/schedule/dropoff")
+        flashes.append("Successfully rented all items! Now, just let us know when we can drop them off.")
+        return {"flashes": flashes}, 201 #redirect("/schedule/dropoff")
     else:
-        flash(routing_response["message"])
-        return redirect("/checkout")
+        flashes.append(cart_response["message"])
+        return {"flashes": flashes}, 406
 
 @bp.route("/schedule/dropoffs", methods=["POST", "GET"])
 @login_required
