@@ -1,6 +1,6 @@
-import React import 'react';
+import React from 'react';
 
-const AccountSettings = ({isOwner, user, profile}) => {
+const AccountSettings = ({isOwner, user}) => {
   if (isOwner) {
     return (
       <div className="row justify-content-center g-0">
@@ -18,7 +18,7 @@ const AccountSettings = ({isOwner, user, profile}) => {
             aria-expanded="false">Edit My Profile</a>
           <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
             <li><h6 className="dropdown-header">Profile</h6></li>
-            <p className="mx-3 mb-1">Phone Number - {profile.phone}</p>
+            <p className="mx-3 mb-1">Phone Number - {user.profile.phone}</p>
             <p className="mx-3 mb-1">Payment - {user.payment}</p>
             <p className="mx-3 mb-1 text-alert">
               <small>Note: You are the only one who can view these details.</small>
