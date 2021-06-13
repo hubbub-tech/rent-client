@@ -18,6 +18,7 @@ def index():
     _testimonials = Testimonials.get_all()
     testimonials = blubber_instances_to_dict(_testimonials)
     for testimonial in testimonials:
+        print(testimonial)
         user = Users.get(testimonial["user_id"])
         testimonial["user"] = user.to_dict()
         testimonial["user"]["name"] = user.name
@@ -31,18 +32,49 @@ def index():
 def account(id):
     searched_user = Users.get(id)
     photo_url = AWS.get_url("users")
-
-    orders = Orders.filter({"renter_id": searched_user.id})
-    listings = Items.filter({"lister_id": searched_user.id})
-    rentals = [Items.get(order.item_id) for order in orders]
-
+    user_to_dict = searched_user.to_dict()
+    user_to_dict["cart"] = searched_user.cart.to_dict()
+    user_to_dict["profile"] = searched_user.profile.to_dict()
+    listings_obj = Items.filter({"lister_id": searched_user.id})
+    listings = []
+    for item in listings_obj:
+        item_to_dict = item.to_dict()
+        item_to_dict["calendar"] = item.calendar.to_dict()
+        item_to_dict["details"] = item.details.to_dict()
+        listings.append(item_to_dict)
     return {
         #is the current user the owner of the account?
         "photo_url": photo_url,
-        "user": searched_user.to_dict(),
-        "orders": blubber_instances_to_dict(orders),
-        "rentals": blubber_instances_to_dict(rentals),
-        "listings": blubber_instances_to_dict(listings)
+        "user": user_to_dict,
+        "listings": listings
+    }
+
+@bp.get("/accounts/u/rentals")
+@login_required
+def view_rentals():
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    photo_url = AWS.get_url("users")
+    user_to_dict = user.to_dict()
+    user_to_dict["cart"] = user.cart.to_dict()
+    user_to_dict["profile"] = user.profile.to_dict()
+    orders = Orders.filter({"renter_id": user.id})
+    rentals = []
+    for order in orders:
+        item = Items.get(order.item_id)
+        item_to_dict = item.to_dict()
+        item_to_dict["calendar"] = item.calendar.to_dict()
+        item_to_dict["details"] = item.details.to_dict()
+
+        order_to_dict = order.to_dict()
+        order_to_dict["ext_date_end"] = order.ext_date_end.strftime("%Y-%m-%d")
+        order_to_dict["reservation"] = order.reservation.to_dict()
+        order_to_dict["item"] = item_to_dict
+        rentals.append(order_to_dict)
+    return {
+        "photo_url": photo_url,
+        "user": user_to_dict,
+        "rentals": rentals
     }
 
 #edit personal account
