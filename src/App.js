@@ -7,47 +7,70 @@ import Navbar from './components/base/Navbar';
 import Footer from './components/base/Footer';
 import Main from './components/pages/Main';
 import Shop from './components/pages/Shop';
+import List from './components/pages/List';
 import ItemDetails from './components/pages/ItemDetails';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
-import Logout from './components/pages/Logout';
+import Logout from './components/requests/Logout';
+import CheckoutProcessor from './components/requests/CheckoutProcessor';
+import Checkout from './components/pages/Checkout';
+import Account from './components/pages/Account';
+import Rentals from './components/pages/Rentals';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [flashMessages, setFlashMessages] = useState([]);
-  const [cartSize, setCartSize] = useState(null);
   useEffect(() => {
     fetch('/login_status')
     .then(res => res.json())
     .then(data => {
-      setIsLoggedIn(data.is_logged_in);
-      setCartSize(data.cart_size);
+      setUserId(data.user_id);
+      setIsLoggedIn(data.user_id ? true : false);
     });
   }, []);
   return (
     <Router>
       <div className="App">
-        <Navbar isLoggedIn={isLoggedIn} cartSize={cartSize} />
+        <Navbar userId={userId} isLoggedIn={isLoggedIn} />
         <Flash flashMessages={flashMessages} />
         <Switch>
           <Route exact path="/"><Main /></Route>
-          <Route exact path="/inventory"><Shop /></Route>
+          <Route exact path="/inventory">
+            <Shop isSearching={false} />
+          </Route>
+          <Route exact path="/inventory/search=:searchTerm">
+            <Shop isSearching={true} />
+          </Route>
+          <Route exact path="/list">
+            <List setFlashMessages={setFlashMessages} />
+          </Route>
           <Route exact path="/inventory/i/id=:itemId">
             <ItemDetails
               isLoggedIn={isLoggedIn}
               setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/checkout">
+            <Checkout setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/accounts/u/id=:userId">
+            <Account isOwner={false} />
+          </Route>
+          <Route exact path="/accounts/u/rentals">
+            <Rentals />
           </Route>
           <Route exact path="/login">
             <Login
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
               setFlashMessages={setFlashMessages}
-              setCartSize={setCartSize} />
+            />
           </Route>
           <Route exact path="/register">
             <Register isLoggedIn={isLoggedIn} />
           </Route>
           <Route exact path="/logout"><Logout /></Route>
+          <Route exact path="/checkout/confirmation/token=:token"><CheckoutProcessor /></Route>
         </Switch>
         <Footer />
       </div>
