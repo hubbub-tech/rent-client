@@ -1,7 +1,7 @@
 from datetime import datetime, date, timedelta
 from flask import Blueprint, flash, g, redirect, request, session, Markup
 
-from blubber_orm import Users, Orders
+from blubber_orm import Users, Orders, Reservations
 from blubber_orm import Items, Tags, Details, Calendars
 
 from api.tools.settings import create_rental_token
@@ -20,6 +20,7 @@ def inventory(search):
         listings = search_items(search)
     else:
         listings = Items.filter({"is_available": True})
+    print("items", [item.name for item in listings])
     return {
         "items": blubber_instances_to_dict(listings),
         "listers": blubber_instances_to_dict(listers),
@@ -118,6 +119,7 @@ def add_to_cart(item_id):
         else:
             user.cart.add_without_reservation(item)
             message = "The item has been added to your cart!"
+    session["cart_size"] = user.cart.size()
     return {"flashes": [message]}, 201
 
 #TODO: in the new version of the backend, user must propose new dates to reset
@@ -141,8 +143,8 @@ def update(item_id):
             "is_in_cart": True
         })
         if _reservation:
-            reservation, = _reservation
-            user.cart.remove(reservation)
+            old_reservation, = _reservation
+            user.cart.remove(old_reservation)
         else:
             user.cart.remove_without_reservation(item)
 
@@ -160,7 +162,7 @@ def update(item_id):
                 "date_started": new_date_started,
                 "date_ended": new_date_ended
             }
-            reservation, action, waitlist_ad = create_reservation(insert_data)
+            reservation, action, waitlist_ad = create_reservation(rental_data)
             if reservation:
                 user.cart.add(reservation)
                 reservation = reservation.to_dict()
@@ -173,29 +175,29 @@ def update(item_id):
         else:
             user.cart.add_without_reservation(item)
             flashes.append(form_check["message"])
-    return {
-        "reservation": reservation,
-        "flashes": flashes
-    }, code
+    return {"flashes": flashes}, code
 
 @bp.get("/remove/i/id=<int:item_id>", defaults={"start": None, "end": None})
 @bp.get("/remove/i/id=<int:item_id>&start=<start>&end=<end>")
 @login_required
 def remove_from_cart(item_id, start, end):
     format = "%Y-%m-%d" # this format when taking dates thru url
+    g.user_id = session.get('user_id')
+    user = Users.get(g.user_id)
     item = Items.get(item_id)
     flashes = []
     if start and end:
         reservation_keys = {
-            "renter_id": g.user.id,
+            "renter_id": g.user_id,
             "item_id": item_id,
             "date_started": datetime.strptime(start, format).date(),
             "date_ended": datetime.strptime(end, format).date(),
         }
         reservation = Reservations.get(reservation_keys)
-        g.user.cart.remove(reservation)
+        user.cart.remove(reservation)
     elif start is None and end is None:
-        g.user.cart.remove_without_reservation(item)
+        user.cart.remove_without_reservation(item)
+    session["cart_size"] = user.cart.size()
     flashes.append(f"The {item.name} has been removed from your cart.")
     return {"flashes": flashes}, 201
 
@@ -206,8 +208,7 @@ def checkout():
     g.user_id = session.get("user_id")
     user = Users.get(g.user_id)
     items = [] #for json
-    flashes = []
-    is_ready = True
+    is_ready = user.cart.size() > 0
     ready_to_order_items = user.cart.get_reserved_contents()
     for item in user.cart.contents:
         if is_item_in_itemlist(item, ready_to_order_items):
@@ -224,14 +225,13 @@ def checkout():
                 if item.calendar.scheduler(reservation) is None:
                     Items.set(item.id, {"is_available": False})
                     user.cart.remove(reservation)
-                    flashes.append(f"Unfortunately, the {item.name} is no longer available.")
                 elif item.calendar.scheduler(reservation):
                     item_to_dict = item.to_dict()
                     item_to_dict["reservation"] = reservation.to_dict()
         else:
             is_ready = False
             item_to_dict = item.to_dict()
-            item_to_dict["reservation"] = None
+            item_to_dict["reservation"] = ''
         item_to_dict["details"] = item.details.to_dict()
         item_to_dict["calendar"] = item.calendar.to_dict()
         next_start, next_end = item.calendar.next_availability()
@@ -240,7 +240,6 @@ def checkout():
         items.append(item_to_dict)
     return {
         "is_ready": is_ready,
-        "flashes": flashes,
         "photo_url": photo_url,
         "user": user.to_dict(),
         "cart": user.cart.to_dict(),
