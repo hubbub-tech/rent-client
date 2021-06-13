@@ -12,7 +12,7 @@ const AddressForm = ({ address, setAddress }) => {
             name="address[num]"
             onChange={e => setAddress({ ...address, num: e.target.value })}
             minLength="1"
-            maxLength="49" required />
+            maxLength="49" />
           <label htmlFor="floatingInputNum">Address Number</label>
         </div>
         <div className="form-floating mb-3">
@@ -23,7 +23,7 @@ const AddressForm = ({ address, setAddress }) => {
             name="address[street]"
             onChange={e => setAddress({ ...address, street: e.target.value })}
             minLength="1"
-            maxLength="49" required />
+            maxLength="49" />
           <label htmlFor="floatingInputStreet">Street</label>
         </div>
       </div>
@@ -36,7 +36,7 @@ const AddressForm = ({ address, setAddress }) => {
             name="address[apt]"
             onChange={e => setAddress({ ...address, apt: e.target.value })}
             minLength="1"
-            maxLength="49" required />
+            maxLength="49" />
           <label htmlFor="floatingInputApt">Apartment</label>
         </div>
         <div className="form-floating mb-3">
@@ -47,7 +47,7 @@ const AddressForm = ({ address, setAddress }) => {
             name="address[zip]"
             onChange={e => setAddress({ ...address, zip: e.target.value })}
             minLength="1"
-            maxLength="49" required />
+            maxLength="49" />
           <label htmlFor="floatingInputZipCode">Zip Code</label>
         </div>
       </div>
