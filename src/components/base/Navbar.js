@@ -1,9 +1,19 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import SearchForm from '../forms/SearchForm';
 
-const Navbar = ({isLoggedIn, cartSize}) => {
+const Navbar = ({ userId, isLoggedIn }) => {
+  const [isNavCollapsed, setIsNavCollapsed] = useState(true);
+  const [cartSize, setCartSize] = useState(null);
+
+  const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
+
+  useEffect(() => {
+    fetch('/cart_size')
+    .then(res => res.json())
+    .then(data => setCartSize(data.cart_size));
+  }, [cartSize]);
   return (
     <nav
       className="navbar navbar-expand-lg navbar-light"
@@ -15,73 +25,65 @@ const Navbar = ({isLoggedIn, cartSize}) => {
         <button
           className="navbar-toggler"
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDropdown"
+          data-toggle="collapse"
+          data-target="#navbarNavDropdown"
           aria-controls="navbarNavDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation">
+          aria-expanded={!isNavCollapsed ? true : false}
+          aria-label="Toggle navigation"
+          onClick={handleNavCollapse}
+        >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className="collapse navbar-collapse" id="navbarNavDropdown">
+        <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarNavDropdown">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a
-                className="btn btn-secondary text-white mx-1 nav-link active"
-                aria-current="page"
-                href="/inventory"
-                role="button">Rent Now</a>
+              <a className="nav-link active" aria-current="page" href="/inventory">Rent Now</a>
             </li>
-            {
-              //<li className="nav-item"><a className="nav-link" href="/become-a-lister">List</a></li>
+            {isLoggedIn &&
+              <li className="nav-item">
+                <a className="nav-link" href={`/accounts/u/id=${ userId }`}>My Profile</a>
+              </li>
             }
             {isLoggedIn &&
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="/"
-                  id="navbarDropdownMenuLink"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false">Account</a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <a className="dropdown-item" href="/account/u.{{ g.user.id }}">View Profile</a>
-                  <a className="dropdown-item" href="/account/u.edit">Edit Profile</a>
-                  <a className="dropdown-item" href="/account/u.password">Change Password</a>
-                  <a className="dropdown-item" href="/return/logistics">Returns Scheduling</a>
-                  <div className="dropdown-divider"></div>
-                  <a className="dropdown-item" href="/checkout">My Cart</a>
-                  <a className="dropdown-item" href="/logout">Logout</a>
-                </ul>
+              <li className="nav-item">
+                <a className="nav-link" href="/accounts/u/rentals">My Rentals</a>
               </li>
             }
             {!isLoggedIn &&
               <li className="nav-item">
-                <Link className="nav-link" to="/login">Login</Link>
+                <a className="nav-link" href="/login">Login</a>
               </li>
             }
             {!isLoggedIn &&
               <li className="nav-item">
-                <Link className="nav-link" to="/register">Sign Up</Link>
+                <a className="nav-link" href="/register">Sign Up</a>
               </li>
             }
           </ul>
           <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
-            <SearchForm />
-            <a href="/checkout">
-              <svg
-                width="2rem"
-                height="2rem"
-                viewBox="0 0 16 16"
-                className="bi bi-cart3 navbar-brand"
-                fill="currentColor"
-                xmlns="http://www.w3.org/2000/svg">
-                <path
-                  fillRule="evenodd"
-                  d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-              </svg>
-            </a>
+            {isNavCollapsed && <SearchForm />}
+            {isNavCollapsed &&
+              <a href="/checkout">
+                <svg
+                  width="2rem"
+                  height="2rem"
+                  viewBox="0 0 16 16"
+                  className="bi bi-cart3 navbar-brand"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fillRule="evenodd"
+                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+                </svg>
+              </a>
+            }
+            {isLoggedIn && !isNavCollapsed &&
+              <li className="nav-item">
+                <a className="nav-link" href="/checkout">Cart ({cartSize})</a>
+              </li>
+            }
           </ul>
-          {isLoggedIn &&
+          {isLoggedIn && isNavCollapsed &&
             <span className="badge badge-primary badge-pill mx-2">{cartSize}</span>
           }
         </div>

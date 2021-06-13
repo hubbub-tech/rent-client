@@ -17,13 +17,17 @@ def load_logged_in_user():
 @bp.get('/login_status')
 def login_status():
     g.user_id = session.get('user_id', None)
-    is_logged_in = not g.user_id is None
-    cart_size = session.get('cart_size', None)
     return {
         "flashes": get_flashed_messages(),
-        "is_logged_in": is_logged_in,
-        "cart_size": cart_size
+        "user_id": g.user_id,
+
     }
+
+@bp.get('/cart_size')
+def cart_size():
+    cart_size = session.get('cart_size', None)
+    return {"cart_size": cart_size}
+
 
 @bp.post('/login')
 def login():

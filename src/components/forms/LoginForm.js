@@ -4,7 +4,7 @@ import { useHistory, Link } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
-const LoginForm = ({setIsLoggedIn, setFlashMessages, setCartSize}) => {
+const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
   let history = useHistory();
   const [user, setUser] = useState({"email": null, "password": null});
   const [errors, setErrors] = useState([]);
@@ -21,7 +21,6 @@ const LoginForm = ({setIsLoggedIn, setFlashMessages, setCartSize}) => {
         res.json().then(data => {
           setIsLoggedIn(data.is_logged_in);
           setFlashMessages(data.flashes);
-          setCartSize(data.cart_size);
           history.push('/');
         });
       } else {
