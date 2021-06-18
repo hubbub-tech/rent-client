@@ -14,16 +14,25 @@ bp = Blueprint('rent', __name__)
 @bp.get("/inventory", defaults={"search": None})
 @bp.get("/inventory/search=<search>")
 def inventory(search):
-    listers = Users.get_all() #TODO: only get listers
     photo_url = AWS.get_url("items")
     if search:
         listings = search_items(search)
     else:
         listings = Items.filter({"is_available": True})
-    print("items", [item.name for item in listings])
+    listings_to_dict = []
+    for item in listings:
+        lister = Users.get(item.lister_id)
+        item_to_dict = item.to_dict()
+        next_start, next_end  = item.calendar.next_availability()
+        item_to_dict["next_available_start"] = next_start.strftime("%Y-%m-%d")
+        item_to_dict["next_available_end"] = next_end.strftime("%Y-%m-%d")
+        item_to_dict["details"] = item.details.to_dict()
+        item_to_dict["lister"] = lister.to_dict()
+        item_to_dict["lister"]["name"] = lister.name
+
+        listings_to_dict.append(item_to_dict)
     return {
-        "items": blubber_instances_to_dict(listings),
-        "listers": blubber_instances_to_dict(listers),
+        "items": listings_to_dict,
         "photo_url": photo_url
         }
 

@@ -10,9 +10,9 @@ return (
             <h6 className="card-title">{item.name}</h6>
             <p className="card-text mt-3 mb-1">From</p>
             <p className="card-text mb-1">{item.price}/day</p>
-            <p className="card-text">Listed by SOMEONE</p>
+            <p className="card-text">Listed by {item.lister.name}</p>
             <hr className="my-2" />
-            <small className="card-text text-success">Available starting SOMETIME</small>
+            <small className="card-text text-success">Available starting {item.next_available_start}</small>
           </div>
         </div>
       </a>
