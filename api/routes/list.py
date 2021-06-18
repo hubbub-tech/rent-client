@@ -1,9 +1,11 @@
+from distutils.util import strtobool
+
 from flask import Blueprint, flash, g, redirect, render_template, request, session
 
 from blubber_orm import Users, Tags
 
-from api.tools.settings import login_required
-from api.tools.build import validate_listing
+from api.tools.settings import login_required, AWS
+from api.tools.build import validate_listing, upload_image, create_item
 from api.tools import blubber_instances_to_dict, json_date_to_python_date
 
 bp = Blueprint('list', __name__)
@@ -26,8 +28,9 @@ def list():
 def list_submit():
     format = "%Y-%m-%d"
     flashes = []
-    data = request.json
+    data = request.form
     if data:
+        print("data", data)
         new_date_started = json_date_to_python_date(data["startDate"])
         new_date_ended = json_date_to_python_date(data["endDate"])
         form_data = {
@@ -60,17 +63,12 @@ def list_submit():
                 "state": data["state"],
                 "zip": data["zip"]
             },
-            "tags": data["selectedTags"],
-            "is_listed_from_user_address": data["isDefaultAddress"]
+            "tags": set(data["selectedTags"].split(",")),
+            "is_listed_from_user_address": strtobool(data["isDefaultAddress"])
         }
-        image = data["image"]
-        form_check = validate_listing(form_data, format) #validate `start` < `end` on frontend
+        image = request.files["image"]
+        form_check = validate_listing(form_data) #validate `start` < `end` on frontend
         if form_check["is_valid"]:
-            date_started_str = form_data["calendar"]["date_started"]
-            date_ended_str = form_data["calendar"]["date_ended"]
-            form_data["calendar"]["date_started"] = datetime.strptime(date_started_str, format).date()
-            form_data["calendar"]["date_ended"] = datetime.strptime(date_ended_str, format).date()
-
             item = create_item(form_data)
             image_data = {
                 "self": item,
@@ -85,13 +83,11 @@ def list_submit():
                 return {"flashes": flashes}, 201
             else:
                 flashes.append(upload_response["message"])
-                return {"flashes": flashes}, 406
         else:
             flashes.append(form_check["message"])
-            return {"flashes": flashes}, 406
     else:
         flashes.append("No data was sent.")
-        return {"flashes": flashes}, 406
+    return {"flashes": flashes}, 406
 
 #TODO: create static page for list/info
 #TODO: create static page for list/complete or list/success

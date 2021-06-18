@@ -10,9 +10,10 @@ import '../../dates.css';
 
 const ListForm = ({ setFlashMessages }) => {
   let history = useHistory();
-  let fileInput = createRef();
+  let redirectUrl;
   const formData = new FormData();
 
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isDefaultAddress, setIsDefaultAddress] = useState(true);
   const [item, setItem] = useState({
     "name": null,
@@ -31,11 +32,20 @@ const ListForm = ({ setFlashMessages }) => {
     "endDate": null
   });
   const [selectedTags, setSelectedTags] = useState([])
-  const [errors, setErrors] = useState([]);
   const [focusedInput, setFocusedInput] = useState(null);
 
   const handleOnDatesChange = ({ startDate, endDate }) => {
     setCalendar({ startDate, endDate });
+  }
+
+  const handleOnSelectChange = (e) => {
+    let newSelectedTags = new Set(selectedTags.concat(e.target.value));
+    setSelectedTags(selectedTags => newSelectedTags);
+  }
+
+  const isStatusOK = (res) => {
+    redirectUrl = res.ok ? '/' : null;
+    return res.json()
   }
 
   const submit = (e) => {
@@ -48,8 +58,8 @@ const ListForm = ({ setFlashMessages }) => {
     formData.append('weight', details.weight);
     formData.append('volume', details.volume);
 
-    formData.append('startDate', calendar.startDate);
-    formData.append('endDate', calendar.endDate);
+    formData.append('startDate', calendar.startDate.toJSON());
+    formData.append('endDate', calendar.endDate.toJSON());
     formData.append('selectedTags', selectedTags);
     formData.append('isDefaultAddress', isDefaultAddress);
 
@@ -58,24 +68,28 @@ const ListForm = ({ setFlashMessages }) => {
     formData.append('apt', address.apt);
     formData.append('city', address.city);
     formData.append('state', address.state);
-    formData.append('zip', address.zip);
+    formData.append('zip', address.zip_code);
 
-    formData.append('image', fileInput.current.files[0]);
+    formData.append('image', selectedFile);
 
-    fetch('/list/submit', { method: 'POST', body: formData })
-    .then(res => {
-      if (res.ok) {
-        res.json().then(data => {
-          setFlashMessages(data.flashes);
-          history.push('/');
-        });
-      } else {
-        res.json().then(data => {
-          setErrors(data.errors);
-          setFlashMessages(data.flashes);
-        });
+    // Display the key/value pairs
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ', ' + pair[1]);
+    }
+
+    fetch('/list/submit', {
+      method: 'POST',
+      body: formData
+    })
+    .then(isStatusOK)
+    .then(data => {
+      setFlashMessages(data.flashes);
+
+      if (redirectUrl) {
+        history.push(redirectUrl);
       }
-    });
+    })
+    .catch(error => console.log(error));
   }
 
   useEffect(() => {
@@ -87,7 +101,7 @@ const ListForm = ({ setFlashMessages }) => {
     });
   }, []);
   return (
-    <form onSubmit={submit}>
+    <form encType="multipart/form-data" onSubmit={submit}>
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="card-body">
           <div className="form-floating mb-3">
@@ -132,8 +146,9 @@ const ListForm = ({ setFlashMessages }) => {
             <select
               className="form-control"
               size="3"
+              multiple
               aria-label="Select Tags"
-              onChange={e => setSelectedTags(e.target.value)}>
+              onChange={handleOnSelectChange}>
               {tags.map((tag) => (
                 <option value={tag.name} key={tag.name}>{tag.name}</option>
               ))}
@@ -160,7 +175,9 @@ const ListForm = ({ setFlashMessages }) => {
               id="formFile"
               name="image"
               accept="image/*"
-              ref={fileInput} required />
+              onChange={e => setSelectedFile(e.target.files[0])}
+              required
+              />
           </div>
           <div className="row">
             <div className="col">
