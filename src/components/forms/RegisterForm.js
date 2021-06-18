@@ -5,8 +5,10 @@ import { useHistory, Link } from 'react-router-dom';
 import AddressForm from './AddressForm';
 import FormErrors from '../errors/FormErrors';
 
-const RegisterForm = () => {
+const RegisterForm = ({ setFlashMessages }) => {
   let history = useHistory();
+  let redirectUrl;
+
   const [user, setUser] = useState({
     "firstName": null,
     "lastName": null,
@@ -18,7 +20,7 @@ const RegisterForm = () => {
   const [address, setAddress] = useState({
     "num": null,
     "street": null,
-    "apt": null,
+    "apt": "",
     "city": "New York",
     "state": "NY",
     "zip": null
@@ -31,6 +33,10 @@ const RegisterForm = () => {
     "server": []
   });
 
+  const isStatusOK = (res) => {
+    redirectUrl = res.ok ? '/login': null;
+    return res.json();
+  }
   const submit = (e) => {
     e.preventDefault()
     fetch('/register', {
@@ -38,21 +44,20 @@ const RegisterForm = () => {
       body: JSON.stringify({ user, profile, address }),
       headers: { 'Content-Type': 'application/json' },
     })
-    .then(res => {
-      if (res.ok) {
-        res.json().then(data => history.push('/login'));
+    .then(isStatusOK)
+    .then(data => {
+      setFlashMessages(data.flashes);
+      if (redirectUrl) {
+        history.push(redirectUrl);
       } else {
-        res.json().then(data => {
-          setErrors({ ...errors, server: data.errors });
-        });
+        setErrors({ ...errors, server: data.errors });
       }
-    })
+    });
   }
   return (
     <form onSubmit={submit} >
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="step-1 card-body">
-          <FormErrors errors={errors.server} color={"red"} />
           <div className="row">
             <div className="col">
               <div className="form-floating mb-3">
@@ -182,6 +187,7 @@ const RegisterForm = () => {
           </div>
           <br />
           <p className="card-text">Already on Hubbub? Log in <Link to="/login">here</Link>!</p>
+          <FormErrors errors={errors.server} color={"red"} />
         </div>
       </div>
     </form>

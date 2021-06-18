@@ -8,9 +8,14 @@ import FormErrors from '../errors/FormErrors';
 
 const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
   let history = useHistory();
+  let redirectUrl;
   const [user, setUser] = useState({"email": null, "password": null});
   const [errors, setErrors] = useState([]);
 
+  const isStatusOK = (res) => {
+    redirectUrl = res.ok ? '/' : null;
+    return res.json()
+  }
   const submit = (e) => {
     e.preventDefault()
     fetch('/login', {
@@ -18,17 +23,14 @@ const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
       body: JSON.stringify({ user }),
       headers: { 'Content-Type': 'application/json' },
     })
-    .then(res => {
-      if (res.ok) {
-        res.json().then(data => {
-          setIsLoggedIn(data.is_logged_in);
-          setFlashMessages(data.flashes);
-          history.push('/');
-        });
-      } else {
-        res.json().then(data => {
-          setErrors(data.errors)
-        });
+    .then(isStatusOK)
+    .then(data => {
+      setIsLoggedIn(data.is_logged_in);
+      setErrors(data.errors);
+      setFlashMessages(data.flashes);
+
+      if (redirectUrl) {
+        history.push(redirectUrl);
       }
     });
   }
