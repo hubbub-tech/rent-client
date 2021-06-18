@@ -71,7 +71,7 @@ def lock_checkout(user):
         if _reservation:
             reservation, = _reservation
             if item.calendar.scheduler(reservation) and item.is_locked == False:
-                item.lock()
+                item.lock(user)
                 locked_items.append(item)
             else:
                 unlock_checkout(user, specified_items=locked_items)
@@ -85,8 +85,8 @@ def lock_checkout(user):
                 "is_valid" : False,
                 "message" : "Not all of your items had reservations set for checkout."
                 }
-    timeout_clock = datetime.now(tz=pytz.UTC) + timedelta(minutes=30)
-    set_async_timeout.apply_async(eta=timeout_clock, kwargs={"user_id": user.id})
+    # timeout_clock = datetime.now(tz=pytz.UTC) + timedelta(minutes=30)
+    # set_async_timeout.apply_async(eta=timeout_clock, kwargs={"user_id": user.id})
     return {
         "is_valid" : True,
         "message" : "All items in cart have been locked successfully."
