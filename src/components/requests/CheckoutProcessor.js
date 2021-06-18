@@ -4,23 +4,21 @@ import { Redirect, useParams, useHistory } from 'react-router-dom';
 
 const CheckoutProcessor = ({ setFlashMessages }) => {
   let history = useHistory();
+  let redirectUrl;
   const { token } = useParams();
 
+  const isStatusOK = (res) => {
+    redirectUrl = res.ok ? '/checkout' : '/inventory'
+    return res.json()
+  }
+
   fetch(`/checkout/confirmation/token=${token}`)
-  .then(res => res.json())
-  .then(res => {
-    if (res.ok) {
-      res.json().then(data => {
-        setFlashMessages(data.flashes);
-        history.push('/success'); //success, go to logistics
-      });
-    } else {
-      res.json().then(data => {
-        setFlashMessages(data.flashes);
-        history.push('/checkout'); //it failed
-      });
-    }
+  .then(isStatusOK)
+  .then(data => {
+    setFlashMessages(data.flashes);
+    history.push(redirectUrl);
   });
+  
   return <p>Loading...</p>
 }
 
