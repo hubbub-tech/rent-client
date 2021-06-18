@@ -14,6 +14,12 @@ const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
     setStartDate(startDate);
     setEndDate(endDate);
   };
+
+  const isStatusOK = (res) => {
+    // some other thing dependent on if res.ok
+    return res.json()
+  }
+
   const submit = (e) => {
     e.preventDefault()
     fetch(`/validate/i/id=${calendar.item_id}`, {
@@ -21,20 +27,13 @@ const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
       body: JSON.stringify({ startDate, endDate }),
       headers: { 'Content-Type': 'application/json' }
     })
-    .then(res => {
-      if (res.ok) {
-        res.json().then(data => {
-          setReservation(data.reservation);
-          setFlashMessages(data.flashes);
-        });
-      } else {
-        res.json().then(data => {
-          setReservation(null);
-          setFlashMessages(data.flashes);
-        });
-      }
+    .then(isStatusOK)
+    .then(data => {
+      setReservation(data.reservation);
+      setFlashMessages(data.flashes);
     });
   }
+  
   return (
     <form onSubmit={submit} >
       <DateRangePicker
