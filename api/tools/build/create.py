@@ -7,7 +7,7 @@ from blubber_orm import Logistics, Dropoffs, Pickups
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from api.tools.settings import exp_decay
+from api.tools.settings import exp_decay, generate_proposed_period
 #done
 def create_user(insert_data):
     user_address = Addresses.filter(insert_data["address"])
@@ -49,20 +49,19 @@ def create_review(review_data):
     return new_review
 
 def create_reservation(insert_data):
-    reservation = Reservations.filter(insert_data)
-    if reservation:
-        reservation, = reservation
-        is_valid_reservation = True
+    item = Items.get(insert_data["item_id"])
+    _reservation = Reservations.filter(insert_data)
+    if _reservation:
+        reservation, = _reservation
     else:
-        item = Items.get(insert_data["item_id"])
         rental_duration = (insert_data["date_ended"] - insert_data["date_started"]).days
         insert_data["charge"] = exp_decay(item.price, rental_duration)
         insert_data["deposit"] = insert_data["charge"] * 0.25
 
         reservation = Reservations.insert(insert_data)
 
-        #scheduler() checks if the res conflicts with other reservations
-        is_valid_reservation = item.calendar.scheduler(reservation)
+    #scheduler() checks if the res conflicts with other reservations
+    is_valid_reservation = item.calendar.scheduler(reservation)
 
     if is_valid_reservation:
         action_message = "Great, the item is available! If it isn't in your cart already make sure you 'Add to Cart'!"
