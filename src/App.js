@@ -67,10 +67,15 @@ const App = () => {
             />
           </Route>
           <Route exact path="/register">
-            <Register isLoggedIn={isLoggedIn} />
+            <Register
+              setFlashMessages={setFlashMessages}
+              isLoggedIn={isLoggedIn}
+            />
           </Route>
           <Route exact path="/logout"><Logout /></Route>
-          <Route exact path="/checkout/confirmation/token=:token"><CheckoutProcessor /></Route>
+          <Route exact path="/checkout/confirmation/token=:token">
+            <CheckoutProcessor setFlashMessages={setFlashMessages} />
+          </Route>
         </Switch>
         <Footer />
       </div>
