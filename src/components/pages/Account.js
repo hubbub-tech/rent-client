@@ -6,7 +6,7 @@ import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
 import AccountCard from '../cards/AccountCard';
 
-const Account = ({ myId }) => {
+const Account = ({ myId, setFlashMessages }) => {
   const { userId } = useParams();
   const [user, setUser] = useState({"profile": {}, "cart": {}});
   const isOwner = myId == userId;
@@ -67,7 +67,11 @@ const Account = ({ myId }) => {
           <div className={`${isOwner ? 'col-md-8' : 'col-md-12'} mt-2`}>
             <h3 className="my-4">Hubbub Listings ({listings.length})</h3>
             {listings.map((item) => (
-              <ListingCard isOwner={isOwner} item={item} key={item.id} />
+              <ListingCard
+                setFlashMessages={setFlashMessages}
+                isOwner={isOwner}
+                item={item}
+                key={item.id} />
             ))}
           </div>
         </div>
