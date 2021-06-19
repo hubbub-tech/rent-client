@@ -11,7 +11,7 @@ const AccountSettings = ({isOwner, user}) => {
         <div className="col-6 dropdown">
           <a
             className="dropdown-toggle ms-2"
-            href="#"
+            href="/"
             role="button"
             id="dropdownMenuLink"
             data-bs-toggle="dropdown"

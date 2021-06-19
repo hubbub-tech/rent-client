@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, createRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import AddressForm from './AddressForm';
@@ -39,7 +39,7 @@ const ListForm = ({ setFlashMessages }) => {
   }
 
   const handleOnSelectChange = (e) => {
-    let newSelectedTags = new Set(selectedTags.concat(e.target.value));
+    let newSelectedTags = selectedTags.concat(e.target.value);
     setSelectedTags(selectedTags => newSelectedTags);
   }
 

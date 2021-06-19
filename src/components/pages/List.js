@@ -1,21 +1,8 @@
 import React from "react";
-import { useState, useEffect } from 'react';
 
 import ListForm from "../forms/ListForm";
 
 const List = ({ setFlashMessages }) => {
-  const [tags, setTags] = useState([]);
-  const [address, setAddress] = useState({});
-
-  useEffect(() => {
-    fetch('/list')
-    .then(res => res.json())
-    .then(data => {
-      setTags(data.tags);
-      setAddress(data.address);
-      console.log({"got address": data.address})
-    });
-  }, []);
   return (
     <main>
       <br />

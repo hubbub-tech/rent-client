@@ -5,7 +5,6 @@ import CheckoutCard from '../cards/CheckoutCard';
 import PricingCard from '../cards/PricingCard';
 
 const Checkout = ({setFlashMessages}) => {
-  const [user, setUser] = useState({});
   const [cart, setCart] = useState({});
   const [items, setItems] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -16,7 +15,6 @@ const Checkout = ({setFlashMessages}) => {
     fetch('/checkout')
     .then(res => res.json())
     .then(data => {
-      setUser(data.user);
       setCart(data.cart);
       setItems(data.items);
       setUrlBase(data.photo_url);

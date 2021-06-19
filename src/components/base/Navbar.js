@@ -46,7 +46,7 @@ const Navbar = ({ userId, isLoggedIn }) => {
             }
             {isLoggedIn &&
               <li className="nav-item">
-                <a className="nav-link" href="/accounts/u/rentals">My Rentals</a>
+                <a className="nav-link" href="/accounts/u/orders">My Rentals</a>
               </li>
             }
             {!isLoggedIn &&

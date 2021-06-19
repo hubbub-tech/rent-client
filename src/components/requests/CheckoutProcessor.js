@@ -1,6 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
-import { Redirect, useParams, useHistory } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 const CheckoutProcessor = ({ setFlashMessages }) => {
   let history = useHistory();
@@ -18,7 +17,7 @@ const CheckoutProcessor = ({ setFlashMessages }) => {
     setFlashMessages(data.flashes);
     history.push(redirectUrl);
   });
-  
+
   return <p>Loading...</p>
 }
 

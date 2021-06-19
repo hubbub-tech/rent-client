@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import ProfileCard from '../cards/ProfileCard';
 import ListingAccordion from '../accordions/ListingAccordion';
