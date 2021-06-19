@@ -16,6 +16,8 @@ import CheckoutProcessor from './components/requests/CheckoutProcessor';
 import Checkout from './components/pages/Checkout';
 import Account from './components/pages/Account';
 import Rentals from './components/pages/Rentals';
+import Dropoffs from './components/pages/Dropoffs';
+import Pickups from './components/pages/Pickups';
 
 const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -56,8 +58,14 @@ const App = () => {
           <Route exact path="/accounts/u/id=:userId">
             <Account isOwner={false} />
           </Route>
-          <Route exact path="/accounts/u/rentals">
+          <Route exact path="/accounts/u/orders">
             <Rentals />
+          </Route>
+          <Route exact path="/schedule/dropoffs/:dropoffDate">
+            <Dropoffs setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/schedule/pickups/:pickupDate">
+            <Pickups setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/login">
             <Login
