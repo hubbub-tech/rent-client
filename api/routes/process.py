@@ -1,7 +1,7 @@
 from datetime import datetime, date, timedelta
 from flask import Blueprint, flash, g, redirect, request, session, Markup
 
-from blubber_orm import Users, Orders
+from blubber_orm import Users, Orders, Reservations
 from blubber_orm import Items, Tags
 
 from api.tools.settings import get_orders_for_dropoff, get_orders_for_pickup, get_delivery_schedule
@@ -17,14 +17,16 @@ bp = Blueprint('process', __name__)
 @transaction_auth
 @login_required
 def order_router(token):
-    cart_response = lock_checkout(g.user)
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    cart_response = lock_checkout(user)
     if cart_response["is_valid"]:
         #Redirect depending on payment method
         if method == "online":
             return redirect(f"/checkout/payment/token={token}")
         else:
             # default to in-person payment, skip to confirmation
-            for item in g.user.cart.contents:
+            for item in user.cart.contents:
                 item.is_routed = True
             return redirect(f"/checkout/confirmation/token={token}")
     else:
@@ -48,16 +50,18 @@ def order_confirmation(token):
     user = Users.get(g.user_id)
     cart_response = lock_checkout(user)
     if cart_response["is_valid"]:
+        print("it locked")
         cart_data = {}
-        _cart_contents = g.user.cart.contents # need this because cart size changes
+        _cart_contents = user.cart.contents # need this because cart size changes
         for item in _cart_contents:
             _reservation = Reservations.filter({
-                "renter_id": g.user.id,
+                "renter_id": g.user_id,
                 "item_id": item.id,
                 "is_in_cart": True
             })
             reservation, = _reservation
             item.calendar.add(reservation)
+            print(f"it added the res for {item.name}")
             order_data = {
                 "res_date_start": reservation.date_started,
                 "res_date_end": reservation.date_ended,
@@ -68,6 +72,7 @@ def order_confirmation(token):
                 "date_placed": date.today(),
             }
             order = create_order(order_data)
+            print("the corresponding order was created")
             transaction_summary = {
                 "item": item,
                 "order": order,
@@ -78,132 +83,179 @@ def order_confirmation(token):
             }
             #TODO: send email receipt to lister
             cart_data[str(order.id)] = transaction_summary # important for renters receipt
-            g.user.cart.remove(reservation)
+            user.cart.remove(reservation)
+            print("remove the item from cart")
             item.unlock()
+            print(f"{item.name} was unlocked")
         #TODO: send email receipt to renter
+        session["cart_size"] = 0
         flashes.append("Successfully rented all items! Now, just let us know when we can drop them off.")
         return {"flashes": flashes}, 201 #redirect("/schedule/dropoff")
     else:
         flashes.append(cart_response["message"])
         return {"flashes": flashes}, 406
 
-@bp.route("/schedule/dropoffs", methods=["POST", "GET"])
+@bp.route("/accounts/u/orders")
 @login_required
-def schedule_dropoffs():
-    format = "%Y-%m-%d"
-    orders_grouped_by_date = get_orders_for_dropoff(g.user.id) # by start date
-    if orders_grouped_by_date:
-        am_slots = ["8-9am","9-10am", "10-11am", "11-12pm", "12-1pm"]
-        pm_slots = ["1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"]
-
-        if request.method == "POST":
-            availabilities = request.form.getlist("availability")
-            timeslots_grouped_by_date = get_delivery_schedule(availabilities)
-
-            for date_str in timeslots_grouped_by_date.keys():
-                logistics_data = {
-                    "notes": request.form.get("notes"),
-                    "referral": request.form.get("referral"),
-                    "timeslots": timeslots_grouped_by_date[date_str],
-                    "renter_id": g.user.id,
-                    "chosen_time": None,
-                    "address_num": request.form.get("address_num"),
-                    "address_street": request.form.get("address_street"),
-                    "address_apt": request.form.get("address_apt"),
-                    "address_zip": request.form.get("address_zip")
-                }
-                orders = orders_grouped_by_date[date_str]
-                dropoff_date = datetime.strptime(date_str, format)
-                dropoff_logistics = create_logistics(logistics_data, orders, dropoff=dropoff_date)
-
-            #TODO: async send availability details to user
-            #logistics_email_data = get_renter_logistics(g.user, form_data)
-            #send_async_email.apply_async(kwargs=logistics_email_data)
-            #TODO: send return procedure email
-            return redirect(f"/accounts/u/id={g.user.id}")
-        elif request.method == "GET":
-            items = {}
-            for date_str in orders_grouped_by_date.keys():
-                orders = orders_grouped_by_date[date_str]
-                orders_grouped_by_date[date_str] = blubber_instances_to_dict(orders)
-                for order in orders:
-                    items[order.item_id] = Items.get(order.item_id).to_dict()
-            return {
-                "orders_grouped_by_date": orders_grouped_by_date,
-                "items": items,
-                "am_slots": am_slots,
-                "pm_slots": pm_slots,
-            }
-        return redirect("/inventory") # only take post and get requests
-    else:
-        flash("No rentals need dropoff scheduling right now. Check out inventory to rent something!")
-        return redirect(f"/accounts/u/id={g.user.id}")
-
-@bp.route("/accounts/u/rentals")
-@login_required
-def active_rentals():
+def order_history():
     photo_url = AWS.get_url("items")
-    orders_grouped_by_date = get_orders_for_pickup(g.user.id) # by end date
-    if orders:
-        for date_str in orders_grouped_by_date.keys():
-            orders = orders_grouped_by_date[date_str]
-            orders_grouped_by_date[date_str] = blubber_instances_to_dict(orders)
-            for order in orders:
-                items[order.item_id] = Items.get(order.item_id).to_dict()
-        return {
-            "photo_url": photo_url,
-            "orders_grouped_by_date": orders_grouped_by_date,
-            "items": items,
-        }
-    else:
-        flash("No rentals need pickup scheduling right now. Check out inventory to rent something!")
-        return redirect(f"/accounts/u/id={g.user.id}")
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    order_history = Orders.filter({"renter_id": g.user_id})
+    orders = []
+    if order_history:
+        for order in order_history:
+            item = Items.get(order.item_id)
+            item_to_dict = item.to_dict()
+            item_to_dict["calendar"] = item.calendar.to_dict()
+            item_to_dict["details"] = item.details.to_dict()
 
-@bp.route("/schedule/pickups/<date_str>", methods=["POST", "GET"])
+            order_to_dict = order.to_dict()
+            order_to_dict["ext_date_end"] = order.ext_date_end.strftime("%Y-%m-%d")
+            order_to_dict["reservation"] = order.reservation.to_dict()
+            order_to_dict["lister"] = order.lister.to_dict()
+            order_to_dict["item"] = item_to_dict
+
+            orders.append(order_to_dict)
+    return {
+        "photo_url": photo_url,
+        "orders": orders
+    }
+
+@bp.get("/schedule/dropoffs/<date_str>")
+@login_required
+def schedule_dropoffs(date_str):
+    format = "%Y-%m-%d"
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    res_date_start = datetime.strptime(date_str, format).date()
+    orders = Orders.filter({
+        "renter_id": g.user_id,
+        "is_dropoff_sched": False,
+        "res_date_start": res_date_start
+    })
+    orders_to_dropoff = []
+    for order in orders:
+        order_to_dict = order.to_dict()
+        item = Items.get(order.item_id)
+        order_to_dict["item"] = item.to_dict()
+        order_to_dict["reservation"] = order.reservation.to_dict()
+        orders_to_dropoff.append(order_to_dict)
+    return {
+        "address": user.address.to_dict(),
+        "orders_to_dropoff": orders_to_dropoff
+    }
+
+@bp.post("/schedule/dropoffs/submit")
+@login_required
+def schedule_dropoffs_submit():
+    format = "%Y-%m-%d"
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    flashes = []
+    data = request.json
+    if data:
+        logistics_data = {
+            "logistics" : {
+                "notes": data["notes"],
+                "referral": data["referral"],
+                "timeslots": data["timesChecked"],
+                "renter_id": g.user_id,
+                "chosen_time": None,
+                "address_num": data["address"]["num"],
+                "address_street": data["address"]["street"],
+                "address_apt": data["address"]["apt"],
+                "address_zip": data["address"]["zip_code"]
+            },
+            "address": {
+                "num": data["address"]["num"],
+                "street": data["address"]["street"],
+                "apt": data["address"]["apt"],
+                "city": data["address"]["city"],
+                "state": data["address"]["state"],
+                "zip": data["address"]["zip_code"]
+            }
+        }
+        orders = [Orders.get(order["id"]) for order in data["orders"]]
+        dropoff_date = datetime.strptime(data["dropoffDate"], format)
+        dropoff_logistics = create_logistics(logistics_data, orders, dropoff=dropoff_date)
+
+        #TODO: async send availability details to user
+        #logistics_email_data = get_renter_logistics(g.user, form_data)
+        #send_async_email.apply_async(kwargs=logistics_email_data)
+        #TODO: send return procedure email
+
+        flashes.append("You have successfully scheduled your rental dropoffs!")
+        return {"flashes": flashes}, 201
+    else:
+        flashes.append("Please, provide availabilities for dropoff.")
+        return {"flashes": flashes}, 406
+
+@bp.get("/schedule/pickups/<date_str>")
 @login_required
 def schedule_pickups(date_str):
     format = "%Y-%m-%d"
-    pickup_date = datetime.strptime(date_str, format).date()
-    orders_grouped_by_date = get_orders_for_pickup(g.user.id)
-    if orders_grouped_by_date:
-        am_slots = ["8-9am","9-10am", "10-11am", "11-12pm", "12-1pm"]
-        pm_slots = ["1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"]
-        orders = orders_grouped_by_date[date_str]
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    res_date_end = datetime.strptime(date_str, format).date()
+    orders = Orders.filter({"renter_id": g.user_id, "is_pickup_sched": False})
+    orders_to_pickup = []
+    for order in orders:
+        if order.ext_date_end == res_date_end:
+            order_to_dict = order.to_dict()
+            item = Items.get(order.item_id)
+            order_to_dict["item"] = item.to_dict()
+            order_to_dict["reservation"] = order.reservation.to_dict()
+            orders_to_pickup.append(order_to_dict)
+    return {
+        "address": user.address.to_dict(),
+        "orders_to_pickup": orders_to_pickup
+    }
 
-        if request.method == "POST":
-            availabilities = request.form.getlist("availability")
-            timeslots_grouped_by_date = get_delivery_schedule(availabilities)
-
-            logistics_data = {
-                "notes": request.form.get("notes"),
-                "referral": None,
-                "timeslots": timeslots_grouped_by_date[date_str],
-                "renter_id": g.user.id,
+@bp.post("/schedule/pickups/submit")
+@login_required
+def schedule_pickups_submit():
+    format = "%Y-%m-%d"
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    flashes = []
+    data = request.json
+    if data:
+        logistics_data = {
+            "logistics" : {
+                "notes": data["notes"],
+                "referral": "N/A",
+                "timeslots": data["timesChecked"],
+                "renter_id": g.user_id,
                 "chosen_time": None,
-                "address_num": request.form.get("address_num"),
-                "address_street": request.form.get("address_street"),
-                "address_apt": request.form.get("address_apt"),
-                "address_zip": request.form.get("address_zip")
+                "address_num": data["address"]["num"],
+                "address_street": data["address"]["street"],
+                "address_apt": data["address"]["apt"],
+                "address_zip": data["address"]["zip_code"]
+            },
+            "address": {
+                "num": data["address"]["num"],
+                "street": data["address"]["street"],
+                "apt": data["address"]["apt"],
+                "city": data["address"]["city"],
+                "state": data["address"]["state"],
+                "zip": data["address"]["zip_code"]
             }
-            pickup_logistics = create_logistics(logistics_data, orders, pickup=pickup_date)
-
-            #TODO: async send availability details to user
-            #logistics_email_data = get_renter_logistics(g.user, form_data)
-            #send_async_email.apply_async(kwargs=logistics_email_data)
-            #TODO: send return procedure email
-            return redirect(f"/accounts/u/id={g.user.id}")
-        elif request.method == "GET":
-            for order in orders:
-                items.append(Items.get(order.item_id).to_dict())
-        return {
-            "orders": blubber_instances_to_dict(orders),
-            "items": items,
-            "am_slots": am_slots,
-            "pm_slots": pm_slots,
         }
+        orders = [Orders.get(order["id"]) for order in data["orders"]]
+        pickup_date = datetime.strptime(data["pickupDate"], format)
+        pickup_logistics = create_logistics(logistics_data, orders, pickup=pickup_date)
+
+        #TODO: async send availability details to user
+        #logistics_email_data = get_renter_logistics(g.user, form_data)
+        #send_async_email.apply_async(kwargs=logistics_email_data)
+        #TODO: send return procedure email
+
+        flashes.append("You have successfully scheduled your rental pickup!")
+        return {"flashes": flashes}, 201
     else:
-        flash("No rentals need pickup scheduling right now. Check out inventory to rent something!")
-        return redirect(f"/accounts/u/id={g.user.id}")
+        flashes.append("Please, provide availabilities for pickup.")
+        return {"flashes": flashes}, 406
 
 @bp.route("/accounts/o/extend/id=<int:order_id>", methods=["POST", "GET"])
 @login_required

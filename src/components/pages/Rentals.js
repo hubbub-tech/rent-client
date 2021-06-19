@@ -4,16 +4,14 @@ import { useState, useEffect } from 'react';
 import OrderCard from '../cards/OrderCard';
 
 const Rentals = () => {
-  const [user, setUser] = useState({"profile": {}, "cart": {}});
   const [urlBase, setUrlBase] = useState(null);
-  const [rentals, setRentals] = useState([]);
+  const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    fetch(`/accounts/u/rentals`)
+    fetch(`/accounts/u/orders`)
     .then(res => res.json())
     .then(data => {
-      setUser(data.user);
-      setRentals(data.rentals);
+      setOrders(data.orders);
       setUrlBase(data.photo_url);
     });
   }, []);
@@ -31,9 +29,12 @@ const Rentals = () => {
           </div>
         </div>
         <hr />
-        <div className="row">
-          {rentals.map((order) => <OrderCard urlBase={urlBase} order={order} key={order.id} />)}
-        </div>
+        {orders.length !== 0 &&
+          <div className="row">
+            {orders.map((order) => <OrderCard urlBase={urlBase} order={order} key={order.id} />)}
+          </div>
+        }
+        {orders.length === 0 && <p className="text-center">You haven't placed any orders yet :(</p>}
       </div>
     </main>
   );
