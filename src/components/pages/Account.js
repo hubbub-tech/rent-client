@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 import ProfileCard from '../cards/ProfileCard';
-import ListingAccordion from '../accordions/ListingAccordion';
-import AccountSettings from '../toolbars/AccountSettings';
+import ListingCard from '../cards/ListingCard';
+import AccountCard from '../cards/AccountCard';
 
-const Account = ({isOwner}) => {
+const Account = ({ myId }) => {
   const { userId } = useParams();
   const [user, setUser] = useState({"profile": {}, "cart": {}});
+  const isOwner = myId == userId;
   const [urlBase, setUrlBase] = useState(null);
   const [listings, setListings] = useState([]);
 
@@ -36,7 +37,9 @@ const Account = ({isOwner}) => {
         </div>
       </div>
       <div className="container-md">
-        <AccountSettings isOwner={isOwner} user={user} />
+        <div className="row justify-content-center g-0">
+          <h2 className="text-center mt-3">{user.name}</h2>
+        </div>
         <div className="row justify-content-center">
           <p className="text-center text-muted mb-1"><small>Bio</small></p>
           <div className="col-sm-6 col-12">
@@ -50,15 +53,23 @@ const Account = ({isOwner}) => {
             <p className="mx-3 mb-1"><strong>Email</strong> - {user.email}</p>
           </div>
           <div className="col-md-4 text-center mt-2">
-            <p className="mx-3 mb-1"><strong>Member Since</strong> - { user.date_joined }</p>
+            <p className="mx-3 mb-1"><strong>Member Since</strong> - { user.dt_joined }</p>
           </div>
         </div>
         <hr />
-        <div className="col-md mt-2">
-          <h3>{user.name} Listings ({listings.length})</h3>
-          {listings.map((item) => (
-            <ListingAccordion isOwner={isOwner} item={item} key={item.id} />
-          ))}
+        <div className="row justify-content-center">
+          {isOwner &&
+            <div className="col-md-4 mt-2">
+              <h3 className="my-4">Your Settings</h3>
+               <AccountCard user={user} />
+            </div>
+          }
+          <div className={`${isOwner ? 'col-md-8' : 'col-md-12'} mt-2`}>
+            <h3 className="my-4">Hubbub Listings ({listings.length})</h3>
+            {listings.map((item) => (
+              <ListingCard isOwner={isOwner} item={item} key={item.id} />
+            ))}
+          </div>
         </div>
       </div>
     </main>

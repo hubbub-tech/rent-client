@@ -1,6 +1,11 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 
 const ProfileCard = ({urlBase, user}) => {
+  const [undefinedPhoto, setUndefinedPhoto] = useState('roaree')
+  useEffect(() => {
+    setUndefinedPhoto('roaree');
+  }, []);
   if (user.profile.has_pic) {
     return (
       <div className="crop-circle mx-auto d-block">
@@ -10,7 +15,12 @@ const ProfileCard = ({urlBase, user}) => {
   } else {
     return (
       <div className="mx-auto d-block" style={{"width": "300px", "height": "300px"}}>
-        <img className="card-img-top" src="static/users/roaree.jpg" style={{"borderRadius": "50%"}} alt="roaree" />
+        <img
+          className="card-img-top"
+          src={`/static/users/roaree.jpg`}
+          style={{"borderRadius": "50%"}}
+          alt="roaree"
+        />
       </div>
     );
   }
