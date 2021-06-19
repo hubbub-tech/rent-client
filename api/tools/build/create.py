@@ -26,7 +26,9 @@ def create_user(insert_data):
 
 #done
 def create_item(insert_data):
-    if not insert_data["is_listed_from_user_address"]:
+    item_address = Addresses.filter(insert_data["address"])
+    #NOTE: an empty list returns false not none
+    if not item_address:
         item_address = Addresses.insert(insert_data["address"])
 
     new_item = Items.insert(insert_data["item"])
@@ -100,7 +102,12 @@ def create_order(insert_data):
     return new_order
 
 def create_logistics(insert_data, orders, dropoff=None, pickup=None):
-    new_logistics = Logistics.insert(insert_data)
+    logistics_address = Addresses.filter(insert_data["address"])
+    #NOTE: an empty list returns false not none
+    if not logistics_address:
+        logistics_address = Addresses.insert(insert_data["address"])
+
+    new_logistics = Logistics.insert(insert_data["logistics"])
     if dropoff:
         dropoff_data = {
             "dt_sched": new_logistics.dt_scheduled,
