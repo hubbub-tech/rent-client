@@ -9,7 +9,7 @@ from blubber_orm import Items, Details, Testimonials
 
 from api.tools.build import validate_edit_account, validate_edit_password
 from api.tools.settings import login_required, AWS
-from api.tools import blubber_instances_to_dict
+from api.tools import blubber_instances_to_dict, json_date_to_python_date
 
 bp = Blueprint('main', __name__)
 
@@ -126,39 +126,60 @@ def remove_pic():
     return redirect(f"/accounts/u/id={g.user.id}")
 
 #users hide items
-@bp.route("/accounts/i/hide/id=<int:item_id>&status=<int:toggle>")
+@bp.post("/accounts/i/hide/id=<int:item_id>")
 @login_required
-def hide_item(item_id, toggle):
-    item_to_hide = Items.get(item_id)
-    #TODO: permissioned access based on ownership or admin access
-    boolean_conversion = {0: True, 1: False}
-    item_to_hide.is_available = boolean_conversion[toggle]
-    if boolean_conversion[toggle]:
-        flash("Item has been hidden. Come back when you are ready to reveal it.")
+def hide_item(item_id):
+    code = 406
+    flashes = []
+    item = Items.get(item_id)
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    if item.lister_id == g.user_id:
+        data = request.json
+        if data:
+            item.is_available = data["toggle"]
+            if item.is_available:
+                flashes.append("Item has been revealed. Others can now see it in inventory.")
+            else:
+                flashes.append("Item has been hidden. Come back when you are ready to reveal it.")
+            code = 201
+        else:
+            flashes.append("No data was sent! Try again.")
     else:
-        flash("Item has been revealed. Others can now see it in inventory.")
-        return redirect(f"/accounts/u/id={g.user.id}")
+        flashes.append("You are not authorized to manage the visibility of this item.")
+    return {"flashes": flashes}, code
 
-#user edit items
-@bp.route("/accounts/i/edit/id=<int:item_id>", methods=["POST", "GET"])
+@bp.route("/accounts/i/edit/id=<int:item_id>")
 @login_required
 def edit_item(item_id):
-    format = "%m/%d/%Y"
-    photo_url = AWS.get_url("items")
+    flashes = []
     item = Items.get(item_id)
-    #TODO: permission based on admin access and ownership
-    if request.method == "POST":
-        form_data = {
-            "price": request.form.get("price", item.price),
-            "description": request.form.get("description", item.details.description),
-            "extend": request.form.get("extend") #TODO: check date format in frontend
-        }
-        new_end_of_calendar = datetime.strptime(form_data["extend"], format).date()
+    if item.lister_id == g.user_id:
+        item_to_dict = item.to_dict()
+        item_to_dict["details"] = item.details.to_dict()
+        item_to_dict["calendar"] = item.calendar.to_dict()
+        return { "item": item_to_dict }, 201
+    else:
+        flashes.append("You are not authorized to manage the visibility of this item.")
+    return {"flashes": flashes}, 406
 
+
+@bp.post("/accounts/i/edit/submit")
+@login_required
+def edit_item_submit():
+    data = request.form
+    if data:
+        item = Items.get(data["itemId"])
+        date_end_extended = json_date_to_python_date(data["extendEndDate"])
+        form_data = {
+            "price": data["price"],
+            "description": data["description"],
+            "extend": date_end_extended
+        }
         Items.set(item_id, {"price": form_data["price"]})
         Details.set(item_id, {"description": form_data["description"]})
-        Calendars.set(item_id, {"date_ended": new_end_of_calendar})
-        image = request.files.get("image")
+        Calendars.set(item_id, {"date_ended": date_end_extended})
+        image = request.files.get("image", None)
         if image:
             image_data = {
                 "self" : item,
@@ -167,13 +188,13 @@ def edit_item(item_id):
                 "bucket" : AWS.S3_BUCKET
             }
             upload_response = upload_image(image_data)
-            flash(upload_response["message"])
-        flash(f"Your {item.name} has been updated!")
-        return redirect(f"/accounts/u/id={g.user.id}")
-    return {
-        "item": item.to_dict(),
-        "photo_url": photo_url
-        }
+            flashes.append(upload_response["message"])
+        flashes.append(f"Your {item.name} has been updated!")
+        code = 201
+    else:
+        flashes.append("No changes were received! Try again.")
+        code = 406
+    return {"flashes": flashes}, code
 
 #review an item
 @bp.route("/accounts/i/review/id=<int:item_id>", methods=["POST", "GET"])
