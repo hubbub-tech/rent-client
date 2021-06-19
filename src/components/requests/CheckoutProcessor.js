@@ -7,7 +7,7 @@ const CheckoutProcessor = ({ setFlashMessages }) => {
   const { token } = useParams();
 
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? '/checkout' : '/inventory'
+    redirectUrl = res.ok ? '/accounts/u/orders' : '/inventory'
     return res.json()
   }
 

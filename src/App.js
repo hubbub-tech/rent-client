@@ -18,10 +18,11 @@ import Account from './components/pages/Account';
 import Rentals from './components/pages/Rentals';
 import Dropoffs from './components/pages/Dropoffs';
 import Pickups from './components/pages/Pickups';
+import EditItem from './components/pages/EditItem';
 
 const App = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [flashMessages, setFlashMessages] = useState([]);
   useEffect(() => {
     fetch('/login_status')
@@ -52,11 +53,14 @@ const App = () => {
               isLoggedIn={isLoggedIn}
               setFlashMessages={setFlashMessages} />
           </Route>
+          <Route exact path="/accounts/i/edit/id=:itemId">
+            <EditItem setFlashMessages={setFlashMessages} />
+          </Route>
           <Route exact path="/checkout">
             <Checkout setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/accounts/u/id=:userId">
-            <Account isOwner={false} />
+            <Account myId={userId} setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/accounts/u/orders">
             <Rentals />

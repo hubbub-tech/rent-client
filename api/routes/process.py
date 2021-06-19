@@ -72,7 +72,6 @@ def order_confirmation(token):
                 "date_placed": date.today(),
             }
             order = create_order(order_data)
-            print("the corresponding order was created")
             transaction_summary = {
                 "item": item,
                 "order": order,
@@ -84,13 +83,11 @@ def order_confirmation(token):
             #TODO: send email receipt to lister
             cart_data[str(order.id)] = transaction_summary # important for renters receipt
             user.cart.remove(reservation)
-            print("remove the item from cart")
             item.unlock()
-            print(f"{item.name} was unlocked")
         #TODO: send email receipt to renter
         session["cart_size"] = 0
         flashes.append("Successfully rented all items! Now, just let us know when we can drop them off.")
-        return {"flashes": flashes}, 201 #redirect("/schedule/dropoff")
+        return {"flashes": flashes}, 201
     else:
         flashes.append(cart_response["message"])
         return {"flashes": flashes}, 406
