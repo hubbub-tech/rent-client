@@ -7,7 +7,7 @@ from flask import Blueprint, redirect, session, g, request, url_for
 from blubber_orm import Users, Profiles, Orders
 from blubber_orm import Items, Details, Testimonials
 
-from api.tools.build import validate_edit_account, validate_edit_password
+from api.tools.build import validate_edit_account, validate_edit_password, upload_image
 from api.tools.settings import login_required, AWS
 from api.tools import blubber_instances_to_dict, json_date_to_python_date
 
@@ -18,7 +18,6 @@ def index():
     _testimonials = Testimonials.get_all()
     testimonials = blubber_instances_to_dict(_testimonials)
     for testimonial in testimonials:
-        print(testimonial)
         user = Users.get(testimonial["user_id"])
         testimonial["user"] = user.to_dict()
         testimonial["user"]["name"] = user.name
@@ -54,69 +53,96 @@ def account(id):
     }
 
 #edit personal account
-@bp.route("/accounts/u/edit", methods=["POST", "GET"])
+@bp.get("/accounts/u/edit")
 @login_required
 def edit_account():
     photo_url = AWS.get_url("users")
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
 
-    if request.method == "POST":
+    user_to_dict = user.to_dict()
+    user_to_dict["address"] = user.address.to_dict()
+    user_to_dict["profile"] = user.profile.to_dict()
+    return {
+        "user": user_to_dict,
+        "photo_url": photo_url
+    }
+
+#edit personal account
+@bp.post("/accounts/u/edit/submit")
+@login_required
+def edit_account_submit():
+    flashes = []
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    data = request.form
+    if data:
         form_data = {
-            "self": g.user,
-            "payment": request.form.get("payment", g.user.payment),
-            "email": request.form.get("email", g.user.email),
-            "phone": request.form.get("phone", g.user.profile.phone),
-            "bio": request.form.get("bio", g.user.profile.bio)
+            "self": user,
+            "payment": data.get("payment", user.payment),
+            "email": data.get("email", user.email),
+            "phone": data.get("phone", user.profile.phone),
+            "bio": data.get("bio", user.profile.bio)
         }
         form_check = validate_edit_account(form_data)
         if form_check["is_valid"]:
-            Users.set(g.user.id, {
-                "bio": form_data["bio"],
+            Users.set(g.user_id, {
                 "email": form_data["email"],
-                "phone": form_data["phone"],
-                "payment": form_data["payment"],
+                "payment": form_data["payment"]
             })
-
+            Profiles.set(g.user_id, {
+                "bio": form_data["bio"],
+                "phone": form_data["phone"]
+            })
             image = request.files.get("image")
             if image:
                 image_data = {
-                    "self": g.user,
+                    "self": user,
                     "image" : image,
                     "directory" : "users",
                     "bucket" : AWS.S3_BUCKET
                 }
                 upload_response = upload_image(image_data)
                 if upload_response["is_valid"]:
-                    Profiles.set(g.user.id, {"has_pic": True})
-                flash(upload_response["message"])
-            flash(upload_response["message"])
-            return redirect(f"/accounts/u/id={g.user.id}")
+                    Profiles.set(g.user_id, {"has_pic": True})
+                    flashes.append(upload_response["message"])
+                else:
+                    flashes.append(upload_response["message"])
+                    return {"flashes": flashes}, 406
+            flashes.append("Successfully edited your account!")
+            return {"flashes": flashes}, 201
         else:
-            flash(upload_response["message"])
-            return redirect("/accounts/u/edit")
-    return {
-        "user": g.user.to_dict(),
-        "photo_url": photo_url
-        }
+            flashes.append(form_check["message"])
+    else:
+        flashes.append("No updates were submitted! Try again.")
+    return {"flashes": flashes}, 406
 
 #edit personal password
 #check that the confirmation pass and new pass match on frontend
-@bp.route("/accounts/u/password", methods=["POST", "GET"])
+@bp.post("/accounts/u/password/submit")
 @login_required
-def edit_password():
-    if request.method == "POST":
+def edit_password_submit():
+    flashes = []
+    errors = []
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    data = request.json
+    if data:
         form_data = {
-            "self" : g.user,
-            "current_password" : request.form.get("current"),
-            "new_password" : request.form.get("new")
+            "self" : user,
+            "current_password" : data["password"]["old"],
+            "new_password" : data["password"]["new"]
         }
         form_check = validate_edit_password(form_data)
         if form_check["is_valid"]:
-            g.user.password = generate_password_hash(form_data["new_password"])
-            return redirect(f"/accounts/u/id={g.user.id}")
+            user.password = generate_password_hash(form_data["new_password"])
+            flashes.append(form_check["message"])
+            return {"flashes": flashes}, 201
         else:
-            flash(form_check["message"])
-            return redirect("/accounts/u/password")
-    return {"user": g.user.to_dict()}
+            errors.append(form_check["message"])
+            return {"errors": errors}, 406
+    flashes.append("No data was sent! Try again.")
+    return {"flashes": flashes}, 406
 
 #remove user profile picture
 @bp.route("/accounts/u/remove-picture")
@@ -170,15 +196,15 @@ def edit_item_submit():
     data = request.form
     if data:
         item = Items.get(data["itemId"])
-        date_end_extended = json_date_to_python_date(data["extendEndDate"])
+        # date_end_extended = json_date_to_python_date(data["extendEndDate"])
         form_data = {
             "price": data["price"],
             "description": data["description"],
-            "extend": date_end_extended
+            # "extend": date_end_extended
         }
-        Items.set(item_id, {"price": form_data["price"]})
-        Details.set(item_id, {"description": form_data["description"]})
-        Calendars.set(item_id, {"date_ended": date_end_extended})
+        Items.set(item.id, {"price": form_data["price"]})
+        Details.set(item.id, {"description": form_data["description"]})
+        # Calendars.set(item.id, {"date_ended": date_end_extended})
         image = request.files.get("image", None)
         if image:
             image_data = {
