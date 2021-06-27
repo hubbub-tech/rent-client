@@ -67,6 +67,9 @@ const Footer = () => {
                 <a href="https://docs.google.com/document/d/1rRKafml--o5q6L3HA8EtFHCedQTncR8rUZhAeVsEqfI/edit?usp=sharing" target="_blank" rel="noreferrer">Community Guidelines</a>
               </li>
               <li>
+                <a href="https://docs.google.com/document/d/1HVTqo46FFZu-P12gfrb7o6a83VDANyzGNfMyR_FFxOE/edit?usp=sharing" target="_blank" rel="noreferrer">Terms of Service & Privacy Policy</a>
+              </li>
+              <li>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLSe5gWyZ6XtGYhMk8n_pPbxVtt8_YhEh139BTRydbF4XCkVHJg/viewform" target="_blank" rel="noreferrer">Leave Feedback</a>
               </li>
               <li>
@@ -84,9 +87,7 @@ const Footer = () => {
           <div className="col-3"></div>
         </div>
       </div>
-      <div className="footer-copyright text-center py-3">© 2021 Copyright:
-        <a href="https://www.hubbub.shop/">hubbub.shop</a>
-      </div>
+      <div className="footer-copyright text-center py-3">© 2021 Copyright: <a href="https://www.hubbub.shop/">hubbub.shop</a></div>
     </footer>
   );
 }
