@@ -11,5 +11,7 @@ from .utils import search_items
 
 from .config import AWSConfig
 
+from .const import *
+
 AWS = AWSConfig.get_instance()
 recaptcha = ReCaptcha()

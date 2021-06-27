@@ -8,7 +8,7 @@ from api.tools.settings import get_orders_for_dropoff, get_orders_for_pickup, ge
 from api.tools.settings import lock_checkout, check_if_routed, exp_decay
 from api.tools.settings import login_required, transaction_auth, AWS
 from api.tools.build import create_order, create_logistics, create_reservation
-from api.tools import blubber_instances_to_dict
+from api.tools import blubber_instances_to_dict, json_date_to_python_date
 
 bp = Blueprint('process', __name__)
 
@@ -50,7 +50,6 @@ def order_confirmation(token):
     user = Users.get(g.user_id)
     cart_response = lock_checkout(user)
     if cart_response["is_valid"]:
-        print("it locked")
         cart_data = {}
         _cart_contents = user.cart.contents # need this because cart size changes
         for item in _cart_contents:
@@ -118,6 +117,33 @@ def order_history():
         "photo_url": photo_url,
         "orders": orders
     }
+
+@bp.get("/accounts/o/id=<int:order_id>")
+@login_required
+def manage_order(order_id):
+    photo_url = AWS.get_url("items")
+    flashes = []
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    order = Orders.get(order_id)
+    item = Items.get(order.item_id)
+    if g.user_id == order.renter_id:
+        item_to_dict = item.to_dict()
+        item_to_dict["calendar"] = item.calendar.to_dict()
+        item_to_dict["details"] = item.details.to_dict()
+
+        order_to_dict = order.to_dict()
+        order_to_dict["ext_date_end"] = order.ext_date_end.strftime("%Y-%m-%d")
+        order_to_dict["reservation"] = order.reservation.to_dict()
+        order_to_dict["lister"] = order.lister.to_dict()
+        order_to_dict["item"] = item_to_dict
+        return {
+            "order": order_to_dict,
+            "photo_url": photo_url
+        }
+    else:
+        flashes.append("You can only manage orders that you placed.")
+        return {"flashes": flashes}, 406
 
 @bp.get("/schedule/dropoffs/<date_str>")
 @login_required
@@ -254,95 +280,41 @@ def schedule_pickups_submit():
         flashes.append("Please, provide availabilities for pickup.")
         return {"flashes": flashes}, 406
 
-@bp.route("/accounts/o/extend/id=<int:order_id>", methods=["POST", "GET"])
+@bp.post("/accounts/o/extend/confirmation")
 @login_required
-def extend_order(order_id):
-    format = "%m/%d/%Y"
-    ext_reservation = None
-    order = Orders.get(order_id)
-    item = Items.get(order.item_id)
-    if g.user.id == order.renter_id:
-        if request.method == "POST":
-            ext_date_end_str = request.form.get("ext_date_end")
-            ext_date_end = datetime.strptime(ext_date_end_str, format).date()
-            ext_rental_data = {
-                "renter_id": g.user.id,
+def extend_confirmation():
+    flashes = []
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    data = request.json
+    if data:
+        item_id = data["itemId"]
+        item = Items.get(item_id)
+        if item.is_locked == False:
+            item.lock(user)
+            order_id = data["orderId"]
+            order = Orders.get(order_id)
+            ext_date_end = json_date_to_python_date(data["extendDate"])
+            ext_reservation_keys = {
+                "renter_id": g.user_id,
                 "item_id": item.id,
                 "date_started": order.ext_date_end, # will return order.res_date_end if no ext
                 "date_ended": ext_date_end
             }
-            ext_reservation, action, waitlist_ad = create_reservation(ext_rental_data)
-            if ext_reservation:
-                ext_reservation = ext_reservation.to_dict()
+            ext_reservation = Reservations.get(reservation_keys)
+            if item.calendar.scheduler(ext_reservation):
+                item.calendar.add(ext_reservation)
+                ext_data = {
+                    "res_date_end": ext_reservation.date_ended,
+                    "res_date_start": ext_reservation.date_started,
+                    "renter_id": order.renter_id,
+                    "item_id": order.item_id,
+                    "order_id": order_id
+                }
+                extension = create_extension(ext_data)
+                flashes.append(f"Your {item.name} was successfully extended!")
             else:
-                flash(Markup(waitlist_ad))
-                flash("Sorry, you cannot extend for that time period.")
-            flash(action)
-        return {
-            "ext_reservation": ext_reservation,
-            "order": order.to_dict(),
-            "item": item.to_dict()
-        } # tells the user how much extension will cost, then they can confirm or not
-    else:
-        flash("You can only manage orders that you placed.")
-        return redirect(f"/accounts/u/id={g.user.id}")
-
-# Navigate here via, "extend now" button on frontend
-@bp.route("/extend/o/processor/id=<int:order_id>&start=<start>&end=<end>")
-@login_required
-def extension_processor(order_id, start, end):
-    format = "%Y-%m-%d"
-    order = Orders.get(order_id)
-    ext_reservation_keys = {
-        "renter_id": g.user.id,
-        "item_id": order.item_id,
-        "date_started": datetime.strptime(start, format).date(),
-        "date_ended": datetime.strptime(end, format).date()
-    }
-    item = Items.get(order.item_id)
-    ext_reservation = Reservations.get(reservation_keys)
-    if ext_reservation:
-        if item.calendar.scheduler(ext_reservation):
-            item.calendar.add(ext_reservation)
-            ext_data = {
-                "res_date_end": ext_reservation.date_ended,
-                "res_date_start": ext_reservation.date_started,
-                "renter_id": order.renter_id,
-                "item_id": order.item_id,
-                "order_id": order_id
-            }
-            extension = create_extension(ext_data)
-            #TODO: email notification about extension
-            flash(f"Your {item.name} was successfully extended!")
-            return redirect(f"/accounts/u/id={g.user.id}")
+                flashes.append(f"Sorry, you cannot extend this rental. It seems someone just got to the {item.name} before you.")
         else:
-            flash(f"Sorry, it seems someone just got to the {item.name} before you.")
-            return redirect(f"/accounts/u/id={g.user.id}")
-    else:
-        flash("Couldn't find that reservation. Try extending again.")
-        return redirect(f"/accounts/o/extend/id={order_id}")
-
-@bp.route("/accounts/o/return/id=<int:order_id>")
-@login_required
-def return_order(order_id):
-    format = "%m/%d/%Y"
-    order = Orders.get(order_id)
-    item = Items.get(order.item_id)
-    if g.user.id == order.renter_id:
-        if request.method == "POST":
-            return_date_str = request.form.get("return_date")
-            return_date = datetime.strptime(return_date_str, format).date()
-            early_return_data = {
-                "renter_id": g.user.id,
-                "item_id": item.id,
-                "date_started": order.res_date_start, # will return order.res_date_end if no ext
-                "date_ended": return_date
-            }
-            create_reservation(early_return_data)
-        return {
-            "order": order.to_dict(),
-            "item": item.to_dict()
-        } # tells the user how much extension will cost, then they can confirm or not
-    else:
-        flash("You can only manage orders that you placed.")
-        return redirect(f"/accounts/u/id={g.user.id}")
+            flashes.append("It looks like someone else is ordering the item right now.")
+    return None

@@ -169,3 +169,45 @@ def get_delivery_schedule(availabilities):
         else:
             delivery_schedule[delivery_date] = [delivery_time]
     return delivery_schedule
+
+def process_early_return(order, early_return_reservation):
+    if early_return_reservation.date_ended < order.res_date_end:
+        if early_return_reservation.item_id == order.item_id:
+            if early_return_reservation.renter_id == order.renter_id:
+                if order.ext_date_end == order.res_date_end:
+                    renter = Users.get(order.renter_id)
+                    item = Items.get(order.item_id)
+                    old_res_keys = {
+                        "renter_id": order.renter_id,
+                        "item_id": order.item_id,
+                        "date_started": order.res_date_start,
+                        "date_ended": order.res_date_end
+                    }
+                    if item.is_locked == False:
+                        item.lock(renter) # if someone else hasn't locked it already, lock it
+                        Reservations.set(old_res_keys, {"is_calendared": False})
+                        new_res_keys = {
+                            "renter_id": early_return_reservation.renter_id,
+                            "item_id": early_return_reservation.item_id,
+                            "res_date_start": early_return_reservation.date_started,
+                            "res_date_end": early_return_reservation.date_ended
+                        }
+                        Orders.set(order.id, new_res_keys)
+                        new_res_keys = {
+                            "renter_id": early_return_reservation.renter_id,
+                            "item_id": early_return_reservation.item_id,
+                            "date_started": early_return_reservation.date_started,
+                            "date_ended": early_return_reservation.date_ended
+                        }
+                        Reservations.set(new_res_keys, {"is_calendared": True})
+                        item.unlock()
+                    else:
+                        message = "Someone else is processing the item right now. Try again in a few minutes."
+                else:
+                    message = "The order should not have extensions attached to it."
+            else:
+                message = "The reservation is not tied to the same renter."
+        else:
+            message = "Error: The reservation is not tied to the same item as the original order."
+    else:
+        message = "Early returns must be earlier than the current return date."
