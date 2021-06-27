@@ -29,7 +29,7 @@ const App = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [flashMessages, setFlashMessages] = useState([]);
   useEffect(() => {
-    fetch('/login_status')
+    fetch('/login/status')
     .then(res => res.json())
     .then(data => {
       setUserId(data.user_id);

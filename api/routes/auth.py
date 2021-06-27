@@ -14,7 +14,7 @@ bp = Blueprint('auth', __name__)
 def load_logged_in_user():
     g.user_id = session.get('user_id', None)
 
-@bp.get('/login_status')
+@bp.get('/login/status')
 def login_status():
     g.user_id = session.get('user_id', None)
     return {
