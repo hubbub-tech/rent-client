@@ -8,6 +8,7 @@ from blubber_orm import Logistics, Dropoffs, Pickups
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from api.tools.settings import exp_decay, generate_proposed_period
+from api.tools.settings import DEPOSIT, TAX
 #done
 def create_user(insert_data):
     user_address = Addresses.filter(insert_data["address"])
@@ -58,7 +59,8 @@ def create_reservation(insert_data):
     else:
         rental_duration = (insert_data["date_ended"] - insert_data["date_started"]).days
         insert_data["charge"] = exp_decay(item.price, rental_duration)
-        insert_data["deposit"] = insert_data["charge"] * 0.25
+        insert_data["deposit"] = insert_data["charge"] * DEPOSIT
+        insert_data["tax"] = insert_data["charge"] * TAX
 
         reservation = Reservations.insert(insert_data)
 
