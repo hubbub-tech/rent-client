@@ -9,7 +9,7 @@ const Login = ({isLoggedIn, setIsLoggedIn, setFlashMessages, setCartSize}) => {
       <main>
         <br />
         <h1 className="text-center">Login</h1>
-        <p className="text-center">Find the sweet deal that's been waiting for you.</p>
+        <p className="text-center mx-2">Find the sweet deal that's been waiting for you.</p>
         <br />
         <LoginForm
           setIsLoggedIn={setIsLoggedIn}

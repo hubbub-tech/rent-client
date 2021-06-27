@@ -45,11 +45,7 @@ def login():
             login_response = login_user(user)
             if login_response["is_valid"]:
                 flashes.append(login_response["message"])
-                return {
-                    "is_logged_in": True,
-                    "errors": errors,
-                    "flashes": flashes
-                }, 201
+                return {"errors": errors, "flashes": flashes}, 201
             else:
                 errors.append(login_response["message"])
                 flashes.append("Houston, we have a problem...")
@@ -58,11 +54,7 @@ def login():
             flashes.append("Houston, we have a problem...")
     else:
         flashes.append("Nothing was entered! We need input to log you in.")
-    return {
-        "is_logged_in": False,
-        "errors": errors,
-        "flashes": flashes
-    }, 406 #NOTE: no data
+    return {"errors": errors, "flashes": flashes}, 406 #NOTE: no data
 
 @bp.post('/register')
 def register():
@@ -72,7 +64,7 @@ def register():
     if data:
         first_name = data["user"]["firstName"]
         last_name = data["user"]["lastName"]
-        unhashed_pass = data["user"]["password"] #TODO: confirm on the frontend
+        unhashed_pass = data["user"]["password"]
         hashed_pass = generate_password_hash(unhashed_pass)
         form_data = {
             "user": {
@@ -115,12 +107,9 @@ def register():
             errors.append(form_check["message"])
             flashes.append("Uh oh...")
     else:
-        errors.append("No information to create an account!")
+        errors.append("No information to create an account! Try again.")
         flashes.append("Uh oh...")
-    return {
-        "flashes": flashes,
-        "errors": errors
-    }, 406
+    return {"flashes": flashes, "errors": errors}, 406
 
 @bp.get("/logout")
 @login_required
