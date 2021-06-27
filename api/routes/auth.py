@@ -85,6 +85,7 @@ def register():
             "cart": {
                 "total": 0.0,
                 "total_deposit": 0.0,
+                "total_tax": 0.0,
                 "id": None
             },
             "address": {

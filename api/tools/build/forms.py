@@ -39,15 +39,9 @@ def validate_registration(form_data):
     loaded_user = Users.filter({"email": form_data["email"]})
     if loaded_user:
         message = "You might already have an account. Try logging in!"
-    elif form_data["address_num"] is None:
-        message = "Please provide an address number (Ex: '1600' in '1600 Pennsylvania Avenue' )."
-    elif form_data["address_street"] is None:
-        message = "Please provide an address street (Ex: 'Pennsylvania Avenue' in '1600 Pennsylvania Avenue' )."
-    elif form_data["address_apt"] is None:
-        message = "Please provide an address apartment number. If you don't have one, then enter 'N/A'."
-    elif form_data["address_zip"] is None:
-        message = "Please provide an zip code."
     else:
+        if form_data["payment"] is None:
+            form_data["payment"] = "NA"
         is_valid = True
         message = "You're registered on Hubbub, now login to get started!"
     return {

@@ -2,8 +2,6 @@ import React from 'react';
 import { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import TextInput from '../inputs/TextInput';
-import PasswordInput from '../inputs/PasswordInput';
 import FormErrors from '../errors/FormErrors';
 
 const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
@@ -43,23 +41,33 @@ const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
       <div className="card mx-sm-auto mx-2" style={{"maxWidth": "540px"}}>
         <div className="card-body">
           <FormErrors errors={errors} color={"red"} />
-          <TextInput
-            id="newUserEmail"
-            name="userEmail"
-            label="Email"
-            placeholder="ah1754@columbia.edu"
-            onChange={e => setUser({ ...user, email: e.target.value })}
-            minLength="1"
-            maxLength="49"
-            required={true}
-          />
-          <PasswordInput
-            id="newUserPassword"
-            name="userPassword"
-            label="Password"
-            placeholder="ah1754@columbia.edu"
-            onChange={e => setUser({ ...user, password: e.target.value })}
-          />
+          <div className="form-floating mb-3">
+            <input
+              type="email"
+              className="form-control"
+              id="userEmail"
+              name="email"
+              placeholder="ah1754@columbia.edu"
+              onChange={e => setUser({ ...user, email: e.target.value })}
+              minLength="5"
+              maxLength="49"
+              required
+            />
+            <label htmlFor="userEmail">Email address</label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              type="password"
+              className="form-control"
+              id="userPassword"
+              name="password"
+              onChange={e => setUser({ ...user, password: e.target.value })}
+              minLength="8"
+              maxLength="49"
+              required
+            />
+            <label htmlFor="userPassword">Password</label>
+          </div>
           <div className="d-grid gap-2 mb-3">
             <button
               className="next-step-2 btn btn-primary"
