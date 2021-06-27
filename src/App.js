@@ -19,6 +19,10 @@ import Rentals from './components/pages/Rentals';
 import Dropoffs from './components/pages/Dropoffs';
 import Pickups from './components/pages/Pickups';
 import EditItem from './components/pages/EditItem';
+import EditAccount from './components/pages/EditAccount';
+import EditPassword from './components/pages/EditPassword';
+import ExtendRental from './components/pages/ExtendRental';
+import EarlyReturn from './components/pages/EarlyReturn';
 
 const App = () => {
   const [userId, setUserId] = useState(null);
@@ -36,7 +40,7 @@ const App = () => {
     <Router>
       <div className="App">
         <Navbar userId={userId} isLoggedIn={isLoggedIn} />
-        <Flash flashMessages={flashMessages} />
+        <Flash flashMessages={flashMessages} setFlashMessages={setFlashMessages} />
         <Switch>
           <Route exact path="/"><Main /></Route>
           <Route exact path="/inventory">
@@ -55,6 +59,18 @@ const App = () => {
           </Route>
           <Route exact path="/accounts/i/edit/id=:itemId">
             <EditItem setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/accounts/u/edit">
+            <EditAccount setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/accounts/u/password">
+            <EditPassword setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/accounts/o/extend/id=:orderId">
+            <ExtendRental setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/accounts/o/early/id=:orderId">
+            <EarlyReturn setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/checkout">
             <Checkout setFlashMessages={setFlashMessages} />
