@@ -23,8 +23,8 @@ def login_status():
 
     }
 
-@bp.get('/cart_size')
-def cart_size():
+@bp.get('/login/cart')
+def login_cart():
     cart_size = session.get('cart_size', None)
     return {"cart_size": cart_size}
 
