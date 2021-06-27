@@ -8,16 +8,14 @@ from api.tools.settings import AWS
 
 #done 5/21
 def validate_edit_account(form_data):
-    is_valid = False
+    is_valid = True
     message = None
-
     check_if_is_existing_user = Users.filter({"email": form_data["email"]})
     if check_if_is_existing_user:
         registered_email_owner, = check_if_is_existing_user
-        if registered_email_owner != form_data["self"]:
+        if registered_email_owner.id != form_data["self"].id:
+            is_valid = False
             message = "Sorry, the email you want to user is already in use."
-    else:
-        is_valid = True
     return {
         "is_valid" : is_valid,
         "message" : message
@@ -29,7 +27,8 @@ def validate_edit_password(form_data):
     if not check_password_hash(_self.password, form_data["current_password"]):
         message = "The password you entered is incorrect."
     else:
-        message = "Successful login. Welcome back!"
+        is_valid = True
+        message = "Your password was successfully changed!"
     return {
         "is_valid" : is_valid,
         "message" : message

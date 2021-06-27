@@ -1,5 +1,5 @@
 from datetime import datetime, date, timedelta
-from flask import Blueprint, flash, g, redirect, request, session, Markup
+from flask import Blueprint, flash, g, redirect, request, session
 
 from blubber_orm import Users, Orders, Reservations
 from blubber_orm import Items, Tags, Details, Calendars
