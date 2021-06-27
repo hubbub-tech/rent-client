@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { stringToMoment, printMoment } from '../../helper.js'
 import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
 import AccountCard from '../cards/AccountCard';
@@ -53,7 +54,9 @@ const Account = ({ myId, setFlashMessages }) => {
             <p className="mx-3 mb-1"><strong>Email</strong> - {user.email}</p>
           </div>
           <div className="col-md-4 text-center mt-2">
-            <p className="mx-3 mb-1"><strong>Member Since</strong> - { user.dt_joined }</p>
+            <p className="mx-3 mb-1"><strong>Member Since</strong>
+              {` - ${printMoment(stringToMoment(user.dt_joined))}`}
+            </p>
           </div>
         </div>
         <hr />

@@ -19,9 +19,6 @@ const Checkout = ({setFlashMessages}) => {
       setItems(data.items);
       setUrlBase(data.photo_url);
       setIsReady(data.is_ready);
-      console.log({"isReady by length": items.length});
-      console.log({"isReady data": data.is_ready});
-      console.log({isReady});
     });
   }, [toggle]);
   return (

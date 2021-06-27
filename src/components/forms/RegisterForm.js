@@ -58,6 +58,7 @@ const RegisterForm = ({ setFlashMessages }) => {
     <form onSubmit={submit} >
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="step-1 card-body">
+          <FormErrors errors={errors.server} color={"red"} />
           <div className="row">
             <div className="col">
               <div className="form-floating mb-3">

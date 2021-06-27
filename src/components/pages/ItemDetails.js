@@ -35,9 +35,8 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
       body: JSON.stringify({ startDate, endDate }),
       headers: { 'Content-Type': 'application/json' },
     })
-    .then(res => {
-      res.json().then(data => setFlashMessages(data.flashes));
-    });
+    .then(res => res.json())
+    .then(data => setFlashMessages(data.flashes));
   }
   return (
     <main>

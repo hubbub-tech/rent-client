@@ -24,7 +24,7 @@ const EditItemForm = ({ item, setFlashMessages }) => {
 
     formData.append('image', selectedFile);
 
-    fetch('/list/submit', {
+    fetch('/accounts/i/edit/submit', {
       method: 'POST',
       body: formData
     })
