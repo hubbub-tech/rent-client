@@ -12,6 +12,14 @@ const OrderCard = ({ urlBase, order }) => {
     history.push(`/schedule/pickups/${order.res_date_end}`)
   }
 
+  const handleEarlyOnClick = () => {
+    history.push(`/accounts/o/early/id=${order.id}`)
+  }
+
+  const handleExtendOnClick = () => {
+    history.push(`/accounts/o/extend/id=${order.id}`)
+  }
+
   return (
     <div className="card px-0 mb-3">
       <div className="card-header">
@@ -70,6 +78,7 @@ const OrderCard = ({ urlBase, order }) => {
                     <button
                       type="button"
                       className="btn btn-lg btn-warning mx-1 my-1"
+                      onClick={handleEarlyOnClick}
                       disabled={order.is_pickup_scheduled}>
                       Early Return
                     </button>
@@ -79,6 +88,7 @@ const OrderCard = ({ urlBase, order }) => {
                       <button
                         type="button"
                         className="btn btn-lg btn-info mx-1 my-1"
+                        onClick={handleExtendOnClick}
                         disabled={order.is_pickup_scheduled}>
                         Extend Rental
                       </button>

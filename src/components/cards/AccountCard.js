@@ -9,8 +9,8 @@ const AccountCard = ({ user }) => {
         <p className="card-text my-3">Phone Number - {user.profile.phone}</p>
         <p className="card-text">Payment - {user.payment}</p>
         <hr className="dropdown-divider"/>
-        <a className="card-link" href="/account/u/edit">Edit Profile</a>
-        <a className="card-link" href="/account/u/password">Change Password</a>
+        <a className="card-link" href="/accounts/u/edit">Edit Profile</a>
+        <a className="card-link" href="/accounts/u/password">Change Password</a>
       </div>
     </div>
   );
