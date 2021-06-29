@@ -76,6 +76,7 @@ const RegisterForm = ({ setFlashMessages }) => {
         setErrors({ ...errors, server: data.errors });
       }
     });
+    window.scrollTo(0, 0);
   }
   return (
     <form onSubmit={submit}>

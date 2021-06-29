@@ -32,8 +32,9 @@ const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
       setReservation(data.reservation);
       setFlashMessages(data.flashes);
     });
+    window.scrollTo(0, 0);
   }
-  
+
   return (
     <form onSubmit={submit} >
       <DateRangePicker
