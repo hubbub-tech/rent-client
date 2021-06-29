@@ -3,23 +3,30 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import RentalForm from '../forms/RentalForm';
+import ShopCard from '../cards/ShopCard';
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
   const { itemId } = useParams();
-  const [item, setItem] = useState({});
+  const [item, setItem] = useState({
+    "address": {},
+    "details": {},
+    "calendar": {}
+  });
+  const [recommendations, setRecommendations] = useState([]);
   const [urlBase, setUrlBase] = useState(null);
-  const [details, setDetails] = useState({});
-  const [calendar, setCalendar] = useState({});
   const [reservation, setReservation] = useState(null);
 
   useEffect(() => {
+    AOS.init({duration : 1000});
     fetch(`/inventory/i/id=${itemId}`)
     .then(res => res.json())
     .then(data => {
       setItem(data.item);
       setUrlBase(data.photo_url);
-      setDetails(data.details);
-      setCalendar(data.calendar);
+      setRecommendations(data.recommendations);
     });
   }, [itemId]);
 
@@ -36,7 +43,10 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => res.json())
-    .then(data => setFlashMessages(data.flashes));
+    .then(data => {
+      setFlashMessages(data.flashes);
+    });
+    window.scrollTo(0, 0);
   }
   return (
     <main>
@@ -59,14 +69,16 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
               alt={item.name} />
           </div>
           <div className="col-md-4 mt-2">
-            <p className="card-text text-center">Available starting { calendar.next_available_start }</p>
+            <p className="card-text text-center">
+              <span class="badge rounded-pill bg-primary">Available starting { item.calendar.next_available_start }</span>
+            </p>
             <div className="card">
               <div className="card-body">
-                {reservation && <p className="text-start fs-5 fw-bold">Rent for <mark>{reservation.charge}</mark></p>}
+                {reservation && <p className="text-start fs-5 fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{reservation.charge}</span></p>}
                 {!reservation && <p className="text-start fs-5 fw-bold">How long do you want to rent?</p>}
                 {isLoggedIn &&
                   <RentalForm
-                    calendar={calendar}
+                    calendar={item.calendar}
                     setFlashMessages={setFlashMessages}
                     setReservation={setReservation} />
                 }
@@ -83,7 +95,13 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
                 }
                 <hr />
                 <p className="text-start fs-5 fw-bold">Specs</p>
-                <p className="text-start">{ details.description }</p>
+                <p className="text-start">{ item.details.description }</p>
+
+              <p className="text-start fs-5 fw-bold">More Info</p>
+                <p><strong>Location</strong> - {item.address.city}, {item.address.state}</p>
+                <p><strong>Condition</strong> - { item.details.condition }</p>
+                <p><strong>Weight</strong> - { item.details.weight }</p>
+                <p><strong>Volume</strong> - { item.details.volume }</p>
               </div>
             </div>
           </div>
@@ -92,27 +110,27 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
         <div className="row mt-3">
           <div className="col-md-1"></div>
           <div className="col-md-10">
-            <div className="card">
-              <div className="card-body">
-                <p className="text-start fs-5 fw-bold">More Info</p>
-                <div className="row">
-                  <div className="col-lg-3 col-md-6">
-                    <p><strong>Location</strong> - SOMEWHERE</p>
-                  </div>
-                  <div className="col-lg-3 col-md-6">
-                    <p><strong>Condition</strong> - { details.condition }</p>
-                  </div>
-                  <div className="col-lg-3 col-md-6"><p>
-                    <strong>Weight</strong> - { details.weight }</p>
-                  </div>
-                  <div className="col-lg-3 col-md-6"><p>
-                    <strong>Volume</strong> - { details.volume }</p>
-                  </div>
+            <hr />
+            <h3 className="text-start mt-5">Looking for something else?</h3>
+            <p className="text-start mb-5">Check out some of our other featured items or you can <a href="https://docs.google.com/forms/d/e/1FAIpQLSflErYv4mNyPlAlPmSEO_q1xmOIYOMmafoI1-te_fx44VvKhw/viewform" className="btn btn-hubbub btn-sm" target="_blank" rel="noreferrer">Request an Item</a> and we’ll try to help you out!</p>
+            <div className="row">
+              {recommendations.length > 0 && recommendations.map((item) => (
+                <div className="col-12">
+                  <ShopCard urlBase={urlBase} item={item} key={item.id} />
                 </div>
-              </div>
+              ))}
             </div>
           </div>
           <div className="col-md-1"></div>
+        </div>
+        <div className="row mt-3">
+          <p className="text-center">
+            Having trouble finding something? You can <span className="fw-bold text-hubbub">request an item</span> through our form :)!
+            Just click below and we'll try to help you out!
+          </p>
+          <div className="d-grid gap-2 col-6  mx-auto my-3">
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSflErYv4mNyPlAlPmSEO_q1xmOIYOMmafoI1-te_fx44VvKhw/viewform" className="btn btn-hubbub btn-lg" target="_blank" rel="noreferrer">Request an Item</a>
+          </div>
         </div>
       </div>
     </main>
