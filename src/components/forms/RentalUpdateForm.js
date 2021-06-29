@@ -5,7 +5,7 @@ import 'react-dates/initialize';
 
 import '../../dates.css';
 
-const RentalUpdateForm = ({calendar, toggle, setToggle, setFlashMessages}) => {
+const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [focusedInput, setFocusedInput] = useState(null);
@@ -26,6 +26,7 @@ const RentalUpdateForm = ({calendar, toggle, setToggle, setFlashMessages}) => {
       setFlashMessages(data.flashes);
       setToggle(!toggle);
     });
+    window.scrollTo(0, 0);
   }
   return (
     <form onSubmit={submit} >

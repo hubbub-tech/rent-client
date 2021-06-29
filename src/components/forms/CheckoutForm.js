@@ -4,12 +4,12 @@ import { useHistory } from 'react-router-dom';
 
 const CheckoutForm = ({setFlashMessages}) => {
   let history = useHistory();
-  let redirectUrl;
+  let statusOK;
   const [paymentMethod, setPaymentMethod] = useState("in-person");
 
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? '/checkout/confirmation' : null;
-    return res.json()
+    statusOK = res.ok;
+    return res.json();
   }
 
   const submit = (e) => {
@@ -21,8 +21,8 @@ const CheckoutForm = ({setFlashMessages}) => {
     })
     .then(isStatusOK)
     .then(data => {
-      if (redirectUrl) {
-        history.push(redirectUrl + `/token=${data.token}`);
+      if (statusOK) {
+        history.push(`/checkout/confirmation/token=${data.token}`);
       } else {
         setFlashMessages(data.flashes);
       }
@@ -31,7 +31,7 @@ const CheckoutForm = ({setFlashMessages}) => {
 
   return (
     <form onSubmit={submit} >
-      <p className="text-start fs-5 fw-bold mb-3">Select Payment Method</p>
+      <p className="text-start fs-6 fw-bold mb-3">Select Payment Method</p>
       <div className="form-check mb-3">
         <input
           className="form-check-input"

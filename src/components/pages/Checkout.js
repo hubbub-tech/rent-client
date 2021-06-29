@@ -23,19 +23,20 @@ const Checkout = ({setFlashMessages}) => {
   }, [toggle]);
   return (
     <main>
-      <div className="container-md">
+      <div className="container-md my-3">
         <div className="row">
           <div className="col-md-1"></div>
-          <div className="col-md-11 mt-5">
+          <div className="col-md-10 mt-4">
             <h1>Checkout</h1>
             <p>See what's in your cart and place your order.</p>
             <p>A 25% safety deposit is charged at delivery and returned at the end of rental.</p>
+            <hr />
           </div>
+          <div className="col-md-1"></div>
         </div>
-        <hr />
         <div className="row">
           <div className="col-md-1"></div>
-          <div className="col-md-6">
+          <div className="col-md-7">
           {items.map((item, index) => (
             <CheckoutCard
               key={item.id}
@@ -52,7 +53,7 @@ const Checkout = ({setFlashMessages}) => {
             </p>
           }
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <PricingCard
               cart={cart}
               isReady={isReady}

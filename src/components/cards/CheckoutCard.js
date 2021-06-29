@@ -41,13 +41,13 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
   }
   return (
     <div className="card mb-3">
-      <div className="row g-0">
-        <div className="col-md-5">
-          <img className="card-img-top" src={`${urlBase}/${item.id}.jpg`} alt={item.name} />
-        </div>
-        <div className="col-md-7">
-          <div className="card-body">
-            <h5 className="card-title">{ item.name }</h5>
+      <div className="card-body">
+        <div className="row">
+          <div className="col-md-5">
+            <img className="card-img-top" src={`${urlBase}/${item.id}.jpg`} alt={item.name} />
+          </div>
+          <div className="col-md-7">
+            <h4 className="card-title">{ item.name }</h4>
             <small className="card-text text-success">Available starting { item.calendar.next_available_start }</small>
             <hr />
             {!reservation &&
@@ -61,14 +61,12 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
             {reservation && <p className="card-text">Rental Ending - {reservation.date_ended}</p>}
             {reservation && <p className="card-text">Price - {reservation.charge}</p>}
 
-            <span><button className="btn btn-link" onClick={viewItem}>View</button>|</span>
-            {reservation &&
-            <span><button className="btn btn-link" onClick={editItem}>Edit Rental</button>|</span>
-            }
-            {!reservation &&
-            <span><button className="btn btn-link" onClick={() => setReservation(item.reservation)}>Hide Form</button>|</span>
-            }
-            <span><button className="btn btn-link" onClick={removeItem}>Remove</button></span>
+            <div className="btn-group" role="group" aria-label="Basic outlined example">
+              <button type="button" className="btn btn-outline-dark" onClick={viewItem}>View</button>
+              {reservation && <button type="button" className="btn btn-outline-dark" onClick={editItem}>Edit Rental</button>}
+              {!reservation && <button type="button" className="btn btn-outline-warning" onClick={() => setReservation(item.reservation)}>Hide Form</button>}
+              <button type="button" className="btn btn-outline-danger" onClick={removeItem}>Remove</button>
+            </div>
           </div>
         </div>
       </div>
