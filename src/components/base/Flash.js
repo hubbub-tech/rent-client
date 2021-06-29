@@ -12,7 +12,7 @@ const Flash = ({ flashMessages, setFlashMessages }) => {
       <div>
         {flashMessages.map((message, index) => (
           <div
-            className="alert alert-primary alert-dismissible fade show mb-0"
+            className="alert alert-warning alert-dismissible fade show mb-0"
             role="alert"
             key={index}>
             {message}
