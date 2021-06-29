@@ -7,20 +7,64 @@ h1, h2, h3, h4, h5, h6
   font-family: 'Roboto Slab', serif;
 }
 
-.btn-primary {
-  background-color: #69b6e7;
-  border: #69b6e7;
-}
-
-.btn-main {
-  background-color: #ffffff;
-  border: #ffffff;
+.text-hubbub {
   color: #69b6e7;
+  font-weight: bold;
+  animation: animateText 20000ms linear infinite;
 }
 
-.btn-primary:hover .btn-main:hover {
+@keyframes animateText {
+  0% {
+    color: #69b6e7;
+  }
+  50% {
+    color: #3d4fe0;
+  }
+  100% {
+    color: #69b6e7;
+  }
+}
+
+.btn-hubbub {
+  background-color: #69b6e7;
+  border-width: 1px 1px;
+  border: #69b6e7;
+  color: white;
+}
+
+.btn-hubbub:hover {
   background-color: #3d4fe0;
+  border-width: 1px 1px;
   border: #3d4fe0;
+  color: white;
+  transform: scale(1);
+  animation: grow 5000ms ease-in-out infinite;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.btn-neutral {
+  background-color: #000000;
+  border: solid #000000;
+  border-width: 1px 1px;
+  color: #ffffff;
+}
+
+.btn-neutral:hover {
+  border: solid #000000;
+  border-width: 1px 1px;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 a, .btn-link {
@@ -49,14 +93,32 @@ a.custom-card {
   color: inherit;
 }
 
-.zoom-in:hover {
-  transform: scale(1.05);
-  transition-duration: 300ms;
-}
-
 a.custom-card:hover {
   color: inherit;
-  box-shadow: 0 0 11px rgba(33,33,33,.2);
+}
+
+.img-float {
+  transform: translatey(0px);
+  animation: float 10000ms ease-in-out infinite;
+}
+
+.img-float:hover {
+  opacity: 0.3;
+}
+
+@keyframes float {
+	0% {
+		box-shadow: 0 5px 10px 0px rgba(0,0,0,0.4);
+		transform: translatey(0px);
+	}
+	50% {
+		box-shadow: 0 10px 10px 0px rgba(0,0,0,0.2);
+		transform: translatey(-5px);
+	}
+	100% {
+		box-shadow: 0 5px 10px 0px rgba(0,0,0,0.4);
+		transform: translatey(0px);
+	}
 }
 
 .hide {
@@ -67,8 +129,44 @@ a.custom-card:hover {
   display: block;
 }
 
-.index-background {
-  background-image: linear-gradient(#69b6e7, #ffffff);
+.hubbub-background {
+  background: linear-gradient(-45deg, #3d4fe0, #69b6e7, #3d4fe0);
+  background-size: 400% 400%;
+  animation: gradient 20000ms linear infinite;
+}
+
+@keyframes gradient {
+  0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.zoom-in {
+  transform: scale(1);
+  transition-duration: 300ms;
+  transition-timing-function: ease-out;
+
+}
+
+.zoom-in:hover {
+  transform: scale(1.02);
+  transition-duration: 300ms;
+  transition-timing-function: ease-in;
+
+}
+
+.card-shadow {
+  box-shadow: 0 0 5px rgba(33,33,33,.1);
+}
+
+.card-shadow:hover {
+  box-shadow: 0 0 0px rgba(33,33,33,.2);
 }
 
 .crop-circle {
@@ -88,50 +186,54 @@ hr.divider {
  border-width: 2px;
 }
 
-.parallax {
-  /* The image used */
-  /* background-image: url("static/backgrounds/confirmation.jpg"); */
+.highlight-alert {
   background-color: #ffffff;
-
-  /* Set a specific height */
-  height: 540px;
-
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: cover;
+  animation: highlightFade 5000ms 1 ease-out;
 }
 
-.parallax-info {
-  /* The image used */
-  /* background-image: url("static/backgrounds/list.jpg"); */
-  background-color: #ffffff;
-
-  /* Set a specific height */
-  height: 540px;
-
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: cover;
+@keyframes highlightFade {
+  0% { background-color: #ffffff;}
+  50% { background-color: #fbbc04;}
+  100% { background-color: #ffffff;}
 }
 
-.parallax-faqs {
-  /* The image used */
-  /* background-image: url("static/backgrounds/faq.jpeg"); */
-  background-color: #ffffff;
-
-  /* Set a specific height */
-  height: 540px;
-
-  /* Create the parallax scrolling effect */
-  background-attachment: fixed;
-  background-position: right;
-  background-repeat: no-repeat;
-  background-size: cover;
+.border-alert {
+  border-width: 2px;
+  border: #fec008;
+  animation: alertFade 1000ms 1 linear;
 }
+
+@keyframes alertFade {
+  from { border: #fec008;}
+  to { border: #d8d9db;}
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  border-radius: 5px;
+  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
+  overflow: hidden;
+}
+
+.wave {
+  width: 500px;
+  height: 525px;
+  top: -25%;
+  left: 50%;
+  transform: translate(0%, 0%);
+  border-radius: 35%;
+  background: rgba(255, 255, 255, .75);
+  animation: wave 15000ms infinite linear;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
 
 @media (min-width: 300px) and (max-width: 800px) {
    .collapse-sub {
