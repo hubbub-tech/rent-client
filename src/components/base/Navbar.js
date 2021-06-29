@@ -15,9 +15,7 @@ const Navbar = ({ userId, isLoggedIn }) => {
     .then(data => setCartSize(data.cart_size));
   }, [cartSize]);
   return (
-    <nav
-      className="navbar navbar-expand-lg navbar-light"
-      style={{"backgroundColor": "#69b6e7", "border": "#69b6e7"}}>
+    <nav className="navbar navbar-expand-lg navbar-light hubbub-background">
       <div className="container-fluid">
         <a className="navbar-brand" href="/">
           <h2 className="text-start text-white">HUBBUB</h2>
@@ -37,7 +35,7 @@ const Navbar = ({ userId, isLoggedIn }) => {
         <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarNavDropdown">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/inventory">Rent Now</a>
+              <a className="nav-link active fw-bold" aria-current="page" href="/inventory">Rent Now</a>
             </li>
             {isLoggedIn &&
               <li className="nav-item">
@@ -83,9 +81,6 @@ const Navbar = ({ userId, isLoggedIn }) => {
               </li>
             }
           </ul>
-          {isLoggedIn && isNavCollapsed &&
-            <span className="badge badge-primary badge-pill mx-2">{cartSize}</span>
-          }
         </div>
       </div>
     </nav>

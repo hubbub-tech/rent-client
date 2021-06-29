@@ -15,7 +15,7 @@ const SearchForm = () => {
       <div className="input-group mx-5">
         <input
           type="text"
-          className="form-control"
+          className="form-control border-dark"
           name="search"
           onChange={e => setSearch(e.target.value)}
           placeholder="Search items..."
@@ -24,7 +24,7 @@ const SearchForm = () => {
           maxLength="29"
           aria-describedby="button-addon2" />
         <button
-          className="btn btn-secondary"
+          className="btn btn-neutral"
           type="submit"
           id="button-addon2">Search</button>
       </div>

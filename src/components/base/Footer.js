@@ -3,8 +3,8 @@ import React from 'react';
 const Footer = () => {
   return (
     <footer
-      className="page-footer font-small mt-5 pt-4 footer"
-      style={{"backgroundColor": "#666666"}}>
+      className="font-small pt-4"
+      style={{"backgroundColor": "#000000"}}>
       <div className="container-fluid text-center text-md-start">
         <div className="row pt-3">
           <div className="col-md-4 mt-md-0 mt-3">
@@ -87,7 +87,10 @@ const Footer = () => {
           <div className="col-3"></div>
         </div>
       </div>
-      <div className="footer-copyright text-center py-3">© 2021 Copyright: <a href="https://www.hubbub.shop/">hubbub.shop</a></div>
+      <div className="text-center py-3">
+        <span className="text-white">© 2021 Copyright: </span>
+        <a href="https://www.hubbub.shop/">hubbub.shop</a>
+      </div>
     </footer>
   );
 }
