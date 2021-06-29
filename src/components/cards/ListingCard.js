@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ListingCard = ({ item, isOwner, setFlashMessages }) => {
+const ListingCard = ({ item, urlBase, isOwner, setFlashMessages }) => {
 
   const isStatusOK = (res) => {
     // some action that is dependent on the status of the POST
@@ -17,27 +17,49 @@ const ListingCard = ({ item, isOwner, setFlashMessages }) => {
     .then(data => setFlashMessages(data.flashes));
   }
   return (
-    <div className="card">
-      <div className="card-header">
+    <div className="card px-0 mb-3">
+      <div className="card-body card-shadow">
         <div className="row">
-          <div className="col-md-8 mt-2">
-            <h5 className="text-start">{item.name}</h5>
+          <div className="col-sm-3 my-2">
+            {item.is_featured && <span className="badge badge-primary badge-pill mb-3">Featured</span>}
+            <img
+              className="card-img img-fluid"
+              src={`${urlBase}/${item.id}.jpg`}
+              alt={item.name}
+            />
           </div>
-          {!item.is_available &&
-            <div className="col-md-4 mt-2">
-              <p className="text-end text-alert">(Inactive)</p>
+          <div className="col-sm-9">
+            <div className="card-body">
+              <div className="row">
+                <div className="col-md-9 my-1">
+                  <h3 className="card-title">
+                    {item.name}
+                    {!item.is_available && <span className="text-alert"> (Inactive)</span>}
+                  </h3>
+                  <small className="card-subtitle text-success">Available starting {item.next_available_start}</small>
+                  <hr className="my-2" />
+                  <p className="card-text">{item.details.description}</p>
+                  <div className="row mt-3">
+                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                      <a href={`/inventory/i/id=${item.id}`} type="button" class="btn btn-outline-dark">View Item</a>
+                      {isOwner && <a href={`/accounts/i/edit/id=${item.id}`} type="button" class="btn btn-outline-dark">Edit Item</a>}
+                      {isOwner &&
+                        <button
+                          onClick={onClick}
+                          type="button"
+                          class={`btn btn-outline-${item.is_available ? 'danger' : 'success'}`}
+                        >
+                          {item.is_available ? 'Hide Item' : 'Make Available'}
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-3 my-1"></div>
+              </div>
             </div>
-          }
+          </div>
         </div>
-      </div>
-      <div className="card-body">
-        <a href={`/inventory/i/id=${item.id}`} className="card-link">View Item</a>
-        {isOwner && <a href={`/accounts/i/edit/id=${item.id}`} className="card-link">Edit Item</a>}
-        {isOwner &&
-          <button onClick={onClick} className="btn btn-link">
-            {item.is_available ? 'Hide Item' : 'Make Available'}
-          </button>
-        }
       </div>
     </div>
   );
