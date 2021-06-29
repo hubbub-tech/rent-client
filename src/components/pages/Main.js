@@ -2,6 +2,9 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 import TestimonialCarousel from '../carousels/TestimonialCarousel';
 
 const Main = () => {
@@ -17,6 +20,8 @@ const Main = () => {
   ]
 
   useEffect(() => {
+    AOS.init({duration : 1000});
+
     fetch('/index')
     .then(res => res.json())
     .then(data => setTestimonials(data.testimonials));
@@ -47,7 +52,7 @@ const Main = () => {
           <h1 className="text-center">Top Categories</h1>
           <p className="text-center">Rent from the most active categories on Hubbub!</p>
           {categories.map((category) => (
-            <div className="col-md-2 col-6 mb-1" key={category.title}>
+            <div data-aos="fade-up" className="col-md-2 col-6 mb-1" key={category.title}>
               <h6 className="text-center my-3">{ category.title }</h6>
               <a className="custom-card" href={`/inventory${category.link}`}>
                 <img
