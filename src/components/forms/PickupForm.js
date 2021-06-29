@@ -6,7 +6,7 @@ import AddressForm from './AddressForm';
 import CheckboxList from '../inputs/CheckboxList';
 
 const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress }) => {
-  let redirectUrl;
+  let statusOK;
   let history = useHistory();
   const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
   const timeslots = [
@@ -18,8 +18,8 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
   const [notes, setNotes] = useState(null);
 
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? '/accounts/u/orders' : null;
-    return res.json()
+    statusOK = res.ok;
+    return res.json();
   }
   const submit = (e) => {
     e.preventDefault();
@@ -37,8 +37,8 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
-      if (redirectUrl) {
-        history.push(redirectUrl);
+      if (statusOK) {
+        history.push('/accounts/u/orders');
       }
     });
   }
