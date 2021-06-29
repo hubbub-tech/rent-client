@@ -46,7 +46,7 @@ const Shop = ({isSearching}) => {
             <div className="col my-5">
               <p className="text-center">
                 Unfortunately, nothing came up :(... If possible, <span className="fw-bold text-hubbub">search for a more
-                general word</span> or check out all of our offerings on <Link to="/inventory" type="button" class="btn btn-hubbub btn-sm">Inventory</Link>
+                general word</span> or check out all of our offerings on <Link to="/inventory" type="button" className="btn btn-hubbub btn-sm">Inventory</Link>
               <span> ! You can also</span> <span className="fw-bold text-hubbub">request an item</span> through our form :)!
                 Just click below and we'll try to help you out!
               </p>
