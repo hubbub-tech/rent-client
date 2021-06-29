@@ -1,6 +1,9 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 const OrderCard = ({ urlBase, order }) => {
   let history = useHistory();
 
@@ -21,7 +24,7 @@ const OrderCard = ({ urlBase, order }) => {
   }
 
   return (
-    <div className="card px-0 mb-3">
+    <div data-aos="fade-up" className="card px-0 mb-3">
       <div className="card-header">
         <div className="row">
           <div className="col-md-4 my-2">
@@ -44,7 +47,8 @@ const OrderCard = ({ urlBase, order }) => {
             <img
               className="img-fluid"
               src={`${urlBase}/${order.item.id}.jpg`}
-              alt={order.item.name} />
+              alt={order.item.name}
+            />
           </div>
           <div className="col-sm-10">
             <div className="card-body">

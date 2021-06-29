@@ -1,6 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
 import OrderCard from '../cards/OrderCard';
 
 const Rentals = () => {
@@ -8,6 +11,8 @@ const Rentals = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
+    AOS.init({duration : 1000});
+
     fetch(`/accounts/u/orders`)
     .then(res => res.json())
     .then(data => {
