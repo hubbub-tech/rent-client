@@ -1,6 +1,9 @@
 import React from 'react';
 
 const NewsletterForm = () => {
+  const submit = (e) => {
+    e.preventDefault();
+  }
   return (
     <div className="row mt-5">
       <h3 className="text-center">What's all the Hubbub?</h3>
@@ -11,7 +14,7 @@ const NewsletterForm = () => {
         </p>
         <div className="row justify-content-md-center">
           <div className="col-md-6 col mx-auto">
-            <form method="POST" action="/join-email/from=main.index">
+            <form onSubmit={submit}>
               <div className="input-group mb-3">
                 <input
                   className="form-control"
