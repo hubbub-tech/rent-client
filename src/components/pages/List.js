@@ -10,7 +10,7 @@ const List = ({ setFlashMessages }) => {
       <p className="text-center">Start your side hustle <i><mark>today</mark></i>.</p>
       <div className="container" style={{"maxWidth": "900px"}}>
         <div className="row justify-content-md-center">
-          <div className="col-lg-4">
+          <div className="col-lg-5">
             <h5 className="text-center">Quick Tips</h5>
               <ul className="instructions">
                 <li>
@@ -35,7 +35,7 @@ const List = ({ setFlashMessages }) => {
                 </li>
               </ul>
           </div>
-          <div className="col-lg-8">
+          <div className="col-lg-7">
             <ListForm setFlashMessages={setFlashMessages} />
           </div>
         </div>

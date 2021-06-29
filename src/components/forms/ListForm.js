@@ -10,7 +10,7 @@ import '../../dates.css';
 
 const ListForm = ({ setFlashMessages }) => {
   let history = useHistory();
-  let redirectUrl;
+  let statusOK;
   const formData = new FormData();
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -25,27 +25,21 @@ const ListForm = ({ setFlashMessages }) => {
     "weight": null,
     "volume": null,
   });
-  const [tags, setTags] = useState([]);
   const [address, setAddress] = useState({});
   const [calendar, setCalendar] = useState({
     "startDate": null,
     "endDate": null
   });
-  const [selectedTags, setSelectedTags] = useState([])
   const [focusedInput, setFocusedInput] = useState(null);
+  const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
 
   const handleOnDatesChange = ({ startDate, endDate }) => {
     setCalendar({ startDate, endDate });
   }
 
-  const handleOnSelectChange = (e) => {
-    let newSelectedTags = selectedTags.concat(e.target.value);
-    setSelectedTags(selectedTags => newSelectedTags);
-  }
-
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? '/' : null;
-    return res.json()
+    statusOK = res.ok;
+    return res.json();
   }
 
   const submit = (e) => {
@@ -60,7 +54,6 @@ const ListForm = ({ setFlashMessages }) => {
 
     formData.append('startDate', calendar.startDate.toJSON());
     formData.append('endDate', calendar.endDate.toJSON());
-    formData.append('selectedTags', selectedTags);
     formData.append('isDefaultAddress', isDefaultAddress);
 
     formData.append('num', address.num);
@@ -77,28 +70,22 @@ const ListForm = ({ setFlashMessages }) => {
         console.log(pair[0]+ ', ' + pair[1]);
     }
 
-    fetch('/list/submit', {
-      method: 'POST',
-      body: formData
-    })
+    fetch('/list/submit', {method: 'POST', body: formData})
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
-
-      if (redirectUrl) {
-        history.push(redirectUrl);
+      if (statusOK) {
+        history.push('/');
       }
     })
     .catch(error => console.log(error));
+    window.scrollTo(0, 0);
   }
 
   useEffect(() => {
     fetch('/list')
     .then(res => res.json())
-    .then(data => {
-      setTags(data.tags);
-      setAddress(data.address);
-    });
+    .then(data => setAddress(data.address));
   }, []);
   return (
     <form encType="multipart/form-data" onSubmit={submit}>
@@ -108,28 +95,31 @@ const ListForm = ({ setFlashMessages }) => {
             <input
               type="text"
               className="form-control"
-              id="floatingInputItemName"
-              name="item[name]"
+              id="newItemName"
+              name="itemName"
               onChange={e => setItem({ ...item, name: e.target.value })}
               minLength="1"
-              maxLength="49" required />
-            <label htmlFor="floatingInputItemName">Item Name</label>
+              maxLength="49"
+              required
+            />
+            <label htmlFor="newItemName">Item Name</label>
           </div>
           <div className="form-floating mb-3">
             <input
               type="number"
               className="form-control"
-              id="floatingInputItemPrice"
-              name="item[price]"
+              id="newItemPrice"
+              name="itemPrice"
               step="0.01"
               onChange={e => setItem({ ...item, price: e.target.value })}
               min="1.00"
-              max="1000.00" required />
-            <label htmlFor="floatingInputItemPrice">Retail Price (USD)</label>
+              max="1000.00"
+              required
+            />
+            <label htmlFor="newItemPrice">Retail Price (USD)</label>
           </div>
-          <br />
-          <div className="row">
-            <label htmlFor="floatingInput">Item Availability</label>
+          <div className="row my-3">
+            <p className="text-start my-1">Item Availability</p>
             <DateRangePicker
               startDate={calendar.startDate}
               startDateId="listing-start-date"
@@ -139,20 +129,8 @@ const ListForm = ({ setFlashMessages }) => {
               focusedInput={focusedInput}
               onFocusChange={focusedInput => setFocusedInput(focusedInput)}
               orientation='vertical'
-              required={true} />
-          </div>
-          <br />
-          <div className="form-check mb-3">
-            <select
-              className="form-control"
-              size="3"
-              multiple
-              aria-label="Select Tags"
-              onChange={handleOnSelectChange}>
-              {tags.map((tag) => (
-                <option value={tag.name} key={tag.name}>{tag.name}</option>
-              ))}
-            </select>
+              required={true}
+            />
           </div>
           <small className="card-text">
             <font size="-1">
@@ -162,10 +140,12 @@ const ListForm = ({ setFlashMessages }) => {
           <div className="form-floating mb-3">
             <textarea
               className="form-control"
-              id="floatingDescription"
-              name="details[description]"
-              onChange={e => setDetails({ ...details, description: e.target.value })} required />
-            <label htmlFor="floatingDescription">Item Description</label>
+              id="newItemDescription"
+              name="itemDescription"
+              onChange={e => setDetails({ ...details, description: e.target.value })}
+              required
+            />
+            <label htmlFor="newItemDescription">Item Description</label>
           </div>
           <div className="mb-3">
             <label htmlFor="formFile" className="form-label">Product Photo (Portrait Ideally)</label>
@@ -177,21 +157,29 @@ const ListForm = ({ setFlashMessages }) => {
               accept="image/*"
               onChange={e => setSelectedFile(e.target.files[0])}
               required
-              />
+            />
           </div>
           <div className="row">
+            <p className="text-start my-1">More Info</p>
+            <small className="text-start mb-2">
+              <font size="-1">
+                Please rank the item on a 1-3 scale for each the metrics below (increasing/improving from 1 to 3).
+              </font>
+            </small>
             <div className="col">
               <div className="form-floating mb-3">
                 <input
                   type="number"
                   className="form-control"
-                  id="floatingInputCondition"
-                  name="details[condition]"
+                  id="newItemCondition"
+                  name="itemCondition"
                   step="1"
                   onChange={e => setDetails({ ...details, condition: e.target.value })}
                   min="1"
-                  max="3" required />
-                <label htmlFor="floatingInputCondition">Condition</label>
+                  max="3"
+                  required
+                />
+                <label htmlFor="newItemCondition">Condition</label>
               </div>
             </div>
             <div className="col">
@@ -199,13 +187,15 @@ const ListForm = ({ setFlashMessages }) => {
                 <input
                   type="number"
                   className="form-control"
-                  id="floatingInputWeight"
-                  name="details[weight]"
+                  id="newItemWeight"
+                  name="itemWeight"
                   step="1"
                   onChange={e => setDetails({ ...details, weight: e.target.value })}
                   min="1"
-                  max="3" required />
-                <label htmlFor="floatingInputWeight">Weight</label>
+                  max="3"
+                  required
+                />
+                <label htmlFor="newItemWeight">Weight</label>
               </div>
             </div>
             <div className="col">
@@ -213,13 +203,15 @@ const ListForm = ({ setFlashMessages }) => {
                 <input
                   type="number"
                   className="form-control"
-                  id="floatingInputVolume"
-                  name="details[volume]"
+                  id="newItemVolume"
+                  name="itemVolume"
                   step="1"
                   onChange={e => setDetails({ ...details, volume: e.target.value })}
                   min="1"
-                  max="3" required />
-                <label htmlFor="floatingInputVolume">Volume</label>
+                  max="3"
+                  required
+                />
+                <label htmlFor="newItemVolume">Volume</label>
               </div>
             </div>
           </div>
@@ -232,23 +224,26 @@ const ListForm = ({ setFlashMessages }) => {
                   id="isDefaultAddressCheckbox"
                   type="checkbox"
                   checked={isDefaultAddress}
-                  onChange={e => setIsDefaultAddress(!isDefaultAddress)} />
+                  onChange={e => setIsDefaultAddress(!isDefaultAddress)}
+                />
                 <label className="form-check-label" htmlFor="isDefaultAddressCheckbox">
-                  Are you listing from your address on record?
+                  Are you listing from this address: {addressDisplay}?
                 </label>
               </div>
             </div>
           </div>
           <br />
-          {!isDefaultAddress && <AddressForm address={address} setAddress={setAddress} />}
+          {!isDefaultAddress && <AddressForm address={address} setAddress={setAddress} required={!isDefaultAddress} />}
           <div className="form-check">
             <input
               className="form-check-input"
               type="radio"
               name="GuideToListingRequired"
-              id="GuideToListing" required />
+              id="GuideToListing"
+              required
+            />
             <label className="form-check-label" htmlFor="GuideToListing">
-              Yes, I have read <a href="/how-to-list" target="_blank">How to List Guide</a>.
+              Yes, I have read <a href="/how-to-list" target="_blank" rel="noreferrer">How to List Guide</a>.
             </label>
           </div>
           <br />
