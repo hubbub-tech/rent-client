@@ -1,19 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
-import { DateRangePicker } from 'react-dates';
-import 'react-dates/initialize';
 
-import '../../dates.css';
+import DateRangeInput from '../inputs/DateRangeInput';
 
 const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [focusedInput, setFocusedInput] = useState(null);
+  const [isValid, setIsValid] = useState(false);
 
-  const handleOnDatesChange = ({ startDate, endDate }) => {
-    setStartDate(startDate);
-    setEndDate(endDate);
-  };
   const submit = (e) => {
     e.preventDefault()
     fetch(`/update/i/id=${calendar.item_id}`, {
@@ -30,18 +24,15 @@ const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => 
   }
   return (
     <form onSubmit={submit} >
-      <DateRangePicker
+      <DateRangeInput
         startDate={startDate}
-        startDateId="rental-start-date"
         endDate={endDate}
-        endDateId="rental-end-date"
-        onDatesChange={handleOnDatesChange}
-        focusedInput={focusedInput}
-        onFocusChange={focusedInput => setFocusedInput(focusedInput)}
-        orientation='vertical'
-        required={true} />
+        handleStartOnChange={setStartDate}
+        handleEndOnChange={setEndDate}
+        setIsValid={setIsValid}
+      />
       <div className="d-grid gap-2 my-3">
-        <button className="btn btn-primary" type="submit">Check Quote</button>
+        <button className="btn btn-primary" type="submit" disabled={!isValid}>Check Quote</button>
       </div>
     </form>
   );

@@ -1,19 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
-import { DateRangePicker } from 'react-dates';
-import 'react-dates/initialize';
 
-import '../../dates.css';
+import DateRangeInput from '../inputs/DateRangeInput';
 
 const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const [focusedInput, setFocusedInput] = useState(null);
-
-  const handleOnDatesChange = ({ startDate, endDate }) => {
-    setStartDate(startDate);
-    setEndDate(endDate);
-  };
+  const [isValid, setIsValid] = useState(false);
 
   const isStatusOK = (res) => {
     // some other thing dependent on if res.ok
@@ -22,6 +15,7 @@ const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
 
   const submit = (e) => {
     e.preventDefault()
+    console.log({ startDate, endDate })
     fetch(`/validate/i/id=${calendar.item_id}`, {
       method: 'POST',
       body: JSON.stringify({ startDate, endDate }),
@@ -37,21 +31,19 @@ const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
 
   return (
     <form onSubmit={submit} >
-      <DateRangePicker
+      <DateRangeInput
         startDate={startDate}
-        startDateId="rental-start-date"
         endDate={endDate}
-        endDateId="rental-end-date"
-        onDatesChange={handleOnDatesChange}
-        focusedInput={focusedInput}
-        onFocusChange={focusedInput => setFocusedInput(focusedInput)}
-        orientation='vertical'
-        required={true} />
+        handleStartOnChange={setStartDate}
+        handleEndOnChange={setEndDate}
+        setIsValid={setIsValid}
+      />
       <div className="d-grid gap-2 my-3">
-        <button className="btn btn-primary" type="submit">Check Quote</button>
+        <button className="btn btn-primary" type="submit" disabled={!isValid}>Check Quote</button>
       </div>
     </form>
   );
 }
+
 
 export default RentalForm;

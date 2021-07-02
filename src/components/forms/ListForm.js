@@ -2,11 +2,12 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import AddressForm from './AddressForm';
-import { DateRangePicker } from 'react-dates';
-import 'react-dates/initialize';
+import FormErrors from '../errors/FormErrors'
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
 
-import '../../dates.css';
+import { formatDate, parseDate } from 'react-day-picker/moment';
+import AddressForm from './AddressForm';
 
 const ListForm = ({ setFlashMessages }) => {
   let history = useHistory();
@@ -26,16 +27,11 @@ const ListForm = ({ setFlashMessages }) => {
     "volume": null,
   });
   const [address, setAddress] = useState({});
-  const [calendar, setCalendar] = useState({
-    "startDate": null,
-    "endDate": null
-  });
-  const [focusedInput, setFocusedInput] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [isValid, setIsValid] = useState(false);
+  const [errors, setErrors] = useState([]);
   const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
-
-  const handleOnDatesChange = ({ startDate, endDate }) => {
-    setCalendar({ startDate, endDate });
-  }
 
   const isStatusOK = (res) => {
     statusOK = res.ok;
@@ -52,8 +48,8 @@ const ListForm = ({ setFlashMessages }) => {
     formData.append('weight', details.weight);
     formData.append('volume', details.volume);
 
-    formData.append('startDate', calendar.startDate.toJSON());
-    formData.append('endDate', calendar.endDate.toJSON());
+    formData.append('startDate', startDate.toJSON());
+    formData.append('endDate', endDate.toJSON());
     formData.append('isDefaultAddress', isDefaultAddress);
 
     formData.append('num', address.num);
@@ -83,6 +79,21 @@ const ListForm = ({ setFlashMessages }) => {
   }
 
   useEffect(() => {
+    if (!startDate || !endDate) {
+      setIsValid(false);
+    } else if (startDate > endDate) {
+      setIsValid(false);
+      setErrors(["Your start date can't be after your end date."])
+    } else if (startDate.getTime() === endDate.getTime()) {
+      setIsValid(false);
+      setErrors(["Your rental must be at least one full day."])
+    } else {
+      setIsValid(true);
+      setErrors([])
+    }
+  },[startDate, endDate]);
+
+  useEffect(() => {
     fetch('/list')
     .then(res => res.json())
     .then(data => setAddress(data.address));
@@ -91,46 +102,61 @@ const ListForm = ({ setFlashMessages }) => {
     <form encType="multipart/form-data" onSubmit={submit}>
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="card-body">
-          <div className="form-floating mb-3">
-            <input
-              type="text"
-              className="form-control"
-              id="newItemName"
-              name="itemName"
-              onChange={e => setItem({ ...item, name: e.target.value })}
-              minLength="1"
-              maxLength="49"
-              required
-            />
-            <label htmlFor="newItemName">Item Name</label>
-          </div>
-          <div className="form-floating mb-3">
-            <input
-              type="number"
-              className="form-control"
-              id="newItemPrice"
-              name="itemPrice"
-              step="0.01"
-              onChange={e => setItem({ ...item, price: e.target.value })}
-              min="1.00"
-              max="1000.00"
-              required
-            />
-            <label htmlFor="newItemPrice">Retail Price (USD)</label>
-          </div>
-          <div className="row my-3">
-            <p className="text-start my-1">Item Availability</p>
-            <DateRangePicker
-              startDate={calendar.startDate}
-              startDateId="listing-start-date"
-              endDate={calendar.endDate}
-              endDateId="listing-end-date"
-              onDatesChange={handleOnDatesChange}
-              focusedInput={focusedInput}
-              onFocusChange={focusedInput => setFocusedInput(focusedInput)}
-              orientation='vertical'
-              required={true}
-            />
+          <div className="row">
+            <div className="col-sm-12 mt-3 mb-0">
+              <div className="form-floating mb-3">
+                <input
+                  type="text"
+                  className="form-control"
+                  id="newItemName"
+                  name="itemName"
+                  onChange={e => setItem({ ...item, name: e.target.value })}
+                  minLength="1"
+                  maxLength="49"
+                  required
+                />
+                <label htmlFor="newItemName">Item Name</label>
+              </div>
+              <div className="form-floating mb-3">
+                <input
+                  type="number"
+                  className="form-control"
+                  id="newItemPrice"
+                  name="itemPrice"
+                  step="0.01"
+                  onChange={e => setItem({ ...item, price: e.target.value })}
+                  min="1.00"
+                  max="1000.00"
+                  required
+                />
+                <label htmlFor="newItemPrice">Retail Price (USD)</label>
+              </div>
+            </div>
+            <div className="col-sm-12 mt-0">
+              <p className="text-sm-start text-center my-2">Item Availability</p>
+              <div className="row mt-0 mb-3">
+                <DayPickerInput
+                  classNames={{container: "col-sm-5 my-1 text-center"}}
+                  onDayChange={setStartDate}
+                  selectedDays={startDate}
+                  placeholder="MM/DD/YYYY"
+                  formatDate={formatDate}
+                  parseDate={parseDate}
+                />
+              <div className="col-sm-2 mt-1 mb-0 text-center">
+                  <p className="text-center">to</p>
+                </div>
+                <DayPickerInput
+                  classNames={{container: "col-sm-5 my-1 text-center"}}
+                  onDayChange={setEndDate}
+                  selectedDays={endDate}
+                  placeholder="MM/DD/YYYY"
+                  formatDate={formatDate}
+                  parseDate={parseDate}
+                />
+                <FormErrors errors={errors} color={"red"} />
+              </div>
+            </div>
           </div>
           <small className="card-text">
             <font size="-1">
@@ -248,7 +274,7 @@ const ListForm = ({ setFlashMessages }) => {
           </div>
           <br />
           <div className="d-grid gap-2">
-            <input className="btn btn-outline-success" type='submit' value='Submit' />
+            <input className="btn btn-outline-success" type='submit' value='Submit' disabled={!isValid} />
           </div>
         </div>
       </div>

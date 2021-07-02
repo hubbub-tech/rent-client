@@ -41,6 +41,7 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
         history.push('/accounts/u/orders');
       }
     });
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -49,20 +50,19 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
         <div className="col-md-1"></div>
         <div className="col-md-5">
           <div className="row no-gutters">
+            <h4 className="text-start">Orders to Pickup</h4>
             <div className="col-6">
-              <h4 className="text-start">Orders to Pickup</h4>
               {orders.map((order) => <p className="text-start" key={order.id}>{order.item.name}</p>)}
             </div>
             <div className="col-6">
               <CheckboxList checkboxes={timeslots} onChangeCheckbox={setTimesChecked} />
             </div>
           </div>
-          <hr />
         </div>
         <div className="col-md-5">
           <h4>Instructions</h4>
-          <p>On the left, you'll see the items you're returning on {pickupDate}.</p>
-          <p>On the right, you'll see a series of timeslots during which we can pick up your rentals. Please select the times for which you are available. If you can, <strong>select as many as possible</strong> so we can quick schedule your pick up.</p>
+          <p>On this form, you'll see the items you're returning on {pickupDate}.</p>
+          <p>You'll also see a series of timeslots during which we can pick up your rentals. Please select the times for which you are available. If you can, <strong>select as many as possible</strong> so we can quick schedule your pick up.</p>
           <p>Finally, we want to give you some flexibility in describing your availability and location. Please feel free to add any relevant details for pick up under "Pickup Notes". Thanks!</p>
         </div>
         <div className="col-md-1"></div>
@@ -85,7 +85,7 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
             </label>
           </div>
           <br />
-          {!isDefaultAddress && <AddressForm address={address} setAddress={setAddress} />}
+          {!isDefaultAddress && <AddressForm address={address} setAddress={setAddress} required={!isDefaultAddress} />}
 
           <small className="card-text">
             <font size="-1">Share whatever details you think are relevant to make your pick up smoother.</font>
