@@ -16,6 +16,9 @@ def validate_edit_account(form_data):
         if registered_email_owner.id != form_data["self"].id:
             is_valid = False
             message = "Sorry, the email you want to user is already in use."
+    if form_data["payment"]:
+        if "@" in form_data["payment"] and "@" == form_data["payment"][0]:
+            form_data["payment"] = form_data["payment"].replace("@", "", 1)
     return {
         "is_valid" : is_valid,
         "message" : message
@@ -42,6 +45,8 @@ def validate_registration(form_data):
     else:
         if form_data["payment"] is None:
             form_data["payment"] = "NA"
+        elif "@" in form_data["payment"] and "@" == form_data["payment"][0]:
+            form_data["payment"] = form_data["payment"].replace("@", "", 1)
         is_valid = True
         message = "You're registered on Hubbub, now login to get started!"
     return {

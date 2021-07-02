@@ -8,43 +8,62 @@ import FormErrors from '../errors/FormErrors';
 
 const EditAccountForm = ({ user, setFlashMessages }) => {
   let history = useHistory();
-  let redirectUrl;
-  const formData = new FormData();
+  let statusOK;
 
-  const addressDisplay = `${user.address.num} ${user.address.street}, ${user.address.city}`;
-  const [address, setAddress] = useState(user.address);
+  const formData = new FormData();
+  const [hasVenmo, setHasVenmo] = useState(true);
+  const [errors, setErrors] = useState({
+    "email": [],
+    "payment": [],
+    "server": []
+  });
 
   const [selectedFile, setSelectedFile] = useState(null);
   const [email, setEmail] = useState(user.email);
   const [payment, setPayment] = useState(user.payment);
   const [bio, setBio] = useState(user.profile.bio);
   const [phone, setPhone] = useState(user.profile.phone);
-  const [errors, setErrors] = useState({
-    "email": [],
-    "payment": [],
-    "address": [],
-    "server": []
-  });
 
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? `/accounts/u/id=${user.id}` : null;
-    return res.json()
+    statusOK = res.ok;
+    return res.json();
+  }
+
+  const handleEmailOnChange = (e) => {
+    setEmail(e.target.value);
+    if(e.target.value.includes("@")) {
+      setErrors({ ...errors, email: [] });
+    } else {
+      setErrors({ ...errors, email: ["Please enter a valid email address."] });
+    }
   }
 
   const submit = (e) => {
     e.preventDefault();
 
-    formData.append('bio', bio === "" ? null : bio);
-    formData.append('phone', phone === "" ? null : phone);
-    formData.append('email', email === "" ? null : email);
-    formData.append('payment', payment === "" ? null : payment);
+    if (typeof bio === 'undefined') {
+      formData.append('bio', user.profile.bio);
+    } else {
+      formData.append('bio', bio);
+    }
 
-    formData.append('address_num', address.num);
-    formData.append('address_street', address.street);
-    formData.append('address_apt', address.apt);
-    formData.append('address_zip', address.zip_code);
-    formData.append('address_city', address.city);
-    formData.append('address_state', address.state);
+    if (typeof phone === 'undefined') {
+      formData.append('phone', user.profile.phone);
+    } else {
+      formData.append('phone', phone);
+    }
+
+    if (typeof email === 'undefined') {
+      formData.append('email', user.email);
+    } else {
+      formData.append('email', email);
+    }
+
+    if (typeof payment === 'undefined') {
+      formData.append('payment', user.payment);
+    } else {
+      formData.append('payment', payment);
+    }
 
     formData.append('image', selectedFile);
 
@@ -56,8 +75,8 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
     .then(data => {
       setFlashMessages(data.flashes);
 
-      if (redirectUrl) {
-        history.push(redirectUrl);
+      if (statusOK) {
+        history.push(`/accounts/u/id=${user.id}`);
       } else {
         setErrors({ ...errors, server: data.errors });
       }
@@ -69,66 +88,72 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
         <div className="card-body">
           <FormErrors errors={errors.server} color={"red"} />
-          <TextInput
-            id="floatingEmail"
-            name="email"
-            label="Email"
-            placeholder={user.email}
-            onChange={e => {
-              setEmail(e.target.value);
-              if(e.target.value.includes("@")) {
-                setErrors({ ...errors, email: [] });
-              } else {
-                setErrors({ ...errors, email: ["Please enter a valid email address."] });
-              }
-            }}
-            minLength="1"
-            maxLength="100"
-          />
+            <div className="mb-3">
+              <label className="form-label" htmlFor="editUserEmail">Email address</label>
+              <input
+                type="email"
+                className="form-control"
+                id="editUserEmail"
+                name="userEmail"
+                placeholder={user.email}
+                onChange={handleEmailOnChange}
+                minLength="5"
+                maxLength="49"
+              />
+            </div>
           <FormErrors errors={errors.email} color={"red"} />
-          <small className="card-text">
-            <font size="-1">Is this address active for deliveries: {addressDisplay}?</font>
-          </small>
-          <AddressForm address={address} setAddress={setAddress} />
-          <TextInput
-            id="floatingPayment"
-            name="payment"
-            label="Payment"
-            placeholder={user.payment}
-            onChange={e => {
-              setPayment(e.target.value);
-              if(e.target.value.includes("@")) {
-                setErrors({ ...errors, payment: [] });
-              } else {
-                setErrors({ ...errors, payment: ["Please include the '@' as the first character of your Venmo."] });
-              }
-            }}
-            minLength="1"
-            maxLength="100"
-          />
+          <div className="form-check mb-3">
+            <input
+              className="form-check-input"
+              name="venmoNotice"
+              id="hasVenmo"
+              type="checkbox"
+              checked={hasVenmo}
+              onChange={e => setHasVenmo(!hasVenmo)}
+            />
+            <label className="form-check-label" htmlFor="venmoNotice">
+              Do you have a Venmo?
+            </label>
+          </div>
+          {hasVenmo &&
+            <div className="input-group mb-3">
+              <span className="input-group-text" id="atSign">@</span>
+              <input
+                type="text"
+                className="form-control"
+                id="newUserVenmo"
+                name="userVenmo"
+                placeholder={user.payment}
+                onChange={e => setPayment(e.target.value)}
+                minLength="1"
+                maxLength="49"
+                aria-describedby="atSign"
+              />
+            </div>
+          }
           <FormErrors errors={errors.payment} color={"red"} />
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label className="form-label" htmlFor="editUserPhone">Phone Number</label>
             <input
               type="tel"
               className="form-control"
-              id="floatingInputPhone"
+              id="editUserPhone"
               name="phone"
               placeholder={user.profile.phone}
               onChange={e => setPhone(e.target.value)}
               minLength="10"
               maxLength="20"
             />
-            <label htmlFor="floatingInputPhone">Phone Number</label>
           </div>
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label className="form-label" htmlFor="editUserBio"> Your Bio</label>
             <textarea
               className="form-control"
-              id="floatingBio"
-              name="bio"
+              id="editUserBio"
+              name="userBio"
               placeholder={user.profile.bio}
               onChange={e => setBio(e.target.value)}
             />
-          <label htmlFor="floatingBio"> Your Bio</label>
           </div>
           <div className="mb-3">
             <label htmlFor="formFile" className="form-label">Product Photo (Portrait Ideally)</label>

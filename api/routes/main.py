@@ -81,10 +81,10 @@ def edit_account_submit():
     if data:
         form_data = {
             "self": user,
-            "payment": data.get("payment", user.payment),
-            "email": data.get("email", user.email),
-            "phone": data.get("phone", user.profile.phone),
-            "bio": data.get("bio", user.profile.bio)
+            "payment": data["payment"],
+            "email": data["email"],
+            "phone": data["phone"],
+            "bio": data["bio"]
         }
         form_check = validate_edit_account(form_data)
         if form_check["is_valid"]:
@@ -195,6 +195,7 @@ def edit_item(item_id):
 @bp.post("/accounts/i/edit/submit")
 @login_required
 def edit_item_submit():
+    flashes = []
     data = request.form
     if data:
         item = Items.get(data["itemId"])
