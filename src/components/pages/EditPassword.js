@@ -5,26 +5,24 @@ import EditPassForm from '../forms/EditPassForm';
 
 const EditPassword = ({ setFlashMessages }) => {
   const [user, setUser] = useState({"address": {}, "profile": {}});
-  const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
     fetch("/accounts/u/edit")
     .then(res => res.json())
-    .then(data => {
-      setUser(data.user);
-      setUrlBase(data.photo_url);
-    });
+    .then(data => setUser(data.user));
   }, []);
   return (
     <main>
       <br />
       <h1 className="text-center">Change Password</h1>
       <br />
-        <div className="container" style={{"maxWidth": "900px"}}>
-          <div className="row justify-content-md-center">
-            <div className="col-lg-8">
+        <div className="container-md">
+          <div className="row">
+            <div className="col-sm-3"></div>
+            <div className="col-sm-6">
               <EditPassForm user={user} setFlashMessages={setFlashMessages} />
             </div>
+            <div className="col-sm-3"></div>
           </div>
         </div>
       <br />

@@ -6,7 +6,7 @@ import FormErrors from '../errors/FormErrors';
 
 const EditPassForm = ({ user, setFlashMessages }) => {
   let history = useHistory();
-  let redirectUrl;
+  let statusOK;
 
   const [password, setPassword] = useState({
     "old": null,
@@ -18,7 +18,7 @@ const EditPassForm = ({ user, setFlashMessages }) => {
     "server": []
   });
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? `/accounts/u/id=${user.id}` : null;
+    statusOK = res.ok;
     return res.json();
   }
 
@@ -31,9 +31,9 @@ const EditPassForm = ({ user, setFlashMessages }) => {
     })
     .then(isStatusOK)
     .then(data => {
-      if (redirectUrl) {
+      if (statusOK) {
         setFlashMessages(data.flashes);
-        history.push(redirectUrl);
+        history.push(`/accounts/u/id=${user.id}`);
       } else {
         setErrors({ ...errors, server: data.errors });
       }
@@ -41,41 +41,41 @@ const EditPassForm = ({ user, setFlashMessages }) => {
   }
   return (
     <form onSubmit={submit} >
-      <div className="card mx-auto" style={{"maxWidth": "540px"}}>
-        <div className="step-1 card-body">
+      <div className="card">
+        <div className="card-body">
           <FormErrors errors={errors.server} color={"red"} />
           <div className="form-floating mb-3">
             <input
               type="password"
               className="form-control"
-              id="floatingOldPassword"
-              name="user[password]"
+              id="oldUserPassword"
+              name="oldPassword"
               onChange={e => setPassword({ ...password, old:  e.target.value })}
               minLength="8"
               maxLength="49"
               required
             />
-            <label htmlFor="floatingOldPassword">Old Password</label>
+            <label htmlFor="oldUserPassword">Old Password</label>
           </div>
           <div className="form-floating mb-3">
             <input
               type="password"
               className="form-control"
-              id="floatingNewPassword"
-              name="user[password]"
+              id="newUserPassword"
+              name="newPassword"
               onChange={e => setPassword({ ...password, new:  e.target.value })}
               minLength="8"
               maxLength="49"
               required
             />
-            <label htmlFor="floatingNewPassword">New Password</label>
+            <label htmlFor="newUserPassword">New Password</label>
           </div>
           <div className="form-floating mb-3">
             <input
               type="password"
               className="form-control"
-              id="floatingConfirmPassword"
-              name="user[confirm]"
+              id="ConfirmUserPass"
+              name="ConfirmPass"
               onChange={e => {
                   setPassword({ ...password, confirm:  e.target.value });
                   if(e.target.value === password.new) {
@@ -89,7 +89,7 @@ const EditPassForm = ({ user, setFlashMessages }) => {
               maxLength="49"
               required
             />
-            <label htmlFor="floatingConfirmPassword">Confirm Password</label>
+            <label htmlFor="ConfirmUserPass">Confirm Password</label>
           </div>
           <small className="card-text my-3">
             <font size="-1">
@@ -98,7 +98,12 @@ const EditPassForm = ({ user, setFlashMessages }) => {
           </small>
           <FormErrors errors={errors.client} color={"red"} />
           <div className="d-grid gap-2">
-            <input className="btn btn-outline-success" type='submit' value='Submit' />
+            <input
+              className="btn btn-outline-success"
+              type='submit'
+              value='Submit' 
+              disabled={errors.client.length !== 0}
+            />
           </div>
         </div>
       </div>
