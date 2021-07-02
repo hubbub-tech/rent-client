@@ -1,18 +1,20 @@
-import React from 'react';
-import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
-import AOS from 'aos';
-import 'aos/dist/aos.css';
+import React from 'react';
+import { useHistory, Link } from 'react-router-dom';
 
 const OrderCard = ({ urlBase, order }) => {
   let history = useHistory();
+
+  let todaysDateStr = moment.utc().format("YYYY-MM-DD");
+  let isActive = todaysDateStr < order.ext_date_end
 
   const handleDropoffOnClick = () => {
     history.push(`/schedule/dropoffs/${order.res_date_start}`)
   }
 
   const handlePickupOnClick = () => {
-    history.push(`/schedule/pickups/${order.res_date_end}`)
+    history.push(`/schedule/pickups/${order.ext_date_end}`)
   }
 
   const handleEarlyOnClick = () => {
@@ -29,7 +31,9 @@ const OrderCard = ({ urlBase, order }) => {
         <div className="row">
           <div className="col-md-4 my-2">
             <p className="text-start my-0"><strong>Order Placed</strong></p>
-            <p className="text-start my-0">{order.date_placed}</p>
+            <p className="text-start my-0">{`${order.date_placed}   `}
+              {order.is_extended && <span className="badge bg-success">extended</span>}
+            </p>
           </div>
           <div className="col-md-4 my-2">
             <p className="text-start my-0"><strong>Charge</strong></p>
@@ -37,7 +41,7 @@ const OrderCard = ({ urlBase, order }) => {
           </div>
           <div className="col-md-4 my-2">
             <p className="text-start my-0"><strong>Deposit</strong></p>
-            <p className="text-start my-0">${order.reservation.deposit} {order.is_extended ? '(extended)' : ''}</p>
+            <p className="text-start my-0">{order.reservation.deposit}</p>
           </div>
         </div>
       </div>
@@ -65,7 +69,8 @@ const OrderCard = ({ urlBase, order }) => {
                       type="button"
                       className="btn btn-lg btn-success mx-1 my-1"
                       onClick={handleDropoffOnClick}
-                      disabled={order.is_dropoff_scheduled}>
+                      disabled={order.is_dropoff_scheduled}
+                    >
                       Book Dropoff
                     </button>
                   </div>
@@ -74,37 +79,44 @@ const OrderCard = ({ urlBase, order }) => {
                       type="button"
                       className="btn btn-lg btn-secondary mx-1 my-1"
                       onClick={handlePickupOnClick}
-                      disabled={order.is_pickup_scheduled}>
+                      disabled={order.is_pickup_scheduled}
+                    >
                       Book Pickup
                     </button>
                   </div>
-                  <div className="d-grid gap-2">
-                    <button
-                      type="button"
-                      className="btn btn-lg btn-warning mx-1 my-1"
-                      onClick={handleEarlyOnClick}
-                      disabled={order.is_pickup_scheduled}>
-                      Early Return
-                    </button>
-                  </div>
-                  <div className="d-grid gap-2">
-                    {true && // if rental is still active
+                  {isActive &&
+                    <div className="d-grid gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-lg btn-warning mx-1 my-1"
+                        onClick={handleEarlyOnClick}
+                        disabled={order.is_pickup_scheduled}
+                      >
+                        Early Return
+                      </button>
+                    </div>
+                  }
+                  {isActive &&
+                    <div className="d-grid gap-2">
                       <button
                         type="button"
                         className="btn btn-lg btn-info mx-1 my-1"
                         onClick={handleExtendOnClick}
-                        disabled={order.is_pickup_scheduled}>
+                      >
                         Extend Rental
                       </button>
-                    }
-                    {false && // if rental is not active
-                      <button
-                        type="button"
-                        className="btn btn-lg btn-info mx-1 my-1">
-                        Order Again
-                      </button>
-                    }
-                  </div>
+                    </div>
+                  }
+                  {!isActive &&
+                    <div className="d-grid gap-2">
+                      <Link
+                        className="btn btn-lg btn-dark mx-1 my-1"
+                        to={`/inventory/i/id=${order.item.id}`}
+                      >
+                        See Details
+                      </Link>
+                    </div>
+                  }
                 </div>
               </div>
             </div>

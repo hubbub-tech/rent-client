@@ -10,11 +10,9 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
 
   const editItem = (e) => {
     setReservation(null);
-    //history.push('/checkout')
   }
 
   const viewItem = (e) => {
-    console.log({item})
     e.preventDefault()
     history.push(`/inventory/i/id=${item.id}`);
   }
@@ -60,13 +58,12 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
             {reservation && <p className="card-text">Rental Starting - {reservation.date_started}</p>}
             {reservation && <p className="card-text">Rental Ending - {reservation.date_ended}</p>}
             {reservation && <p className="card-text">Price - {reservation.charge}</p>}
-
-            <div className="btn-group" role="group" aria-label="Basic outlined example">
-              <button type="button" className="btn btn-outline-dark" onClick={viewItem}>View</button>
-              {reservation && <button type="button" className="btn btn-outline-dark" onClick={editItem}>Edit Rental</button>}
-              {!reservation && <button type="button" className="btn btn-outline-warning" onClick={() => setReservation(item.reservation)}>Hide Form</button>}
-              <button type="button" className="btn btn-outline-danger" onClick={removeItem}>Remove</button>
-            </div>
+          </div>
+          <div className="btn-group mt-3" role="group" aria-label="Basic outlined example">
+            <button type="button" className="btn btn-outline-dark" onClick={viewItem}>View</button>
+            {reservation && <button type="button" className="btn btn-outline-dark" onClick={editItem}>Edit Rental</button>}
+            {!reservation && <button type="button" className="btn btn-outline-warning" onClick={() => setReservation(item.reservation)}>Hide Form</button>}
+            <button type="button" className="btn btn-outline-danger" onClick={removeItem}>Remove</button>
           </div>
         </div>
       </div>

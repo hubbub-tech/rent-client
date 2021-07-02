@@ -40,14 +40,14 @@ const ListingCard = ({ item, urlBase, isOwner, setFlashMessages }) => {
                   <hr className="my-2" />
                   <p className="card-text">{item.details.description}</p>
                   <div className="row mt-3">
-                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                      <a href={`/inventory/i/id=${item.id}`} type="button" class="btn btn-outline-dark">View Item</a>
-                      {isOwner && <a href={`/accounts/i/edit/id=${item.id}`} type="button" class="btn btn-outline-dark">Edit Item</a>}
+                    <div className="btn-group" role="group" aria-label="Basic outlined example">
+                      <a href={`/inventory/i/id=${item.id}`} type="button" className="btn btn-outline-dark">View Item</a>
+                      {isOwner && <a href={`/accounts/i/edit/id=${item.id}`} type="button" className="btn btn-outline-dark">Edit Item</a>}
                       {isOwner &&
                         <button
                           onClick={onClick}
                           type="button"
-                          class={`btn btn-outline-${item.is_available ? 'danger' : 'success'}`}
+                          className={`btn btn-outline-${item.is_available ? 'danger' : 'success'}`}
                         >
                           {item.is_available ? 'Hide Item' : 'Make Available'}
                         </button>

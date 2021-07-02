@@ -1,11 +1,6 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 
 const ProfileCard = ({urlBase, user}) => {
-  const [undefinedPhoto, setUndefinedPhoto] = useState('roaree')
-  useEffect(() => {
-    setUndefinedPhoto('roaree');
-  }, []);
   if (user.profile.has_pic) {
     return (
       <div className="crop-circle mx-auto d-block">

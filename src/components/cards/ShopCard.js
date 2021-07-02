@@ -1,8 +1,5 @@
 import React from 'react';
 
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-
 const ShopCard = ({urlBase, item}) => {
 return (
   <a className="custom-card zoom-in" href={`/inventory/i/id=${item.id}`}>
