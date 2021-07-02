@@ -61,11 +61,6 @@ const ListForm = ({ setFlashMessages }) => {
 
     formData.append('image', selectedFile);
 
-    // Display the key/value pairs
-    for (var pair of formData.entries()) {
-        console.log(pair[0]+ ', ' + pair[1]);
-    }
-
     fetch('/list/submit', {method: 'POST', body: formData})
     .then(isStatusOK)
     .then(data => {

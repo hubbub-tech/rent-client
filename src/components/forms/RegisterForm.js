@@ -37,6 +37,18 @@ const RegisterForm = ({ setFlashMessages }) => {
     "server": []
   });
 
+  const isReadyForSubmission = () => {
+    let isReady = false;
+    if (errors.email.length == 0) {
+      if (errors.password.length == 0) {
+        if (errors.address.length == 0) {
+          isReady = true;
+        }
+      }
+    }
+    return isReady;
+  }
+
   const handleEmailOnChange = (e) => {
     setUser({ ...user, email: e.target.value });
     if(e.target.value.includes("@")) {
@@ -233,7 +245,11 @@ const RegisterForm = ({ setFlashMessages }) => {
           </div>
           <br />
           <div className="d-grid gap-2">
-            <input className="btn btn-outline-success" type='submit' value='Submit' />
+            <input
+              className="btn btn-outline-success"
+              type='submit'
+              value='Submit'
+              disabled={!isReadyForSubmission()} />
           </div>
           <br />
           <p className="card-text">Already on Hubbub? Log in <Link to="/login">here</Link>!</p>
