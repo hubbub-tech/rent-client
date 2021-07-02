@@ -1,13 +1,13 @@
 from datetime import datetime, date, timedelta
 from flask import Blueprint, flash, g, redirect, request, session, Markup
 
-from blubber_orm import Users, Orders, Reservations
+from blubber_orm import Users, Orders, Reservations, Extensions
 from blubber_orm import Items, Tags
 
-from api.tools.settings import get_orders_for_dropoff, get_orders_for_pickup, get_delivery_schedule
+from api.tools.settings import get_orders_for_dropoff, get_orders_for_pickup, get_delivery_schedule, process_early_return
 from api.tools.settings import lock_checkout, check_if_routed, exp_decay
 from api.tools.settings import login_required, transaction_auth, AWS
-from api.tools.build import create_order, create_logistics, create_reservation
+from api.tools.build import create_order, create_logistics, create_reservation, create_extension
 from api.tools import blubber_instances_to_dict, json_date_to_python_date
 
 bp = Blueprint('process', __name__)
@@ -60,7 +60,6 @@ def order_confirmation(token):
             })
             reservation, = _reservation
             item.calendar.add(reservation)
-            print(f"it added the res for {item.name}")
             order_data = {
                 "res_date_start": reservation.date_started,
                 "res_date_end": reservation.date_ended,
@@ -107,6 +106,7 @@ def order_history():
             item_to_dict["details"] = item.details.to_dict()
 
             order_to_dict = order.to_dict()
+            order_to_dict["is_extended"] = order.ext_date_end != order.res_date_end
             order_to_dict["ext_date_end"] = order.ext_date_end.strftime("%Y-%m-%d")
             order_to_dict["reservation"] = order.reservation.to_dict()
             order_to_dict["lister"] = order.lister.to_dict()
@@ -127,12 +127,23 @@ def manage_order(order_id):
     user = Users.get(g.user_id)
     order = Orders.get(order_id)
     item = Items.get(order.item_id)
+    is_extended = order.ext_date_end != order.res_date_end
+    if is_extended:
+        final_extension = Extensions.get({
+            "order_id": order.id,
+            "res_date_end": order.ext_date_end
+        })
+        ext_date_start = final_extension.res_date_start
+    else:
+        ext_date_start = order.res_date_start
     if g.user_id == order.renter_id:
         item_to_dict = item.to_dict()
         item_to_dict["calendar"] = item.calendar.to_dict()
         item_to_dict["details"] = item.details.to_dict()
 
         order_to_dict = order.to_dict()
+        order_to_dict["is_extended"] = is_extended
+        order_to_dict["ext_date_start"] = ext_date_start.strftime("%Y-%m-%d")
         order_to_dict["ext_date_end"] = order.ext_date_end.strftime("%Y-%m-%d")
         order_to_dict["reservation"] = order.reservation.to_dict()
         order_to_dict["lister"] = order.lister.to_dict()
@@ -200,16 +211,20 @@ def schedule_dropoffs_submit():
             }
         }
         orders = [Orders.get(order["id"]) for order in data["orders"]]
-        dropoff_date = datetime.strptime(data["dropoffDate"], format)
-        dropoff_logistics = create_logistics(logistics_data, orders, dropoff=dropoff_date)
+        dropoff_date = datetime.strptime(data["dropoffDate"], format).date()
+        if date.today() < dropoff_date:
+            dropoff_logistics = create_logistics(logistics_data, orders, dropoff=dropoff_date)
 
-        #TODO: async send availability details to user
-        #logistics_email_data = get_renter_logistics(g.user, form_data)
-        #send_async_email.apply_async(kwargs=logistics_email_data)
-        #TODO: send return procedure email
+            #TODO: async send availability details to user
+            #logistics_email_data = get_renter_logistics(g.user, form_data)
+            #send_async_email.apply_async(kwargs=logistics_email_data)
+            #TODO: send return procedure email
 
-        flashes.append("You have successfully scheduled your rental dropoffs!")
-        return {"flashes": flashes}, 201
+            flashes.append("You have successfully scheduled your rental dropoffs!")
+            return {"flashes": flashes}, 201
+        else:
+            flashes.append("You can't schedule a dropoff because the rental has already started. Email us at hubbubcu@gmail.com to manually schedule one.")
+            return {"flashes": flashes}, 406
     else:
         flashes.append("Please, provide availabilities for dropoff.")
         return {"flashes": flashes}, 406
@@ -266,23 +281,65 @@ def schedule_pickups_submit():
             }
         }
         orders = [Orders.get(order["id"]) for order in data["orders"]]
-        pickup_date = datetime.strptime(data["pickupDate"], format)
-        pickup_logistics = create_logistics(logistics_data, orders, pickup=pickup_date)
+        pickup_date = datetime.strptime(data["pickupDate"], format).date()
+        if date.today() < pickup_date:
+            pickup_logistics = create_logistics(logistics_data, orders, pickup=pickup_date)
 
-        #TODO: async send availability details to user
-        #logistics_email_data = get_renter_logistics(g.user, form_data)
-        #send_async_email.apply_async(kwargs=logistics_email_data)
-        #TODO: send return procedure email
+            #TODO: async send availability details to user
+            #logistics_email_data = get_renter_logistics(g.user, form_data)
+            #send_async_email.apply_async(kwargs=logistics_email_data)
+            #TODO: send return procedure email
 
-        flashes.append("You have successfully scheduled your rental pickup!")
-        return {"flashes": flashes}, 201
+            flashes.append("You have successfully scheduled your rental pickup!")
+            return {"flashes": flashes}, 201
+        else:
+            flashes.append("You can't schedule a pickup because the rental has already ended. Email us at hubbubcu@gmail.com to manually schedule one.")
+            return {"flashes": flashes}, 406
     else:
         flashes.append("Please, provide availabilities for pickup.")
         return {"flashes": flashes}, 406
 
-@bp.post("/accounts/o/extend/confirmation")
+@bp.post("/accounts/o/early/submit")
 @login_required
-def extend_confirmation():
+def early_return_submit():
+    code = 406
+    flashes = []
+    g.user_id = session.get("user_id")
+    user = Users.get(g.user_id)
+    data = request.json
+    if data:
+        order_id = data["orderId"]
+        order = Orders.get(order_id)
+        if order.ext_date_end > order.res_date_end:
+            extension_keys = {
+                "order_id": order.id,
+                "res_date_end": order.ext_date_end
+            }
+            extension = Extensions.get(extension_keys)
+            early_return_date_start = extension.res_date_start
+        else:
+            early_return_date_start = order.res_date_start
+        early_return_date_end = json_date_to_python_date(data["earlyDate"])
+        early_reservation_keys = {
+            "renter_id": g.user_id,
+            "item_id": order.item_id,
+            "date_started": early_return_date_start, # will return order.res_date_end if no ext
+            "date_ended": early_return_date_end
+        }
+        create_reservation(early_reservation_keys)
+        early_reservation = Reservations.get(early_reservation_keys)
+        response = process_early_return(order, early_reservation)
+        if response["is_success"]:
+            code = 201
+        flashes.append(response["message"])
+    else:
+        flashes.append("No data was sent! Try again.")
+    return {"flashes": flashes}, code
+
+@bp.post("/accounts/o/extend/submit")
+@login_required
+def extend_submit():
+    code = 406
     flashes = []
     g.user_id = session.get("user_id")
     user = Users.get(g.user_id)
@@ -301,7 +358,7 @@ def extend_confirmation():
                 "date_started": order.ext_date_end, # will return order.res_date_end if no ext
                 "date_ended": ext_date_end
             }
-            ext_reservation = Reservations.get(reservation_keys)
+            ext_reservation = Reservations.get(ext_reservation_keys)
             if item.calendar.scheduler(ext_reservation):
                 item.calendar.add(ext_reservation)
                 ext_data = {
@@ -311,10 +368,14 @@ def extend_confirmation():
                     "item_id": order.item_id,
                     "order_id": order_id
                 }
+                code = 201
                 extension = create_extension(ext_data)
                 flashes.append(f"Your {item.name} was successfully extended!")
             else:
                 flashes.append(f"Sorry, you cannot extend this rental. It seems someone just got to the {item.name} before you.")
+            item.unlock()
         else:
             flashes.append("It looks like someone else is ordering the item right now.")
-    return None
+    else:
+        flashes.append("No data was sent! Try again.")
+    return {"flashes": flashes}, code

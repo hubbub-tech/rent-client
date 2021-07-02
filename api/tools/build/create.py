@@ -91,10 +91,8 @@ def create_extension(insert_data):
     new_extension = Extensions.insert(insert_data)
 
     pickup = Pickups.by_order(order)
-    logistics_to_delete = pickup.logistics # will cascade to pickup obj
-    Logistics.delete({
-        "dt_sched": logistics_to_delete.dt_scheduled,
-        "renter_id": logistics_to_delete.renter_id})
+    if pickup:
+        pickup.cancel(order)
     return new_extension
 
 def create_order(insert_data):
