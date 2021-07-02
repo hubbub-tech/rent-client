@@ -5,7 +5,6 @@ import { useParams, Link } from 'react-router-dom';
 import { stringToMoment, printMoment } from '../../helper.js'
 import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
-import ShopCard from '../cards/ShopCard';
 
 const Account = ({ myId, setFlashMessages }) => {
   const { userId } = useParams();

@@ -7,7 +7,7 @@ const CheckboxList = ({ checkboxes, onChangeCheckbox }) => {
   return (
     <div className="row">
       {checkboxes.map((checkbox, index) => (
-        <div className="col-12" key={checkbox}>
+        <div className="col-sm-6" key={checkbox}>
           <label className="form-check-label" htmlFor={`checkbox-${index}`}>
             <input
               id={`checkbox-${index}`}
