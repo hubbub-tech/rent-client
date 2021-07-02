@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 const EditItemForm = ({ item, setFlashMessages }) => {
   let history = useHistory();
-  let redirectUrl;
+  let statusOK;
   const formData = new FormData();
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -12,17 +12,27 @@ const EditItemForm = ({ item, setFlashMessages }) => {
   const [description, setDescription] = useState(item.details.description);
 
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? `/accounts/u/id=${item.lister_id}` : null;
-    return res.json()
+    statusOK = res.ok;
+    return res.json();
   }
 
   const submit = (e) => {
     e.preventDefault();
-    formData.append('itemId', item.id);
-    formData.append('price', price);
-    formData.append('description', description);
 
+    formData.append('itemId', item.id);
     formData.append('image', selectedFile);
+
+    if (typeof price === 'undefined') {
+      formData.append('price', item.price);
+    } else {
+      formData.append('price', price);
+    }
+
+    if (description === null) {
+      formData.append('description', item.details.description);
+    } else {
+      formData.append('description', description);
+    }
 
     fetch('/accounts/i/edit/submit', {
       method: 'POST',
@@ -31,46 +41,44 @@ const EditItemForm = ({ item, setFlashMessages }) => {
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
-
-      if (redirectUrl) {
-        history.push(redirectUrl);
+      if (statusOK) {
+        history.push(`/accounts/u/id=${item.lister_id}`);
       }
     })
     .catch(error => console.log(error));
   }
   return (
     <form encType="multipart/form-data" onSubmit={submit}>
-      <div className="card mx-auto" style={{"maxWidth": "540px"}}>
+      <div className="card">
         <div className="card-body">
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label className="form-label" htmlFor="changeItemPrice">Retail Price (USD)</label>
             <input
               type="number"
               className="form-control"
-              id="floatingInputItemPrice"
-              name="item[price]"
+              id="changeItemPrice"
+              name="itemPrice"
               step="0.01"
               placeholder={item.price}
               onChange={e => setPrice(e.target.value)}
               min="1.00"
               max="1000.00"
-              required
             />
-            <label htmlFor="floatingInputItemPrice">Retail Price (USD)</label>
           </div>
-          <small className="card-text">
-            <font size="-1">
-              The more descriptive you are, the more customers you'll bring in!
-            </font>
-          </small>
-          <div className="form-floating mb-3">
+          <div className="mb-3">
+            <label className="form-label" htmlFor="changeItemDescription">Item Description</label>
+            <small className="card-text">
+              <font size="-1">
+                The more descriptive you are, the more customers you'll bring in!
+              </font>
+            </small>
             <textarea
               className="form-control"
-              id="floatingDescription"
-              name="details[description]"
+              id="changeItemDescription"
+              name="itemDescription"
               placeholder={item.details.description}
               onChange={e => setDescription(e.target.value)}
             />
-            <label htmlFor="floatingDescription">Item Description</label>
           </div>
           <div className="mb-3">
             <label htmlFor="formFile" className="form-label">Product Photo (Portrait Ideally)</label>

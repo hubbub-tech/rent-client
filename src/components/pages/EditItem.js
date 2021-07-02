@@ -6,7 +6,7 @@ import EditItemForm from "../forms/EditItemForm";
 
 const EditItem = ({ setFlashMessages }) => {
   let history = useHistory();
-  let redirectUrl;
+  let statusOK;
 
   const { itemId } = useParams();
   const [item, setItem] = useState({
@@ -15,7 +15,7 @@ const EditItem = ({ setFlashMessages }) => {
   });
 
   const isStatusOK = (res) => {
-    redirectUrl = res.ok ? null : '/';
+    statusOK = res.ok;
     return res.json()
   }
 
@@ -24,10 +24,10 @@ const EditItem = ({ setFlashMessages }) => {
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
-      if (redirectUrl) {
-        history.push(redirectUrl);
-      } else {
+      if (statusOK) {
         setItem(data.item);
+      } else {
+        history.push("/");
       }
     })
   }, [itemId]);
@@ -37,9 +37,10 @@ const EditItem = ({ setFlashMessages }) => {
       <br />
       <h1 className="text-center">Edit {item.name}</h1>
       <p className="text-center">Listed from {item.calendar.date_started} to {item.calendar.date_ended}.</p>
-      <div className="container" style={{"maxWidth": "900px"}}>
-        <div className="row justify-content-md-center">
-          <div className="col-lg-4">
+      <div className="container-md">
+        <div className="row">
+          <div className="col-sm-1"></div>
+          <div className="col-sm-4">
             <h5 className="text-center">Quick Tips</h5>
               <ul className="instructions">
                 <li>
@@ -64,9 +65,10 @@ const EditItem = ({ setFlashMessages }) => {
                 </li>
               </ul>
           </div>
-          <div className="col-lg-8">
+          <div className="col-sm-6">
             <EditItemForm item={item} setFlashMessages={setFlashMessages} />
           </div>
+          <div className="col-sm-1"></div>
         </div>
       </div>
       <br />
