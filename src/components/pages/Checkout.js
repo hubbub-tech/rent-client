@@ -48,7 +48,7 @@ const Checkout = ({setFlashMessages}) => {
             />
           ))}
           {items.length === 0 &&
-            <p className="text-center fs-5 my-3">
+            <p className="text-center fs-5 my-5">
               No items in cart. Check out our <a href="/inventory">Inventory</a>!
             </p>
           }

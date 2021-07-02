@@ -20,15 +20,16 @@ const Dropoffs = ({ setFlashMessages }) => {
 
   return (
     <main>
-      <div className="container-md">
+      <div className="container-md my-5">
         <div className="row">
           <div className="col-md-1"></div>
-          <div className="col-md-11 mt-5">
+          <div className="col-md-10">
             <h1>Drop-off Scheduler for {dropoffDate}</h1>
             <p>Share when you will be availability for us to deliver your rentals.</p>
+            <hr/>
           </div>
+          <div className="col-md-1"></div>
         </div>
-        <hr/>
         <DropoffForm
           orders={orders}
           address={address}

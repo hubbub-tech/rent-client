@@ -70,7 +70,7 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
           </div>
           <div className="col-md-4 mt-2">
             <p className="card-text text-center">
-              <span class="badge rounded-pill bg-primary">Available starting { item.calendar.next_available_start }</span>
+              <span className="badge rounded-pill bg-primary">Available starting { item.calendar.next_available_start }</span>
             </p>
             <div className="card">
               <div className="card-body">
@@ -80,12 +80,13 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
                   <RentalForm
                     calendar={item.calendar}
                     setFlashMessages={setFlashMessages}
-                    setReservation={setReservation} />
+                    setReservation={setReservation}
+                  />
                 }
                 {isLoggedIn &&
-                <div className="d-grid gap-2 my-3">
-                  <button className="btn btn-success" onClick={addToCart}>Add to Cart</button>
-                </div>
+                  <div className="d-grid gap-2 my-3">
+                    <button className="btn btn-success" onClick={addToCart}>Add to Cart</button>
+                  </div>
                 }
                 {!isLoggedIn &&
                   <div className="mt-1">
@@ -115,8 +116,8 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
             <p className="text-start mb-5">Check out some of our other featured items or you can <a href="https://docs.google.com/forms/d/e/1FAIpQLSflErYv4mNyPlAlPmSEO_q1xmOIYOMmafoI1-te_fx44VvKhw/viewform" className="btn btn-hubbub btn-sm" target="_blank" rel="noreferrer">Request an Item</a> and we’ll try to help you out!</p>
             <div className="row">
               {recommendations.length > 0 && recommendations.map((item) => (
-                <div className="col-12">
-                  <ShopCard urlBase={urlBase} item={item} key={item.id} />
+                <div className="col-12" key={item.id}>
+                  <ShopCard urlBase={urlBase} item={item} />
                 </div>
               ))}
             </div>

@@ -20,15 +20,16 @@ const Pickups = ({ setFlashMessages }) => {
 
   return (
     <main>
-      <div className="container-md">
+      <div className="container-md my-5">
         <div className="row">
           <div className="col-md-1"></div>
-          <div className="col-md-11 mt-5">
+          <div className="col-md-10">
             <h1>Pick-up Scheduler for {pickupDate}</h1>
             <p>Share when you will be available for us to pick up your rentals.</p>
+            <hr />
           </div>
+          <div className="col-md-1"></div>
         </div>
-        <hr/>
         <PickupForm
           orders={orders}
           address={address}
