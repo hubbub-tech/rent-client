@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 
-import SingleDateForm from '../forms/SingleDateForm';
+import ExtendForm from '../forms/ExtendForm';
 
 const ExtendRental = ({ setFlashMessages }) => {
+  let statusOK;
+  let history = useHistory();
   const { orderId } = useParams();
   const [order, setOrder] = useState({
     "item": {"details": {}, "calendar": {}},
@@ -22,82 +24,91 @@ const ExtendRental = ({ setFlashMessages }) => {
     });
   }, [orderId]);
 
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    return res.json();
+  }
+
   const extendRental = () => {
-    let extendDate = reservation.date_ended;
-    fetch('/accounts/o/extend/confirmation', {
+    let startDate = null;
+    let extendDate = null;
+    if (reservation !== null) {
+      startDate = reservation.date_started;
+      extendDate = reservation.date_ended;
+    }
+    fetch('/accounts/o/extend/submit', {
       method: 'POST',
-      body: JSON.stringify({ extendDate }),
+      body: JSON.stringify({
+        "itemId": order.item.id,
+        "orderId": order.id,
+        startDate,
+        extendDate
+      }),
       headers: { 'Content-Type': 'application/json' },
     })
-    .then(res => res.json())
-    .then(data => setFlashMessages(data.flashes));
+    .then(isStatusOK)
+    .then(data => {
+      setFlashMessages(data.flashes);
+      if (statusOK) {
+        history.push(`/accounts/u/id=${order.reservation.renter_id}`);
+      }
+    });
   }
   return (
     <main>
       <div className="container-md">
-        <div className="row">
+        <div className="row mt-5">
           <div className="col-md-1"></div>
-          <div className="col-md-11 mt-5">
+          <div className="col-md-10">
             <h2 className="text-start">Extend { order.item.name } Rental</h2>
             <p className="text-start fs-4">ending on { order.ext_date_end }</p>
           </div>
-        </div>
-        <div className="row">
           <div className="col-md-1"></div>
-          <div className="col-md-6 mt-5">
+        </div>
+        <div className="row mb-3">
+          <div className="col-md-1"></div>
+          <div className="col-md-3 mt-5">
             <img
-              className="card-img-top rounded"
+              className="card-img img-fluid"
               src={`${urlBase}/${order.item.id}.jpg`}
-              alt={order.item.name} />
+              alt={order.item.name}
+            />
           </div>
-          <div className="col-md-4 mt-2">
-            <div className="card">
+          <div className="col-md-7 mt-5">
+            <div className="card px-0 mb-3">
               <div className="card-body">
-                {reservation && <p className="text-start fs-5 fw-bold">Extend for <mark>{reservation.charge}</mark></p>}
-                {!reservation && <p className="text-start fs-5 fw-bold">Until when would you like to extend?</p>}
-                <SingleDateForm
-                  calendar={order.item.calendar}
-                  fixedDate={order.res_date_end}
-                  setFlashMessages={setFlashMessages}
-                  setReservation={setReservation}
-                />
-                {reservation &&
-                  <div className="d-grid gap-2 my-3">
-                    <button className="btn btn-success" onClick={extendRental}>Extend Rental</button>
-                  </div>
-                }
-                <hr />
-                <p className="text-start fs-5 fw-bold">Description</p>
-                <p className="text-start">{ order.item.details.description }</p>
-              </div>
-            </div>
-          </div>
-          <div className="col-md-1"></div>
-        </div>
-        <div className="row mt-3">
-          <div className="col-md-1"></div>
-          <div className="col-md-10">
-            <div className="card">
-              <div className="card-body">
-                <p className="text-start fs-5 fw-bold">More Info</p>
                 <div className="row">
-                  <div className="col-lg-3 col-md-6">
-                    <p><strong>Location</strong> - SOMEWHERE</p>
+                  <div className="col-md-6 mt-4">
+                    {reservation && <h4 className="text-start fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{reservation.charge}</span></h4>}
+                    {!reservation && <h4 className="text-start fw-bold">Until when do you want to extend?</h4>}
+                    <hr />
+                    <h4 className="text-start fw-bold">Specs</h4>
+                    <p className="text-start">{ order.item.details.description }</p>
+                    <p className="text-start my-1">See the items detail page to read more about this item.</p>
+                    <div className="d-grid gap-2 mt-3">
+                      <Link to={`/inventory/i/id=${order.item.id}`} className="btn btn-outline-dark">See Details</Link>
+                    </div>
                   </div>
-                  <div className="col-lg-3 col-md-6">
-                    <p><strong>Condition</strong> - { order.item.details.condition }</p>
-                  </div>
-                  <div className="col-lg-3 col-md-6"><p>
-                    <strong>Weight</strong> - { order.item.details.weight }</p>
-                  </div>
-                  <div className="col-lg-3 col-md-6"><p>
-                    <strong>Volume</strong> - { order.item.details.volume }</p>
+                  <div className="col-md-6">
+                    <ExtendForm
+                      order={order}
+                      setFlashMessages={setFlashMessages}
+                      setReservation={setReservation}
+                    />
+                    <div className="d-grid gap-2 mt-3">
+                      <button
+                        className="btn btn-success"
+                        onClick={extendRental}
+                        disabled={reservation === null}>
+                        Extend Rental
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="col-md-1"></div>
+          <div className="col-md-2"></div>
         </div>
       </div>
     </main>
