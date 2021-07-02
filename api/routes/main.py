@@ -4,7 +4,7 @@ from datetime import datetime, date
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, redirect, session, g, request, url_for
 
-from blubber_orm import Users, Profiles, Orders
+from blubber_orm import Users, Profiles, Orders, Addresses
 from blubber_orm import Items, Details, Testimonials
 
 from api.tools.build import validate_edit_account, validate_edit_password, upload_image
@@ -143,8 +143,39 @@ def edit_password_submit():
         else:
             errors.append(form_check["message"])
             return {"errors": errors}, 406
-    flashes.append("No data was sent! Try again.")
+    else:
+        flashes.append("No data was sent! Try again.")
     return {"flashes": flashes}, 406
+
+@bp.post("/accounts/u/address/submit")
+@login_required
+def edit_address_submit():
+    flashes = []
+    g.user_id = session.get("user_id")
+    data = request.json
+    if data:
+        form_data = {
+            "num": data["address"]["num"],
+            "street": data["address"]["street"],
+            "apt": data["address"].get("apt", ""),
+            "zip": data["address"]["zip"],
+            "city": data["address"]["city"],
+            "state": data["address"]["state"]
+        }
+        new_address = Addresses.filter(form_data)
+        if not new_address:
+            new_address = Addresses.insert(form_data)
+        Users.set(g.user_id, {
+            "address_num": form_data["num"],
+            "address_street": form_data["street"],
+            "address_apt": form_data["apt"],
+            "address_zip": form_data["zip"]
+        })
+        flashes.append("You successfully changed your address!")
+        return {"flashes": flashes}, 201
+    else:
+        flashes.append("No data was sent! Try again.")
+    return {"flashes": flashes}, 201
 
 #remove user profile picture
 @bp.route("/accounts/u/remove-picture")

@@ -23,6 +23,7 @@ import EditAccount from './components/pages/EditAccount';
 import EditPassword from './components/pages/EditPassword';
 import ExtendRental from './components/pages/ExtendRental';
 import EarlyReturn from './components/pages/EarlyReturn';
+import EditUserAddress from './components/pages/EditUserAddress';
 
 const App = () => {
   const [userId, setUserId] = useState(null);
@@ -62,6 +63,9 @@ const App = () => {
           </Route>
           <Route exact path="/accounts/u/edit">
             <EditAccount setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/accounts/u/address">
+            <EditUserAddress setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/accounts/u/password">
             <EditPassword setFlashMessages={setFlashMessages} />

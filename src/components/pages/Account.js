@@ -65,10 +65,9 @@ const Account = ({ myId, setFlashMessages }) => {
                     <span> {user.payment}</span>
                   </li>
                 </ul>
-                <div className="btn-group" role="group" aria-label="Basic outlined example">
-                  <Link className="btn btn-outline-dark" to="/accounts/u/edit">Edit Profile</Link>
-                  <Link className="btn btn-outline-dark" to="/accounts/u/password">Change Password</Link>
-                </div>
+                <Link className="btn btn-outline-dark" to="/accounts/u/edit">Edit Profile</Link>
+                <Link className="btn btn-outline-dark" to="/accounts/u/password">Change Password</Link>
+                <Link className="btn btn-outline-dark" to="/accounts/u/address">Change Address</Link>
               </div>
             }
           </div>
