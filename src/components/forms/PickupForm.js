@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { printDate } from '../../helper.js';
 import AddressForm from './AddressForm';
 import CheckboxList from '../inputs/CheckboxList';
 
@@ -61,7 +62,7 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
         </div>
         <div className="col-md-5">
           <h4>Instructions</h4>
-          <p>On this form, you'll see the items you're returning on {pickupDate}.</p>
+          <p>On this form, you'll see the items you're returning on {printDate(pickupDate)}.</p>
           <p>You'll also see a series of timeslots during which we can pick up your rentals. Please select the times for which you are available. If you can, <strong>select as many as possible</strong> so we can quick schedule your pick up.</p>
           <p>Finally, we want to give you some flexibility in describing your availability and location. Please feel free to add any relevant details for pick up under "Pickup Notes". Thanks!</p>
         </div>

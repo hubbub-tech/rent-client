@@ -3,6 +3,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
+import { printDate } from '../../helper.js';
 import EarlyForm from '../forms/EarlyForm';
 
 const EarlyReturn = ({ setFlashMessages }) => {
@@ -28,7 +29,7 @@ const EarlyReturn = ({ setFlashMessages }) => {
           <div className="col-md-1"></div>
           <div className="col-md-10">
             <h2 className="text-start">Early Return for { order.item.name } Rental</h2>
-            <p className="text-start fs-4">ending on { order.ext_date_end }</p>
+            <p className="text-start fs-4">ending on { printDate(order.ext_date_end) }</p>
           </div>
           <div className="col-md-1"></div>
         </div>

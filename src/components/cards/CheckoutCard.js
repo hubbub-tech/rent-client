@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { printDate, printMoney } from '../../helper.js';
 import RentalUpdateForm from '../forms/RentalUpdateForm';
 
 const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
@@ -46,7 +47,7 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
           </div>
           <div className="col-md-7">
             <h4 className="card-title">{ item.name }</h4>
-            <small className="card-text text-success">Available starting { item.calendar.next_available_start }</small>
+            <small className="card-text text-success">Available starting { printDate(item.calendar.next_available_start) }</small>
             <hr />
             {!reservation &&
               <RentalUpdateForm
@@ -55,9 +56,9 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
                 setToggle={setToggle}
                 setFlashMessages={setFlashMessages} />
             }
-            {reservation && <p className="card-text">Rental Starting - {reservation.date_started}</p>}
-            {reservation && <p className="card-text">Rental Ending - {reservation.date_ended}</p>}
-            {reservation && <p className="card-text">Price - {reservation.charge}</p>}
+            {reservation && <p className="card-text">Rental Starting - {printDate(reservation.date_started)}</p>}
+            {reservation && <p className="card-text">Rental Ending - {printDate(reservation.date_ended)}</p>}
+            {reservation && <p className="card-text">Price - {printMoney(reservation.charge)}</p>}
           </div>
           <div className="btn-group mt-3" role="group" aria-label="Basic outlined example">
             <button type="button" className="btn btn-outline-dark" onClick={viewItem}>View</button>

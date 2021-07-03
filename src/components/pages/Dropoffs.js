@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
+import { printDate } from '../../helper.js';
 import DropoffForm from '../forms/DropoffForm';
 
 const Dropoffs = ({ setFlashMessages }) => {
@@ -24,7 +25,7 @@ const Dropoffs = ({ setFlashMessages }) => {
         <div className="row">
           <div className="col-md-1"></div>
           <div className="col-md-10">
-            <h1>Drop-off Scheduler for {dropoffDate}</h1>
+            <h1>Drop-off Scheduler for {printDate(dropoffDate)}</h1>
             <p>Share when you will be availability for us to deliver your rentals.</p>
             <hr/>
           </div>

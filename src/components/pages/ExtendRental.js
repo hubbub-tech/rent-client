@@ -3,6 +3,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
+import { printDate, printMoney } from '../../helper.js';
 import ExtendForm from '../forms/ExtendForm';
 
 const ExtendRental = ({ setFlashMessages }) => {
@@ -61,7 +62,7 @@ const ExtendRental = ({ setFlashMessages }) => {
           <div className="col-md-1"></div>
           <div className="col-md-10">
             <h2 className="text-start">Extend { order.item.name } Rental</h2>
-            <p className="text-start fs-4">ending on { order.ext_date_end }</p>
+            <p className="text-start fs-4">ending on { printDate(order.ext_date_end) }</p>
           </div>
           <div className="col-md-1"></div>
         </div>
@@ -79,7 +80,7 @@ const ExtendRental = ({ setFlashMessages }) => {
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-6 mt-4">
-                    {reservation && <h4 className="text-start fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{reservation.charge}</span></h4>}
+                    {reservation && <h4 className="text-start fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{printMoney(reservation.charge)}</span></h4>}
                     {!reservation && <h4 className="text-start fw-bold">Until when do you want to extend?</h4>}
                     <hr />
                     <h4 className="text-start fw-bold">Specs</h4>

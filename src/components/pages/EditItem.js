@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
+import { printDate } from '../../helper.js';
 import EditItemForm from "../forms/EditItemForm";
 
 const EditItem = ({ setFlashMessages }) => {
@@ -36,7 +37,7 @@ const EditItem = ({ setFlashMessages }) => {
     <main>
       <br />
       <h1 className="text-center">Edit {item.name}</h1>
-      <p className="text-center">Listed from {item.calendar.date_started} to {item.calendar.date_ended}.</p>
+      <p className="text-center">Listed from {printDate(item.calendar.date_started)} to {printDate(item.calendar.date_ended)}.</p>
       <div className="container-md">
         <div className="row">
           <div className="col-sm-1"></div>

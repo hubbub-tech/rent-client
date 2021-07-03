@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import { printDate, printMoney } from '../../helper.js';
 import RentalForm from '../forms/RentalForm';
 import ShopCard from '../cards/ShopCard';
 
@@ -70,11 +71,11 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
           </div>
           <div className="col-md-4 mt-2">
             <p className="card-text text-center">
-              <span className="badge rounded-pill bg-primary">Available starting { item.calendar.next_available_start }</span>
+              <span className="badge rounded-pill bg-primary">Available starting { printDate(item.calendar.next_available_start) }</span>
             </p>
             <div className="card">
               <div className="card-body">
-                {reservation && <p className="text-start fs-5 fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{reservation.charge}</span></p>}
+                {reservation && <p className="text-start fs-5 fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{printMoney(reservation.charge)}</span></p>}
                 {!reservation && <p className="text-start fs-5 fw-bold">How long do you want to rent?</p>}
                 {isLoggedIn &&
                   <RentalForm

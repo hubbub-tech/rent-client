@@ -208,33 +208,6 @@ hr.divider {
   to { border: #d8d9db;}
 }
 
-.wrapper {
-  width: 100%;
-  height: 100%;
-  left: 50%;
-  top: 50%;
-  border-radius: 5px;
-  background-image: linear-gradient(to top, #accbee 0%, #e7f0fd 100%);
-  overflow: hidden;
-}
-
-.wave {
-  width: 500px;
-  height: 525px;
-  top: -25%;
-  left: 50%;
-  transform: translate(0%, 0%);
-  border-radius: 35%;
-  background: rgba(255, 255, 255, .75);
-  animation: wave 15000ms infinite linear;
-}
-
-@keyframes wave {
-  0% { transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
-}
-
-
 @media (min-width: 300px) and (max-width: 800px) {
    .collapse-sub {
        display: none !important;

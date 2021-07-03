@@ -53,7 +53,7 @@ def view_item(item_id):
     item_to_dict["calendar"]["next_available_end"] = next_end.strftime("%Y-%m-%d")
 
     rec_list = Items.filter({"is_featured": True, "is_available": True})
-    recommendations = random.choices(rec_list, k=3)
+    recommendations = random.sample(rec_list, 3)
     recs_to_dict = []
     for rec in recommendations:
         lister = Users.get(rec.lister_id)
@@ -172,7 +172,7 @@ def update(item_id):
                 user.cart.remove(old_reservation)
             else:
                 user.cart.remove_without_reservation(item)
-                
+
             new_date_started = json_date_to_python_date(data["startDate"])
             new_date_ended = json_date_to_python_date(data["endDate"])
             rental_range = {

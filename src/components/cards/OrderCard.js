@@ -3,6 +3,8 @@ import moment from 'moment';
 import React from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
+import { printDate, printMoney } from '../../helper.js';
+
 const OrderCard = ({ urlBase, order }) => {
   let history = useHistory();
 
@@ -31,17 +33,17 @@ const OrderCard = ({ urlBase, order }) => {
         <div className="row">
           <div className="col-md-4 my-2">
             <p className="text-start my-0"><strong>Order Placed</strong></p>
-            <p className="text-start my-0">{`${order.date_placed}   `}
+            <p className="text-start my-0">{printDate(order.date_placed)}
               {order.is_extended && <span className="badge bg-success">extended</span>}
             </p>
           </div>
           <div className="col-md-4 my-2">
             <p className="text-start my-0"><strong>Charge</strong></p>
-            <p className="text-start my-0">${order.reservation.charge}</p>
+            <p className="text-start my-0">{printMoney(order.reservation.charge)}</p>
           </div>
           <div className="col-md-4 my-2">
             <p className="text-start my-0"><strong>Deposit</strong></p>
-            <p className="text-start my-0">{order.reservation.deposit}</p>
+            <p className="text-start my-0">{printMoney(order.reservation.deposit)}</p>
           </div>
         </div>
       </div>
@@ -58,8 +60,8 @@ const OrderCard = ({ urlBase, order }) => {
             <div className="card-body">
               <div className="row">
                 <div className="col-md-8 my-1">
-                  <h5 className="card-title">Start - {order.res_date_start}</h5>
-                  <h5 className="card-title">End - {order.ext_date_end}</h5>
+                  <h5 className="card-title">Start - {printDate(order.res_date_start)}</h5>
+                  <h5 className="card-title">End - {printDate(order.ext_date_end)}</h5>
                   <p className="card-text">{order.item.name}</p>
                   <p className="card-text">{order.item.details.description}</p>
                 </div>
@@ -79,7 +81,7 @@ const OrderCard = ({ urlBase, order }) => {
                       type="button"
                       className="btn btn-lg btn-secondary mx-1 my-1"
                       onClick={handlePickupOnClick}
-                      disabled={order.is_pickup_scheduled}
+                      disabled={order.is_pickup_scheduled || !order.is_dropoff_scheduled}
                     >
                       Book Pickup
                     </button>

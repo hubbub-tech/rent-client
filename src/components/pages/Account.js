@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 
-import { stringToMoment, printMoment } from '../../helper.js'
+import { printDate } from '../../helper.js'
 import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
 
@@ -46,7 +46,7 @@ const Account = ({ myId, setFlashMessages }) => {
                 </li>
                 <li className="list-group-item">
                   <span className="badge bg-dark">Member Since</span>
-                  <span> {printMoment(stringToMoment(user.dt_joined))}</span>
+                  <span> {printDate(user.dt_joined)}</span>
                 </li>
               </ul>
             </div>

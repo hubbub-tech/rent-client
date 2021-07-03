@@ -1,5 +1,6 @@
 import React import 'react';
 
+import { printDate } from '../../helper.js';
 const ReviewsAccordion = ({reviews}) => {
   return (
     <div className="row my-3">
@@ -26,7 +27,7 @@ const ReviewsAccordion = ({reviews}) => {
                   <p>{{ review.body }}</p>
                   <small>by
                     <a href="/account/u.{{ review.author_id }}"> { review.author_name } </a>
-                    on { review.date_created }
+                    on { printDate(review.date_created) }
                   </small>
                   <hr/>
                 </div>

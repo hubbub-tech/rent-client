@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { printDate } from '../../helper.js';
+
 const ListingCard = ({ item, urlBase, isOwner, setFlashMessages }) => {
 
   const isStatusOK = (res) => {
@@ -36,7 +38,7 @@ const ListingCard = ({ item, urlBase, isOwner, setFlashMessages }) => {
                     {item.name}
                     {!item.is_available && <span className="text-alert"> (Inactive)</span>}
                   </h3>
-                  <small className="card-subtitle text-success">Available starting {item.next_available_start}</small>
+                  <small className="card-subtitle text-success">Available starting {printDate(item.next_available_start)}</small>
                   <hr className="my-2" />
                   <p className="card-text">{item.details.description}</p>
                   <div className="row mt-3">

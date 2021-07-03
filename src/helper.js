@@ -2,9 +2,9 @@ import moment from 'moment';
 
 const printMoney = (floatAmount) => {
   const errorMsg = "printMoney can only be used on type float."
-  console.assert(typeof floatAmount === "float", {floatAmount, errorMsg});
+  //console.assert(typeof floatAmount === "float", {floatAmount, errorMsg});
   const money = Number.parseFloat(floatAmount).toFixed(2);
-  return `${money}`;
+  return `$${money}`;
 }
 
 const stringToMoment = (stringDate, formatStr = "YYYY-MM-DD") => {
@@ -12,9 +12,11 @@ const stringToMoment = (stringDate, formatStr = "YYYY-MM-DD") => {
   return momentDate;
 }
 
-const printMoment = (momentDate, formatStr = "MMMM Do YYYY") => {
+const printDate = (stringDate, formatStr = "MMMM Do YYYY") => {
+  // stringDate is a 'YYYY-MM-DD format'
+  const momentDate = stringToMoment(stringDate);
   const printDate = momentDate.format(formatStr);
   return printDate;
 }
 
-export { stringToMoment, printMoment, printMoney };
+export { stringToMoment, printDate, printMoney };
