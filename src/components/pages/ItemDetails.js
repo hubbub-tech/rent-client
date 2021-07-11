@@ -22,7 +22,7 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
   const [reservation, setReservation] = useState(null);
 
   useEffect(() => {
-    AOS.init({duration : 1000});
+    AOS.init({duration : 1000, once: true});
     fetch(`/inventory/i/id=${itemId}`)
     .then(res => res.json())
     .then(data => {
@@ -110,7 +110,7 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
           </div>
           <div className="col-md-1"></div>
         </div>
-        <FeedbackForm setFlashMessages={setFlashMessages} origin={`/inventory/i/id=${itemId}`} />
+        <FeedbackForm setFlashMessages={setFlashMessages} href={`/inventory/i/id=${itemId}`} />
         <div className="row mt-3">
           <div className="col-md-1"></div>
           <div className="col-md-10">

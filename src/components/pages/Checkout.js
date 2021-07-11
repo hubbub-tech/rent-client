@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
+import FeedbackForm from '../forms/FeedbackForm';
 import CheckoutCard from '../cards/CheckoutCard';
 import PricingCard from '../cards/PricingCard';
 
@@ -34,7 +35,7 @@ const Checkout = ({setFlashMessages}) => {
           </div>
           <div className="col-md-1"></div>
         </div>
-        <div className="row">
+        <div className="row mb-3">
           <div className="col-md-1"></div>
           <div className="col-md-7">
           {items.map((item, index) => (
@@ -64,6 +65,7 @@ const Checkout = ({setFlashMessages}) => {
           </div>
           <div className="col-md-1"></div>
         </div>
+        <FeedbackForm setFlashMessages={setFlashMessages} href={'/checkout'} />
       </div>
     </main>
   );

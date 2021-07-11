@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const FeedbackForm = ({ setFlashMessages, origin }) => {
+const FeedbackForm = ({ setFlashMessages, href }) => {
   const [feedback, setFeedback] = useState(null);
   let statusOK;
 
@@ -14,7 +14,7 @@ const FeedbackForm = ({ setFlashMessages, origin }) => {
     e.preventDefault();
     fetch('/feedback/submit', {
       method: 'POST',
-      body: JSON.stringify({ feedback, "origin": origin }),
+      body: JSON.stringify({ feedback, href }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
@@ -27,8 +27,8 @@ const FeedbackForm = ({ setFlashMessages, origin }) => {
       <div className="row my-3">
         <div className="col-sm-2"></div>
         <div className="col-sm-8">
-          <h5 className="text-start">Any Feedback?</h5>
-          <div className="form-floating mb-1">
+          <h5 className="text-start text-muted">Any Feedback?</h5>
+          <div className="form-floating mb-2">
             <textarea
               className="form-control form-control-sm"
               id="feedbackNotes"
@@ -37,12 +37,12 @@ const FeedbackForm = ({ setFlashMessages, origin }) => {
               onChange={e => setFeedback(e.target.value)}
               required
             />
-            <label className="" htmlFor="feedbackNotes">
-              <font size="-1">Give us your feedback on part of Hubbub! We really do read it :)</font>
+          <label className="text-muted" htmlFor="feedbackNotes">
+              <font size="-1">How are we doing? Give us your feedback here!</font>
             </label>
           </div>
           <div className="d-grid gap-2">
-            <input className="btn btn-outline-success" type="submit" value="Submit" />
+            <input className="btn btn-hubbub" type="submit" value="Submit" />
           </div>
         </div>
         <div className="col-sm-2"></div>
