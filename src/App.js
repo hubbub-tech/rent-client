@@ -83,7 +83,7 @@ const App = () => {
             <Account myId={userId} setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/accounts/u/orders">
-            <Rentals />
+            <Rentals setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/schedule/dropoffs/:dropoffDate">
             <Dropoffs setFlashMessages={setFlashMessages} />
