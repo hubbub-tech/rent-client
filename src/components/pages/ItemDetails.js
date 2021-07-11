@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
+import FeedbackForm from '../forms/FeedbackForm';
 import RentalForm from '../forms/RentalForm';
 import ShopCard from '../cards/ShopCard';
 
@@ -57,7 +58,7 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
           <div className="col-md-11 mt-5">
             <h2 className="text-start">{ item.name }</h2>
             <p className="text-start fs-4">from
-              <Link to={`/account/u/${item.lister_id}`}> {item.lister_name}</Link>
+              <Link to={`/accounts/u/id=${item.lister_id}`}> {item.lister_name}</Link>
             </p>
           </div>
         </div>
@@ -109,6 +110,7 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
           </div>
           <div className="col-md-1"></div>
         </div>
+        <FeedbackForm setFlashMessages={setFlashMessages} origin={`/inventory/i/id=${itemId}`} />
         <div className="row mt-3">
           <div className="col-md-1"></div>
           <div className="col-md-10">

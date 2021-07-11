@@ -11,7 +11,7 @@ const Main = () => {
     {"link": "/search=kitchen", "title": "Kitchen", "alt": "Pots"},
     {"link": "", "title": "Everything", "alt": "Fridge"},
     {"link": "/search=entertainment", "title": "Entertainment", "alt": "Kindle Fire"},
-    {"link": "/search=random", "title": "Random", "alt": "Lights"},
+    {"link": "/search=all", "title": "Random", "alt": "Lights"},
     {"link": "/search=school", "title": "School", "alt": "Calculator"},
     {"link": "/search=living", "title": "Living", "alt": "Weights"}
   ]
