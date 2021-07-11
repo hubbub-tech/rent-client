@@ -5,11 +5,17 @@ import { useHistory, Link } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
 
-const OrderCard = ({ urlBase, order }) => {
+const OrderCard = ({ urlBase, order, setFlashMessages }) => {
   let history = useHistory();
 
   let todaysDateStr = moment.utc().format("YYYY-MM-DD");
-  let isActive = todaysDateStr < order.ext_date_end
+  let isActive = todaysDateStr < order.ext_date_end;
+  let statusOK;
+
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    return res.json();
+  }
 
   const handleDropoffOnClick = () => {
     history.push(`/schedule/dropoffs/${order.res_date_start}`)
@@ -25,6 +31,21 @@ const OrderCard = ({ urlBase, order }) => {
 
   const handleExtendOnClick = () => {
     history.push(`/accounts/o/extend/id=${order.id}`)
+  }
+
+  const handleCancelOnClick = () => {
+    if (window.confirm("Are you sure you want to cancel this order?")) {
+      fetch('/accounts/o/cancel/submit', {
+        method: 'POST',
+        body: JSON.stringify({ "orderId": order.id }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then(isStatusOK)
+      .then(data => setFlashMessages(data.flashes));
+      window.scrollTo(0, 0);
+    } else {
+      setFlashMessages([`Your order for ${order.item.name} was not cancelled.`]);
+    }
   }
 
   return (
@@ -76,16 +97,30 @@ const OrderCard = ({ urlBase, order }) => {
                       Book Dropoff
                     </button>
                   </div>
-                  <div className="d-grid gap-2">
-                    <button
-                      type="button"
-                      className="btn btn-lg btn-secondary mx-1 my-1"
-                      onClick={handlePickupOnClick}
-                      disabled={order.is_pickup_scheduled || !order.is_dropoff_scheduled}
-                    >
-                      Book Pickup
-                    </button>
-                  </div>
+                  {order.is_dropoff_scheduled &&
+                    <div className="d-grid gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-lg btn-secondary mx-1 my-1"
+                        onClick={handlePickupOnClick}
+                        disabled={order.is_pickup_scheduled || !order.is_dropoff_scheduled}
+                      >
+                        Book Pickup
+                      </button>
+                    </div>
+                  }
+                  {!order.is_dropoff_scheduled &&
+                    <div className="d-grid gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-lg btn-danger mx-1 my-1"
+                        onClick={handleCancelOnClick}
+                        disabled={order.is_dropoff_scheduled}
+                      >
+                        Cancel Order
+                      </button>
+                    </div>
+                  }
                   {isActive &&
                     <div className="d-grid gap-2">
                       <button
