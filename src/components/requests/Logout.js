@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 
 const Logout = () => {
-  fetch('/logout')
+  fetch(process.env.REACT_APP_SERVER + '/logout')
   return <Redirect to='/' />
 }
 

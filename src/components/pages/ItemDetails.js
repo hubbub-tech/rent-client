@@ -23,7 +23,7 @@ const ItemDetails = ({isLoggedIn, setFlashMessages}) => {
 
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
-    fetch(`/inventory/i/id=${itemId}`)
+    fetch(process.env.REACT_APP_SERVER + `/inventory/i/id=${itemId}`)
     .then(res => res.json())
     .then(data => {
       setItem(data.item);

@@ -34,7 +34,7 @@ const EditItemForm = ({ item, setFlashMessages }) => {
       formData.append('description', description);
     }
 
-    fetch('/accounts/i/edit/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/accounts/i/edit/submit', {
       method: 'POST',
       body: formData
     })

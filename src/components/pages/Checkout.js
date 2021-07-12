@@ -13,7 +13,7 @@ const Checkout = ({setFlashMessages}) => {
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    fetch('/checkout')
+    fetch(process.env.REACT_APP_SERVER + '/checkout')
     .then(res => res.json())
     .then(data => {
       setCart(data.cart);

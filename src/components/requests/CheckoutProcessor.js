@@ -11,7 +11,7 @@ const CheckoutProcessor = ({ setFlashMessages }) => {
     return res.json()
   }
 
-  fetch(`/checkout/confirmation/token=${token}`)
+  fetch(process.env.REACT_APP_SERVER + `/checkout/confirmation/token=${token}`)
   .then(isStatusOK)
   .then(data => {
     setFlashMessages(data.flashes);

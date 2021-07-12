@@ -14,7 +14,7 @@ const EditAccount = ({ setFlashMessages }) => {
   });
 
   useEffect(() => {
-    fetch("/accounts/u/edit")
+    fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit")
     .then(res => res.json())
     .then(data => setUser(data.user));
   }, []);

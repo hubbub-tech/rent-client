@@ -10,7 +10,7 @@ const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => 
 
   const submit = (e) => {
     e.preventDefault()
-    fetch(`/update/i/id=${calendar.item_id}`, {
+    fetch(process.env.REACT_APP_SERVER + `/update/i/id=${calendar.item_id}`, {
       method: 'POST',
       body: JSON.stringify({ startDate, endDate }),
       headers: { 'Content-Type': 'application/json' }

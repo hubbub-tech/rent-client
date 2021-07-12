@@ -14,7 +14,7 @@ const Account = ({ myId, setFlashMessages }) => {
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
-    fetch(`/accounts/u/id=${userId}`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/u/id=${userId}`)
     .then(res => res.json())
     .then(data => {
       setUser(data.user);

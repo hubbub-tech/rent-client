@@ -24,7 +24,7 @@ const EditPassForm = ({ user, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    fetch('/accounts/u/password/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/accounts/u/password/submit', {
       method: 'POST',
       body: JSON.stringify({ password }),
       headers: { 'Content-Type': 'application/json' },
@@ -101,7 +101,7 @@ const EditPassForm = ({ user, setFlashMessages }) => {
             <input
               className="btn btn-outline-success"
               type='submit'
-              value='Submit' 
+              value='Submit'
               disabled={errors.client.length !== 0}
             />
           </div>

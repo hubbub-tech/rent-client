@@ -25,7 +25,7 @@ const EarlyForm = ({ order, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    fetch("/accounts/o/early/submit", {
+    fetch(process.env.REACT_APP_SERVER + "/accounts/o/early/submit", {
       method: 'POST',
       body: JSON.stringify({ "orderId": order.id, earlyDate }),
       headers: { 'Content-Type': 'application/json' }

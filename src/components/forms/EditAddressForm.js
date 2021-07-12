@@ -30,7 +30,7 @@ const EditAddressForm = ({ user, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    fetch('/accounts/u/address/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/accounts/u/address/submit', {
       method: 'POST',
       body: JSON.stringify({ address }),
       headers: { 'Content-Type': 'application/json' },

@@ -67,7 +67,7 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
 
     formData.append('image', selectedFile);
 
-    fetch('/accounts/u/edit/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/accounts/u/edit/submit', {
       method: 'POST',
       body: formData
     })

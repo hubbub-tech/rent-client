@@ -17,7 +17,7 @@ const Main = () => {
   ]
 
   useEffect(() => {
-    fetch('/index')
+    fetch(process.env.REACT_APP_SERVER + '/index')
     .then(res => res.json())
     .then(data => setTestimonials(data.testimonials));
   }, []);

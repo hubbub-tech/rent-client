@@ -25,7 +25,7 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
   }
   const submit = (e) => {
     e.preventDefault();
-    fetch('/schedule/dropoffs/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/schedule/dropoffs/submit', {
       method: 'POST',
       body: JSON.stringify({
         notes,

@@ -18,7 +18,7 @@ const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
   const submit = (e) => {
     e.preventDefault();
     const startDate = stringToMoment(order.ext_date_end).toDate();
-    fetch(`/validate/i/id=${order.item.id}`, {
+    fetch(process.env.REACT_APP_SERVER + `/validate/i/id=${order.item.id}`, {
       method: 'POST',
       body: JSON.stringify({ startDate, "endDate": extendDate }),
       headers: { 'Content-Type': 'application/json' }

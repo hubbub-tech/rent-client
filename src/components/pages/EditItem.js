@@ -21,7 +21,7 @@ const EditItem = ({ setFlashMessages }) => {
   }
 
   useEffect(() => {
-    fetch(`/accounts/i/edit/id=${itemId}`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/i/edit/id=${itemId}`)
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);

@@ -11,7 +11,7 @@ const EditUserAddress = ({ setFlashMessages }) => {
   const addressDisplay = `${user.address.num} ${user.address.street} ${user.address.apt !== '' ? `Apt ${user.address.apt}` : ''}, ${user.address.city}, ${user.address.state} ${user.address.zip_code}`;
 
   useEffect(() => {
-    fetch("/accounts/u/edit")
+    fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit")
     .then(res => res.json())
     .then(data => setUser(data.user));
   }, []);

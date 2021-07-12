@@ -35,7 +35,7 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
 
   const handleCancelOnClick = () => {
     if (window.confirm("Are you sure you want to cancel this order?")) {
-      fetch('/accounts/o/cancel/submit', {
+      fetch(process.env.REACT_APP_SERVER + '/accounts/o/cancel/submit', {
         method: 'POST',
         body: JSON.stringify({ "orderId": order.id }),
         headers: { 'Content-Type': 'application/json' },

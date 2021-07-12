@@ -14,7 +14,7 @@ const CheckoutForm = ({setFlashMessages}) => {
 
   const submit = (e) => {
     e.preventDefault()
-    fetch('/checkout/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/checkout/submit', {
       method: 'POST',
       body: JSON.stringify({ paymentMethod }),
       headers: { 'Content-Type': 'application/json' },

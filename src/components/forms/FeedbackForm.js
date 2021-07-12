@@ -12,7 +12,7 @@ const FeedbackForm = ({ setFlashMessages, href }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    fetch('/feedback/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/feedback/submit', {
       method: 'POST',
       body: JSON.stringify({ feedback, href }),
       headers: { 'Content-Type': 'application/json' },

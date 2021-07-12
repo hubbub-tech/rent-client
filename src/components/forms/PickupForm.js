@@ -24,7 +24,7 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
   }
   const submit = (e) => {
     e.preventDefault();
-    fetch('/schedule/pickups/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/schedule/pickups/submit', {
       method: 'POST',
       body: JSON.stringify({
         notes,

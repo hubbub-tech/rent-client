@@ -17,7 +17,7 @@ const Shop = ({ isSearching }) => {
   useEffect(() => {
     AOS.init({duration : 500, once: true});
 
-    fetch(fetchUrl)
+    fetch(process.env.REACT_APP_SERVER + fetchUrl)
     .then(res => res.json())
     .then(data => {
       setUrlBase(data.photo_url);

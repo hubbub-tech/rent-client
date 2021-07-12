@@ -74,7 +74,7 @@ const RegisterForm = ({ setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault()
-    fetch('/register', {
+    fetch(process.env.REACT_APP_SERVER + '/register', {
       method: 'POST',
       body: JSON.stringify({ user, profile, address }),
       headers: { 'Content-Type': 'application/json' },

@@ -10,7 +10,7 @@ const ListingCard = ({ item, urlBase, isOwner, setFlashMessages }) => {
   }
 
   const onClick = () => {
-    fetch(`/accounts/i/hide/id=${item.id}`, {
+    fetch(process.env.REACT_APP_SERVER + `/accounts/i/hide/id=${item.id}`, {
       method: 'POST',
       body: JSON.stringify({ "toggle": !item.is_available }),
       headers: { 'Content-Type': 'application/json' },

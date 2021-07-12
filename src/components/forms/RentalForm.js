@@ -15,8 +15,7 @@ const RentalForm = ({calendar, setFlashMessages, setReservation}) => {
 
   const submit = (e) => {
     e.preventDefault()
-    console.log({ startDate, endDate })
-    fetch(`/validate/i/id=${calendar.item_id}`, {
+    fetch(process.env.REACT_APP_SERVER + `/validate/i/id=${calendar.item_id}`, {
       method: 'POST',
       body: JSON.stringify({ startDate, endDate }),
       headers: { 'Content-Type': 'application/json' }

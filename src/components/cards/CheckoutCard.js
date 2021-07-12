@@ -23,14 +23,14 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
     if (reservation) {
       let startDate = reservation.date_started;
       let endDate = reservation.date_ended;
-      fetch(`/remove/i/id=${item.id}&start=${startDate}&end=${endDate}`)
+      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}&start=${startDate}&end=${endDate}`)
       .then(res => res.json())
       .then(data => {
         setFlashMessages(data.flashes)
         setToggle(!toggle);
       });
     } else {
-      fetch(`/remove/i/id=${item.id}`)
+      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}`)
       .then(res => res.json())
       .then(data => {
         setFlashMessages(data.flashes)

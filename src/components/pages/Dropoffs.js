@@ -11,7 +11,7 @@ const Dropoffs = ({ setFlashMessages }) => {
   const [address, setAddress] = useState({});
 
   useEffect(() => {
-    fetch(`/schedule/dropoffs/${dropoffDate}`)
+    fetch(process.env.REACT_APP_SERVER + `/schedule/dropoffs/${dropoffDate}`)
     .then(res => res.json())
     .then(data => {
       setAddress(data.address);

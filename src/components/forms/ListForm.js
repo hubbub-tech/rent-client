@@ -61,7 +61,7 @@ const ListForm = ({ setFlashMessages }) => {
 
     formData.append('image', selectedFile);
 
-    fetch('/list/submit', {method: 'POST', body: formData})
+    fetch(process.env.REACT_APP_SERVER + '/list/submit', {method: 'POST', body: formData})
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
@@ -89,7 +89,7 @@ const ListForm = ({ setFlashMessages }) => {
   },[startDate, endDate]);
 
   useEffect(() => {
-    fetch('/list')
+    fetch(process.env.REACT_APP_SERVER + '/list')
     .then(res => res.json())
     .then(data => setAddress(data.address));
   }, []);

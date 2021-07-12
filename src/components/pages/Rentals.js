@@ -15,7 +15,7 @@ const Rentals = ({ setFlashMessages }) => {
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
 
-    fetch(`/accounts/u/orders`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/u/orders`)
     .then(res => res.json())
     .then(data => {
       setOrders(data.orders);

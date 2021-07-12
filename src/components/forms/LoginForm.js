@@ -18,7 +18,7 @@ const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    fetch('/login', {
+    fetch(process.env.REACT_APP_SERVER + '/login', {
       method: 'POST',
       body: JSON.stringify({ user }),
       headers: { 'Content-Type': 'application/json' },

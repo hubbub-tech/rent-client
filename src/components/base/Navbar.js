@@ -10,7 +10,7 @@ const Navbar = ({ userId, isLoggedIn }) => {
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
 
   useEffect(() => {
-    fetch('/login/cart')
+    fetch(process.env.REACT_APP_SERVER + '/login/cart')
     .then(res => res.json())
     .then(data => setCartSize(data.cart_size));
   }, [cartSize]);

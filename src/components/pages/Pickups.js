@@ -11,7 +11,7 @@ const Pickups = ({ setFlashMessages }) => {
   const [address, setAddress] = useState({});
 
   useEffect(() => {
-    fetch(`/schedule/pickups/${pickupDate}`)
+    fetch(process.env.REACT_APP_SERVER + `/schedule/pickups/${pickupDate}`)
     .then(res => res.json())
     .then(data => {
       setAddress(data.address);

@@ -14,7 +14,7 @@ const EarlyReturn = ({ setFlashMessages }) => {
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    fetch(`/accounts/o/id=${orderId}`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`)
     .then(res => res.json())
     .then(data => {
       setOrder(data.order);
