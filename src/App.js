@@ -25,6 +25,9 @@ import ExtendRental from './components/pages/ExtendRental';
 import EarlyReturn from './components/pages/EarlyReturn';
 import EditUserAddress from './components/pages/EditUserAddress';
 
+import Story from './components/static/Story';
+import Faqs from './components/static/Faqs';
+
 const App = () => {
   const [userId, setUserId] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(null);
@@ -107,6 +110,12 @@ const App = () => {
           <Route exact path="/logout"><Logout /></Route>
           <Route exact path="/checkout/confirmation/token=:token">
             <CheckoutProcessor setFlashMessages={setFlashMessages} />
+          </Route>
+          <Route exact path="/story">
+            <Story />
+          </Route>
+          <Route exact path="/faqs">
+            <Faqs />
           </Route>
         </Switch>
         <Footer />

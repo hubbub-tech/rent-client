@@ -27,10 +27,7 @@ const Footer = () => {
             <h5 className="text-uppercase text-white">List</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="/how-to-list">How to List</a>
-              </li>
-              <li>
-                <a href="/become-a-lister">Become a Lister</a>
+                <p className="text-hubbub">Coming Soon!</p>
               </li>
             </ul>
           </div>
@@ -38,13 +35,7 @@ const Footer = () => {
             <h5 className="text-uppercase text-white">About</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="/our-story">Our Story</a>
-              </li>
-              <li>
-                <a href="/callouts">Thank You</a>
-              </li>
-              <li>
-                <a href="https://docs.google.com/document/d/1R_5hmqhHguIqT4Arvi5oNwP6eLbukMhXqabWZSOa2fE/edit?usp=sharing" target="_blank" rel="noreferrer">Our Partnerships</a>
+                <a href="/story">Our Story</a>
               </li>
               <li>
                 <a href="mailto:hubbubcu@gmail.com">Contact Us</a>
@@ -61,7 +52,7 @@ const Footer = () => {
             <h5 className="text-uppercase text-white">Help</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="/help/faqs">FAQs</a>
+                <a href="/faqs">FAQs</a>
               </li>
               <li>
                 <a href="https://docs.google.com/document/d/1rRKafml--o5q6L3HA8EtFHCedQTncR8rUZhAeVsEqfI/edit?usp=sharing" target="_blank" rel="noreferrer">Community Guidelines</a>

@@ -42,8 +42,8 @@ const Shop = ({ isSearching }) => {
         <hr />
         <div className="row">
           {items.length !== 0 && items.map((item) => (
-            <div className="col-sm-6">
-              <MicroCard urlBase={urlBase} item={item} key={item.id} />
+            <div className="col-sm-6" key={item.id}>
+              <MicroCard urlBase={urlBase} item={item} />
             </div>
           ))}
           {items.length === 0 && !isLoading &&
