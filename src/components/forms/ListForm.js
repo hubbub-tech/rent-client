@@ -40,6 +40,9 @@ const ListForm = ({ cookies, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    formData.append('userId', cookies.userId);
+    formData.append('auth', cookies.auth);
+
     formData.append('name', item.name);
     formData.append('price', item.price);
 
