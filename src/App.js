@@ -27,6 +27,7 @@ import EditUserAddress from './components/pages/EditUserAddress';
 
 import Story from './components/static/Story';
 import Faqs from './components/static/Faqs';
+import Error404 from './components/static/Error404';
 
 const App = () => {
   const [flashMessages, setFlashMessages] = useState([]);
@@ -116,6 +117,7 @@ const App = () => {
           <Route exact path="/faqs">
             <Faqs />
           </Route>
+          <Route component={Error404} />
         </Switch>
         <Footer />
       </div>
