@@ -4,7 +4,7 @@ import { useCookies } from 'react-cookie';
 
 import SearchForm from '../forms/SearchForm';
 
-const Navbar = ({ cookies }) => {
+const Navbar = ({ cookies, isLoggedIn }) => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
   return (
@@ -30,22 +30,22 @@ const Navbar = ({ cookies }) => {
             <li className="nav-item">
               <a className="nav-link active fw-bold" aria-current="page" href="/inventory">Rent Now</a>
             </li>
-            {cookies.isLoggedIn &&
+            {isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href={`/accounts/u/id=${ cookies.userId }`}>My Profile</a>
               </li>
             }
-            {cookies.isLoggedIn &&
+            {isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href="/accounts/u/orders">My Rentals</a>
               </li>
             }
-            {!cookies.isLoggedIn &&
+            {!isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href="/login">Login</a>
               </li>
             }
-            {!cookies.isLoggedIn &&
+            {!isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href="/register">Sign Up</a>
               </li>
@@ -68,7 +68,7 @@ const Navbar = ({ cookies }) => {
                 </svg>
               </a>
             }
-            {cookies.isLoggedIn && !isNavCollapsed &&
+            {isLoggedIn && !isNavCollapsed &&
               <li className="nav-item">
                 <a className="nav-link" href="/checkout">Cart ({cookies.cartSize})</a>
               </li>

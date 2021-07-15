@@ -10,7 +10,7 @@ import ShopCard from '../cards/ShopCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const ItemDetails = ({ cookies, setCookie, setFlashMessages }) => {
+const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
   const { itemId } = useParams();
   const [item, setItem] = useState({
     "address": {},
@@ -52,7 +52,7 @@ const ItemDetails = ({ cookies, setCookie, setFlashMessages }) => {
     .then(res => res.json())
     .then(data => {
       setFlashMessages(data.flashes);
-      
+
       let newCartSize = parseInt(cookies.cartSize) + 1;
       setCookie("cartSize", newCartSize, { path: '/' });
     });
@@ -86,7 +86,7 @@ const ItemDetails = ({ cookies, setCookie, setFlashMessages }) => {
               <div className="card-body">
                 {reservation && <p className="text-start fs-5 fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{printMoney(reservation.charge)}</span></p>}
                 {!reservation && <p className="text-start fs-5 fw-bold">How long do you want to rent?</p>}
-                {cookies.isLoggedIn &&
+                {isLoggedIn &&
                   <RentalForm
                     cookies={cookies}
                     calendar={item.calendar}
@@ -94,12 +94,12 @@ const ItemDetails = ({ cookies, setCookie, setFlashMessages }) => {
                     setReservation={setReservation}
                   />
                 }
-                {cookies.isLoggedIn &&
+                {isLoggedIn &&
                   <div className="d-grid gap-2 my-3">
                     <button className="btn btn-success" onClick={addToCart}>Add to Cart</button>
                   </div>
                 }
-                {!cookies.isLoggedIn &&
+                {!isLoggedIn &&
                   <div className="mt-1">
                     <p className="text-start fs-5 fw-bold">Join Hubbub to get everything you need for low cost!</p>
                     <p>Sign up <a href="/register">here</a> to order this item!</p>
