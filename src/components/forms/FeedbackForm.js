@@ -25,8 +25,7 @@ const FeedbackForm = ({ setFlashMessages, href }) => {
   return (
     <form onSubmit={submit}>
       <div className="row my-3">
-        <div className="col-sm-2"></div>
-        <div className="col-sm-8">
+        <div className="col-12">
           <h5 className="text-start text-muted">Any Feedback?</h5>
           <div className="form-floating mb-2">
             <textarea
@@ -42,10 +41,9 @@ const FeedbackForm = ({ setFlashMessages, href }) => {
             </label>
           </div>
           <div className="d-grid gap-2">
-            <input className="btn btn-hubbub" type="submit" value="Submit" />
+            <input className="btn btn-hubbub" type="submit" value="Give Feedback" />
           </div>
         </div>
-        <div className="col-sm-2"></div>
       </div>
     </form>
   );

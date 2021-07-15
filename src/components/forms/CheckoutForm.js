@@ -23,6 +23,7 @@ const CheckoutForm = ({ cookies, setCookie, setFlashMessages}) => {
     .then(data => {
       setFlashMessages(data.flashes);
       if (statusOK) {
+        setCookie('cartSize', 0, { path: '/' });
         history.push('/accounts/u/orders');
       } else {
         history.push('/inventory');

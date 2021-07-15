@@ -74,7 +74,7 @@ const CheckoutCard = ({cookies, setCookie, urlBase, item, toggle, setToggle, set
           <div className="btn-group mt-3" role="group" aria-label="Basic outlined example">
             <button type="button" className="btn btn-outline-dark" onClick={viewItem}>View</button>
             {reservation && <button type="button" className="btn btn-outline-dark" onClick={editItem}>Edit Rental</button>}
-            {!reservation && <button type="button" className="btn btn-outline-warning" onClick={() => setReservation(item.reservation)}>Hide Form</button>}
+            {!reservation && <button type="button" className="btn btn-dark" onClick={() => setReservation(item.reservation)}>Hide Form</button>}
             <button type="button" className="btn btn-outline-danger" onClick={removeItem}>Remove</button>
           </div>
         </div>

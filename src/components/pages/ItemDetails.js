@@ -77,6 +77,7 @@ const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
               className="card-img-top rounded"
               src={`${urlBase}/${itemId}.jpg`}
               alt={item.name} />
+            <FeedbackForm setFlashMessages={setFlashMessages} href={`/inventory/i/id=${itemId}`} />
           </div>
           <div className="col-md-4 mt-2">
             <p className="card-text text-center">
@@ -119,7 +120,6 @@ const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
           </div>
           <div className="col-md-1"></div>
         </div>
-        <FeedbackForm setFlashMessages={setFlashMessages} href={`/inventory/i/id=${itemId}`} />
         <div className="row mt-3">
           <div className="col-md-1"></div>
           <div className="col-md-10">

@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
+import FeedbackForm from '../forms/FeedbackForm';
 import ExtendForm from '../forms/ExtendForm';
 
 const ExtendRental = ({ cookies, setFlashMessages }) => {
@@ -115,6 +116,7 @@ const ExtendRental = ({ cookies, setFlashMessages }) => {
                 </div>
               </div>
             </div>
+            <FeedbackForm setFlashMessages={setFlashMessages} href={`/accounts/o/extend/id=${orderId}`} />
           </div>
           <div className="col-md-2"></div>
         </div>

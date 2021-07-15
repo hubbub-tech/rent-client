@@ -37,7 +37,7 @@ const RentalUpdateForm = ({ cookies, calendar, toggle, setToggle, setFlashMessag
         setIsValid={setIsValid}
       />
       <div className="d-grid gap-2 my-3">
-        <button className="btn btn-primary" type="submit" disabled={!isValid}>Check Quote</button>
+        <button className="btn btn-primary" type="submit" disabled={!isValid}>Update Rental Period</button>
       </div>
     </form>
   );

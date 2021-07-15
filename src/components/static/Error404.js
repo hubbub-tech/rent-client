@@ -1,6 +1,13 @@
 import React from 'react';
+import { useEffect } from 'react';
+
+import AOS from 'aos';
+import 'aos/dist/aos.css';
 
 const Error404 = () => {
+  useEffect(() => {
+    AOS.init({duration : 1000, once: true});
+  }, []);
   return (
     <main>
       <div className="container-md my-5">
@@ -12,7 +19,7 @@ const Error404 = () => {
             <p className="text-center">Go to <a href="/inventory">Rent Page</a>.</p>
           </div>
           <div className="col-sm-3"></div>
-          <div className="col-sm-6">
+          <div className="col-sm-6" data-aos="fade-up">
             <img
               className="rounded img-fluid my-5"
               src="../static/backgrounds/obiwan404.jpeg"

@@ -1,5 +1,4 @@
 import moment from 'moment';
-
 import React from 'react';
 import { useHistory, Link } from 'react-router-dom';
 
@@ -15,6 +14,23 @@ const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
   const isStatusOK = (res) => {
     statusOK = res.ok;
     return res.json();
+  }
+
+  const handleReceiptOnClick = () => {
+    let fileName = `D${todaysDateStr}ID${order.id}P${order.date_placed}.txt`;
+    fetch(process.env.REACT_APP_SERVER + `/accounts/o/receipt/id=${order.id}/${fileName}`, {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(isStatusOK)
+    .then(data => {
+      if (statusOK) {
+        setFlashMessages(["Sorry, this is a placeholder... receipt download coming soon!"]);
+      } else {
+        setFlashMessages(["You can only download receipts to your own order."]);
+      }
+    });
   }
 
   const handleDropoffOnClick = () => {
@@ -56,19 +72,30 @@ const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
     <div data-aos="fade-up" className="card px-0 mb-3">
       <div className="card-header">
         <div className="row">
-          <div className="col-md-4 my-2">
+          <div className="col-md-3 my-2">
             <p className="text-start my-0"><strong>Order Placed</strong></p>
             <p className="text-start my-0">{printDate(order.date_placed)}
               {order.is_extended && <span className="badge bg-success">extended</span>}
             </p>
           </div>
-          <div className="col-md-4 my-2">
+          <div className="col-md-3 my-2">
             <p className="text-start my-0"><strong>Charge</strong></p>
             <p className="text-start my-0">{printMoney(order.reservation.charge)}</p>
           </div>
-          <div className="col-md-4 my-2">
+          <div className="col-md-3 my-2">
             <p className="text-start my-0"><strong>Deposit</strong></p>
             <p className="text-start my-0">{printMoney(order.reservation.deposit)}</p>
+          </div>
+          <div className="col-md-3 my-2">
+            <div className="d-grid gap-2">
+              <button
+                type="button"
+                className="btn btn-dark mx-1 my-1"
+                onClick={handleReceiptOnClick}
+              >
+                Download Receipt
+              </button>
+            </div>
           </div>
         </div>
       </div>
