@@ -6,7 +6,7 @@ import TextInput from '../inputs/TextInput';
 import AddressForm from './AddressForm';
 import FormErrors from '../errors/FormErrors';
 
-const EditAccountForm = ({ user, setFlashMessages }) => {
+const EditAccountForm = ({ user, cookies, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -40,6 +40,8 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    formData.append('userId', cookies.userId);
+    formData.append('auth', cookies.auth);
 
     if (typeof bio === 'undefined') {
       formData.append('bio', user.profile.bio);

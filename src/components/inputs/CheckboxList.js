@@ -15,7 +15,14 @@ const CheckboxList = ({ checkboxes, onChangeCheckbox }) => {
               type="checkbox"
               checked={selectedCheckboxes.includes(checkbox)}
               onChange={e => {
-                setSelectedCheckboxes([...selectedCheckboxes, e.target.value]);
+                if (selectedCheckboxes.includes(e.target.value)) {
+                  let index = selectedCheckboxes.indexOf(e.target.value)
+                  let copySelectedCheckboxes = [...selectedCheckboxes];
+                  copySelectedCheckboxes.splice(index)
+                  setSelectedCheckboxes(copySelectedCheckboxes);
+                } else {
+                  setSelectedCheckboxes([...selectedCheckboxes, e.target.value]);
+                }
                 onChangeCheckbox(selectedCheckboxes);
               }}
             />

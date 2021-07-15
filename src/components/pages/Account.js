@@ -6,15 +6,19 @@ import { printDate } from '../../helper.js'
 import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
 
-const Account = ({ myId, setFlashMessages }) => {
+const Account = ({ cookies, setFlashMessages }) => {
   const { userId } = useParams();
   const [user, setUser] = useState({"profile": {}, "cart": {}});
-  const isOwner = myId == userId;
+  const isOwner = cookies.userId == userId;
   const [urlBase, setUrlBase] = useState({"user": null, "item": null});
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/accounts/u/id=${userId}`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/u/id=${userId}`, {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => {
       setUser(data.user);
@@ -78,6 +82,7 @@ const Account = ({ myId, setFlashMessages }) => {
               {listings.map((item) => (
                 <div className="col-12 my-2" key={item.id}>
                   <ListingCard
+                    cookies={cookies}
                     setFlashMessages={setFlashMessages}
                     urlBase={urlBase.item}
                     isOwner={isOwner}

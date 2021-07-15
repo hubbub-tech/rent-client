@@ -5,7 +5,7 @@ import FeedbackForm from '../forms/FeedbackForm';
 import CheckoutCard from '../cards/CheckoutCard';
 import PricingCard from '../cards/PricingCard';
 
-const Checkout = ({setFlashMessages}) => {
+const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
   const [cart, setCart] = useState({});
   const [items, setItems] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -13,7 +13,11 @@ const Checkout = ({setFlashMessages}) => {
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + '/checkout')
+    fetch(process.env.REACT_APP_SERVER + '/checkout', {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => {
       setCart(data.cart);
@@ -42,6 +46,8 @@ const Checkout = ({setFlashMessages}) => {
             <CheckoutCard
               key={item.id}
               item={item}
+              cookies={cookies}
+              setCookie={setCookie}
               urlBase={urlBase}
               toggle={toggle}
               setToggle={setToggle}
@@ -57,6 +63,8 @@ const Checkout = ({setFlashMessages}) => {
           <div className="col-md-3">
             <PricingCard
               cart={cart}
+              cookies={cookies}
+              setCookie={setCookie}
               isReady={isReady}
               toggle={toggle}
               setToggle={setToggle}

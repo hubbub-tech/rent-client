@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import FormErrors from '../errors/FormErrors'
 import AddressForm from './AddressForm';
 
-const EditAddressForm = ({ user, setFlashMessages }) => {
+const EditAddressForm = ({ user, cookies, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -32,7 +32,7 @@ const EditAddressForm = ({ user, setFlashMessages }) => {
     e.preventDefault();
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/address/submit', {
       method: 'POST',
-      body: JSON.stringify({ address }),
+      body: JSON.stringify({ address, "userId": cookies.userId, "auth": cookies.auth }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

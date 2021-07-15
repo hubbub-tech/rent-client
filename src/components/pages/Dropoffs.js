@@ -5,13 +5,17 @@ import { useParams } from 'react-router-dom';
 import { printDate } from '../../helper.js';
 import DropoffForm from '../forms/DropoffForm';
 
-const Dropoffs = ({ setFlashMessages }) => {
+const Dropoffs = ({ cookies, setFlashMessages }) => {
   const { dropoffDate } = useParams();
   const [orders, setOrders] = useState([]);
   const [address, setAddress] = useState({});
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/schedule/dropoffs/${dropoffDate}`)
+    fetch(process.env.REACT_APP_SERVER + `/schedule/dropoffs/${dropoffDate}`, {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => {
       setAddress(data.address);
@@ -33,6 +37,7 @@ const Dropoffs = ({ setFlashMessages }) => {
         </div>
         <DropoffForm
           orders={orders}
+          cookies={cookies}
           address={address}
           setAddress={setAddress}
           dropoffDate={dropoffDate}

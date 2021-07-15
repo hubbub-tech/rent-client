@@ -5,7 +5,7 @@ import { useParams, useHistory } from 'react-router-dom';
 import { printDate } from '../../helper.js';
 import EditItemForm from "../forms/EditItemForm";
 
-const EditItem = ({ setFlashMessages }) => {
+const EditItem = ({ cookies, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -21,7 +21,11 @@ const EditItem = ({ setFlashMessages }) => {
   }
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/accounts/i/edit/id=${itemId}`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/i/edit/id=${itemId}`, {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
@@ -67,7 +71,7 @@ const EditItem = ({ setFlashMessages }) => {
               </ul>
           </div>
           <div className="col-sm-6">
-            <EditItemForm item={item} setFlashMessages={setFlashMessages} />
+            <EditItemForm item={item} cookies={cookies} setFlashMessages={setFlashMessages} />
           </div>
           <div className="col-sm-1"></div>
         </div>

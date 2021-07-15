@@ -6,7 +6,7 @@ import { useParams, useHistory, Link } from 'react-router-dom';
 import { printDate } from '../../helper.js';
 import EarlyForm from '../forms/EarlyForm';
 
-const EarlyReturn = ({ setFlashMessages }) => {
+const EarlyReturn = ({ cookies, setFlashMessages }) => {
   const { orderId } = useParams();
   const [order, setOrder] = useState({
     "item": {"details": {}, "calendar": {}}
@@ -14,7 +14,11 @@ const EarlyReturn = ({ setFlashMessages }) => {
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => {
       setOrder(data.order);
@@ -57,7 +61,10 @@ const EarlyReturn = ({ setFlashMessages }) => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <EarlyForm order={order} setFlashMessages={setFlashMessages} />
+                    <EarlyForm
+                      order={order}
+                      cookies={cookies}
+                      setFlashMessages={setFlashMessages} />
                   </div>
                 </div>
               </div>

@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import EditAccountForm from "../forms/EditAccountForm";
 
-const EditAccount = ({ setFlashMessages }) => {
+const EditAccount = ({ cookies, setFlashMessages }) => {
   let history = useHistory();
   let redirectUrl;
 
@@ -14,7 +14,11 @@ const EditAccount = ({ setFlashMessages }) => {
   });
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit")
+    fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => setUser(data.user));
   }, []);
@@ -34,7 +38,7 @@ const EditAccount = ({ setFlashMessages }) => {
             </p>
           </div>
           <div className="col-lg-8">
-            <EditAccountForm user={user} setFlashMessages={setFlashMessages} />
+            <EditAccountForm user={user} cookies={cookies} setFlashMessages={setFlashMessages} />
           </div>
         </div>
       </div>

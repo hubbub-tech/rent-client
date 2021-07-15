@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 
 import SingleDateInput from '../inputs/SingleDateInput';
 
-const EarlyForm = ({ order, setFlashMessages }) => {
+const EarlyForm = ({ order, cookies, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -27,7 +27,12 @@ const EarlyForm = ({ order, setFlashMessages }) => {
     e.preventDefault();
     fetch(process.env.REACT_APP_SERVER + "/accounts/o/early/submit", {
       method: 'POST',
-      body: JSON.stringify({ "orderId": order.id, earlyDate }),
+      body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
+        "orderId": order.id,
+        earlyDate
+      }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)

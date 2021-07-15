@@ -5,7 +5,7 @@ import { useHistory, Link } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
 
-const OrderCard = ({ urlBase, order, setFlashMessages }) => {
+const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
   let history = useHistory();
 
   let todaysDateStr = moment.utc().format("YYYY-MM-DD");
@@ -37,7 +37,11 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
     if (window.confirm("Are you sure you want to cancel this order?")) {
       fetch(process.env.REACT_APP_SERVER + '/accounts/o/cancel/submit', {
         method: 'POST',
-        body: JSON.stringify({ "orderId": order.id }),
+        body: JSON.stringify({
+          "userId": cookies.userId,
+          "auth": cookies.auth,
+          "orderId": order.id
+        }),
         headers: { 'Content-Type': 'application/json' },
       })
       .then(isStatusOK)

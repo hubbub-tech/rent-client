@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import DateRangeInput from '../inputs/DateRangeInput';
 
-const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => {
+const RentalUpdateForm = ({ cookies, calendar, toggle, setToggle, setFlashMessages }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isValid, setIsValid] = useState(false);
@@ -12,7 +12,12 @@ const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => 
     e.preventDefault()
     fetch(process.env.REACT_APP_SERVER + `/update/i/id=${calendar.item_id}`, {
       method: 'POST',
-      body: JSON.stringify({ startDate, endDate }),
+      body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
+        startDate,
+        endDate
+      }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(res => res.json())

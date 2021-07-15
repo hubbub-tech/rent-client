@@ -2,7 +2,7 @@ import React from 'react';
 
 import { printDate } from '../../helper.js';
 
-const ListingCard = ({ item, urlBase, isOwner, setFlashMessages }) => {
+const ListingCard = ({ cookies, item, urlBase, isOwner, setFlashMessages }) => {
 
   const isStatusOK = (res) => {
     // some action that is dependent on the status of the POST
@@ -12,7 +12,11 @@ const ListingCard = ({ item, urlBase, isOwner, setFlashMessages }) => {
   const onClick = () => {
     fetch(process.env.REACT_APP_SERVER + `/accounts/i/hide/id=${item.id}`, {
       method: 'POST',
-      body: JSON.stringify({ "toggle": !item.is_available }),
+      body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
+        "toggle": !item.is_available
+      }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

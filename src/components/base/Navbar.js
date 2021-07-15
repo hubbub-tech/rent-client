@@ -1,19 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 
 import SearchForm from '../forms/SearchForm';
 
-const Navbar = ({ userId, isLoggedIn }) => {
+const Navbar = ({ cookies }) => {
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
-  const [cartSize, setCartSize] = useState(null);
-
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
-
-  useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + '/login/cart')
-    .then(res => res.json())
-    .then(data => setCartSize(data.cart_size));
-  }, [cartSize]);
   return (
     <nav className="navbar navbar-expand-lg navbar-light hubbub-background">
       <div className="container-fluid">
@@ -37,22 +30,22 @@ const Navbar = ({ userId, isLoggedIn }) => {
             <li className="nav-item">
               <a className="nav-link active fw-bold" aria-current="page" href="/inventory">Rent Now</a>
             </li>
-            {isLoggedIn &&
+            {cookies.isLoggedIn &&
               <li className="nav-item">
-                <a className="nav-link" href={`/accounts/u/id=${ userId }`}>My Profile</a>
+                <a className="nav-link" href={`/accounts/u/id=${ cookies.userId }`}>My Profile</a>
               </li>
             }
-            {isLoggedIn &&
+            {cookies.isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href="/accounts/u/orders">My Rentals</a>
               </li>
             }
-            {!isLoggedIn &&
+            {!cookies.isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href="/login">Login</a>
               </li>
             }
-            {!isLoggedIn &&
+            {!cookies.isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href="/register">Sign Up</a>
               </li>
@@ -75,9 +68,9 @@ const Navbar = ({ userId, isLoggedIn }) => {
                 </svg>
               </a>
             }
-            {isLoggedIn && !isNavCollapsed &&
+            {cookies.isLoggedIn && !isNavCollapsed &&
               <li className="nav-item">
-                <a className="nav-link" href="/checkout">Cart ({cartSize})</a>
+                <a className="nav-link" href="/checkout">Cart ({cookies.cartSize})</a>
               </li>
             }
           </ul>

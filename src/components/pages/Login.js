@@ -3,8 +3,8 @@ import { Redirect } from 'react-router-dom';
 
 import LoginForm from '../forms/LoginForm';
 
-const Login = ({isLoggedIn, setIsLoggedIn, setFlashMessages, setCartSize}) => {
-  if (!isLoggedIn) {
+const Login = ({ cookies, setCookie, setFlashMessages }) => {
+  if (!cookies.isLoggedIn) {
     return (
       <main>
         <br />
@@ -12,9 +12,10 @@ const Login = ({isLoggedIn, setIsLoggedIn, setFlashMessages, setCartSize}) => {
         <p className="text-center mx-2">Find the sweet deal that's been waiting for you.</p>
         <br />
         <LoginForm
-          setIsLoggedIn={setIsLoggedIn}
+          cookies={cookies}
+          setCookie={setCookie}
           setFlashMessages={setFlashMessages}
-          setCartSize={setCartSize} />
+        />
         <br />
       </main>
     );

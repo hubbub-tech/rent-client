@@ -6,7 +6,7 @@ import { printDate } from '../../helper.js';
 import AddressForm from './AddressForm';
 import CheckboxList from '../inputs/CheckboxList';
 
-const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress }) => {
+const PickupForm = ({ orders, cookies, pickupDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
   let history = useHistory();
   const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
@@ -27,6 +27,8 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
     fetch(process.env.REACT_APP_SERVER + '/schedule/pickups/submit', {
       method: 'POST',
       body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
         notes,
         orders,
         timesChecked,

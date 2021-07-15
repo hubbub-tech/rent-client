@@ -6,7 +6,7 @@ import { printDate } from '../../helper.js';
 import AddressForm from './AddressForm';
 import CheckboxList from '../inputs/CheckboxList';
 
-const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddress }) => {
+const DropoffForm = ({ orders, cookies, dropoffDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
   let history = useHistory();
   const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
@@ -28,6 +28,8 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
     fetch(process.env.REACT_APP_SERVER + '/schedule/dropoffs/submit', {
       method: 'POST',
       body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
         notes,
         orders,
         referral,

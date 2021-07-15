@@ -18,7 +18,7 @@ const RegisterForm = ({ setFlashMessages }) => {
     "password": null,
     "confirm": null,
     "payment": null
-  });
+  }); 
   const [address, setAddress] = useState({
     "num": null,
     "street": null,

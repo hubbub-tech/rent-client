@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { stringToMoment } from '../../helper.js';
 import SingleDateInput from '../inputs/SingleDateInput';
 
-const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
+const ExtendForm = ({ order, cookies, setFlashMessages, setReservation }) => {
   let statusOK;
 
   const [extendDate, setExtendDate] = useState(null);
@@ -20,7 +20,12 @@ const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
     const startDate = stringToMoment(order.ext_date_end).toDate();
     fetch(process.env.REACT_APP_SERVER + `/validate/i/id=${order.item.id}`, {
       method: 'POST',
-      body: JSON.stringify({ startDate, "endDate": extendDate }),
+      body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
+        startDate,
+        "endDate": extendDate
+      }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
@@ -46,9 +51,9 @@ const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
       <div className="row">
         <div className="col-12">
           <SingleDateInput
+            setIsValid={setIsValid}
             selectedDay={extendDate}
             handleOnChange={setExtendDate}
-            setIsValid={setIsValid}
             minDateString={order.ext_date_end}
             maxDateString={order.item.calendar.date_ended}
           />

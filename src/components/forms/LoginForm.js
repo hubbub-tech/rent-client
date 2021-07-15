@@ -4,7 +4,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
-const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
+const LoginForm = ({ cookies, setCookie, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -27,11 +27,14 @@ const LoginForm = ({ setIsLoggedIn, setFlashMessages }) => {
     .then(data => {
       setFlashMessages(data.flashes);
       if (statusOK) {
-        setIsLoggedIn(true);
+        setCookie('auth', data.auth, { path: '/' });
+        setCookie('isLoggedIn', true, { path: '/' });
+        setCookie('userId', data.user_id, { path: '/' });
+        setCookie('cartSize', data.cart_size, { path: '/' });
         history.push("/");
       } else {
         setErrors(data.errors);
-        setIsLoggedIn(false);
+        setCookie('isLoggedIn', false, { path: '/' });
       }
     });
     window.scrollTo(0, 0);

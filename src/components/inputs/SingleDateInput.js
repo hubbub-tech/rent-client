@@ -22,10 +22,16 @@ const SingleDateInput = ({
   useEffect(() => {
     if (!selectedDay) {
       setIsValid(false);
-    } else if (selectedDay < minMoment.toDate()) {
+    } else if (selectedDay <= minMoment.toDate()) {
       setErrors([`No dates before ${minMoment.format('LL')} are valid.`]);
       setIsValid(false);
-    } else if (selectedDay > maxMoment.toDate()) {
+    } else if (minMoment.isSame(selectedDay, 'day')) {
+      setErrors([`No dates before ${minMoment.format('LL')} are valid.`]);
+      setIsValid(false);
+    } else if (selectedDay >= maxMoment.toDate()) {
+      setErrors([`No dates after ${maxMoment.format('LL')} are valid.`]);
+      setIsValid(false);
+    } else if (maxMoment.isSame(selectedDay, 'day')) {
       setErrors([`No dates after ${maxMoment.format('LL')} are valid.`]);
       setIsValid(false);
     } else {

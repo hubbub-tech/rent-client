@@ -7,15 +7,21 @@ import 'aos/dist/aos.css';
 
 import OrderCard from '../cards/OrderCard';
 
-const Rentals = ({ setFlashMessages }) => {
+const Rentals = ({ cookies, setFlashMessages }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [urlBase, setUrlBase] = useState(null);
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
-
-    fetch(process.env.REACT_APP_SERVER + `/accounts/u/orders`)
+    fetch(process.env.REACT_APP_SERVER + '/accounts/u/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => {
       setOrders(data.orders);
@@ -41,6 +47,7 @@ const Rentals = ({ setFlashMessages }) => {
               <hr />
               {orders.map((order) => (
                 <OrderCard
+                  cookies={cookies}
                   urlBase={urlBase}
                   order={order}
                   setFlashMessages={setFlashMessages}

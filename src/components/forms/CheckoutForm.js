@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const CheckoutForm = ({setFlashMessages}) => {
+const CheckoutForm = ({ cookies, setCookie, setFlashMessages}) => {
   let history = useHistory();
   let statusOK;
   const [paymentMethod, setPaymentMethod] = useState("in-person");
@@ -16,15 +16,16 @@ const CheckoutForm = ({setFlashMessages}) => {
     e.preventDefault()
     fetch(process.env.REACT_APP_SERVER + '/checkout/submit', {
       method: 'POST',
-      body: JSON.stringify({ paymentMethod }),
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
     .then(data => {
+      setFlashMessages(data.flashes);
       if (statusOK) {
-        history.push(`/checkout/confirmation/token=${data.token}`);
+        history.push('/accounts/u/orders');
       } else {
-        setFlashMessages(data.flashes);
+        history.push('/inventory');
       }
     });
   }

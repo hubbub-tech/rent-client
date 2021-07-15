@@ -6,7 +6,7 @@ import { useParams, useHistory, Link } from 'react-router-dom';
 import { printDate, printMoney } from '../../helper.js';
 import ExtendForm from '../forms/ExtendForm';
 
-const ExtendRental = ({ setFlashMessages }) => {
+const ExtendRental = ({ cookies, setFlashMessages }) => {
   let statusOK;
   let history = useHistory();
   const { orderId } = useParams();
@@ -17,7 +17,11 @@ const ExtendRental = ({ setFlashMessages }) => {
   const [reservation, setReservation] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`)
+    fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => {
       setOrder(data.order);
@@ -37,9 +41,11 @@ const ExtendRental = ({ setFlashMessages }) => {
       startDate = reservation.date_started;
       extendDate = reservation.date_ended;
     }
-    fetch('/accounts/o/extend/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/accounts/o/extend/submit', {
       method: 'POST',
       body: JSON.stringify({
+        "userId": cookies.userId,
+        "auth": cookies.auth,
         "itemId": order.item.id,
         "orderId": order.id,
         startDate,
@@ -93,6 +99,7 @@ const ExtendRental = ({ setFlashMessages }) => {
                   <div className="col-md-6">
                     <ExtendForm
                       order={order}
+                      cookies={cookies}
                       setFlashMessages={setFlashMessages}
                       setReservation={setReservation}
                     />

@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { printDate, printMoney } from '../../helper.js';
 import RentalUpdateForm from '../forms/RentalUpdateForm';
 
-const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
+const CheckoutCard = ({cookies, setCookie, urlBase, item, toggle, setToggle, setFlashMessages}) => {
   let history = useHistory();
   const [reservation, setReservation] = useState(item.reservation);
 
@@ -23,20 +23,30 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
     if (reservation) {
       let startDate = reservation.date_started;
       let endDate = reservation.date_ended;
-      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}&start=${startDate}&end=${endDate}`)
+      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}&start=${startDate}&end=${endDate}`, {
+        method: 'POST',
+        body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+        headers: { 'Content-Type': 'application/json' },
+      })
       .then(res => res.json())
       .then(data => {
         setFlashMessages(data.flashes)
         setToggle(!toggle);
       });
     } else {
-      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}`)
+      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}`, {
+        method: 'POST',
+        body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+        headers: { 'Content-Type': 'application/json' },
+      })
       .then(res => res.json())
       .then(data => {
         setFlashMessages(data.flashes)
         setToggle(!toggle);
       });
     }
+    let newCartSize = parseInt(cookies.cartSize) - 1;
+    setCookie("cartSize", newCartSize, { path: '/' });
   }
   return (
     <div className="card mb-3">
@@ -51,6 +61,7 @@ const CheckoutCard = ({urlBase, item, toggle, setToggle, setFlashMessages}) => {
             <hr />
             {!reservation &&
               <RentalUpdateForm
+                cookies={cookies}
                 calendar={item.calendar}
                 toggle={toggle}
                 setToggle={setToggle}

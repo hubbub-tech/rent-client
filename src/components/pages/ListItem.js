@@ -1,14 +1,15 @@
 import React from "react";
+import { useEffect } from 'react';
 
 import ListForm from "../forms/ListForm";
 
-const List = ({ setFlashMessages }) => {
+const ListItem = ({ cookies, setFlashMessages }) => {
   return (
     <main>
       <br />
       <h1 className="text-center">List</h1>
       <p className="text-center">Start your side hustle <i><mark>today</mark></i>.</p>
-      <div className="container" style={{"maxWidth": "900px"}}>
+      <div className="container-md">
         <div className="row justify-content-md-center">
           <div className="col-lg-5">
             <h5 className="text-center">Quick Tips</h5>
@@ -36,7 +37,7 @@ const List = ({ setFlashMessages }) => {
               </ul>
           </div>
           <div className="col-lg-7">
-            <ListForm setFlashMessages={setFlashMessages} />
+            <ListForm cookies={cookies} setFlashMessages={setFlashMessages} />
           </div>
         </div>
       </div>
@@ -45,4 +46,4 @@ const List = ({ setFlashMessages }) => {
   );
 }
 
-export default List;
+export default ListItem;

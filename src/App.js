@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Flash from './components/base/Flash';
@@ -7,12 +8,11 @@ import Navbar from './components/base/Navbar';
 import Footer from './components/base/Footer';
 import Main from './components/pages/Main';
 import Shop from './components/pages/Shop';
-import List from './components/pages/List';
+import ListItem from './components/pages/ListItem';
 import ItemDetails from './components/pages/ItemDetails';
 import Login from './components/pages/Login';
 import Register from './components/pages/Register';
 import Logout from './components/requests/Logout';
-import CheckoutProcessor from './components/requests/CheckoutProcessor';
 import Checkout from './components/pages/Checkout';
 import Account from './components/pages/Account';
 import Rentals from './components/pages/Rentals';
@@ -29,24 +29,22 @@ import Story from './components/static/Story';
 import Faqs from './components/static/Faqs';
 
 const App = () => {
-  const [userId, setUserId] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(null);
   const [flashMessages, setFlashMessages] = useState([]);
-  useEffect(() => {
-    fetch('/login/status')
-    .then(res => res.json())
-    .then(data => {
-      setUserId(data.user_id);
-      setIsLoggedIn(data.user_id ? true : false);
-    });
-  }, []);
+  const [cookies, setCookie, removeCookie] = useCookies(['userId', 'auth', 'cartSize', 'isLoggedIn']);
   return (
     <Router>
       <div className="App">
-        <Navbar userId={userId} isLoggedIn={isLoggedIn} />
-        <Flash flashMessages={flashMessages} setFlashMessages={setFlashMessages} />
+        <Navbar
+          cookies={cookies}
+        />
+        <Flash
+          flashMessages={flashMessages}
+          setFlashMessages={setFlashMessages}
+        />
         <Switch>
-          <Route exact path="/"><Main /></Route>
+          <Route exact path="/">
+            <Main />
+          </Route>
           <Route exact path="/inventory">
             <Shop isSearching={false} />
           </Route>
@@ -54,63 +52,98 @@ const App = () => {
             <Shop isSearching={true} />
           </Route>
           <Route exact path="/list">
-            <List setFlashMessages={setFlashMessages} />
+            <ListItem
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
           </Route>
           <Route exact path="/inventory/i/id=:itemId">
             <ItemDetails
-              isLoggedIn={isLoggedIn}
-              setFlashMessages={setFlashMessages} />
-          </Route>
-          <Route exact path="/accounts/i/edit/id=:itemId">
-            <EditItem setFlashMessages={setFlashMessages} />
-          </Route>
-          <Route exact path="/accounts/u/edit">
-            <EditAccount setFlashMessages={setFlashMessages} />
-          </Route>
-          <Route exact path="/accounts/u/address">
-            <EditUserAddress setFlashMessages={setFlashMessages} />
-          </Route>
-          <Route exact path="/accounts/u/password">
-            <EditPassword setFlashMessages={setFlashMessages} />
-          </Route>
-          <Route exact path="/accounts/o/extend/id=:orderId">
-            <ExtendRental setFlashMessages={setFlashMessages} />
-          </Route>
-          <Route exact path="/accounts/o/early/id=:orderId">
-            <EarlyReturn setFlashMessages={setFlashMessages} />
+              cookies={cookies}
+              setCookie={setCookie}
+              setFlashMessages={setFlashMessages}
+            />
           </Route>
           <Route exact path="/checkout">
-            <Checkout setFlashMessages={setFlashMessages} />
+            <Checkout
+              cookies={cookies}
+              setCookie={setCookie}
+              setFlashMessages={setFlashMessages}
+            />
+          </Route>
+          <Route exact path="/accounts/o/extend/id=:orderId">
+            <ExtendRental
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
+          </Route>
+          <Route exact path="/accounts/o/early/id=:orderId">
+            <EarlyReturn
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
           </Route>
           <Route exact path="/accounts/u/id=:userId">
-            <Account myId={userId} setFlashMessages={setFlashMessages} />
+            <Account
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
           </Route>
           <Route exact path="/accounts/u/orders">
-            <Rentals setFlashMessages={setFlashMessages} />
+            <Rentals
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
           </Route>
           <Route exact path="/schedule/dropoffs/:dropoffDate">
-            <Dropoffs setFlashMessages={setFlashMessages} />
+            <Dropoffs
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
           </Route>
           <Route exact path="/schedule/pickups/:pickupDate">
-            <Pickups setFlashMessages={setFlashMessages} />
+            <Pickups
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
+          </Route>
+          <Route exact path="/accounts/i/edit/id=:itemId">
+            <EditItem
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
+          </Route>
+          <Route exact path="/accounts/u/edit">
+            <EditAccount
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
+          </Route>
+          <Route exact path="/accounts/u/address">
+            <EditUserAddress
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
+          </Route>
+          <Route exact path="/accounts/u/password">
+            <EditPassword
+              cookies={cookies}
+              setFlashMessages={setFlashMessages}
+            />
           </Route>
           <Route exact path="/login">
             <Login
-              isLoggedIn={isLoggedIn}
-              setIsLoggedIn={setIsLoggedIn}
+              cookies={cookies}
+              setCookie={setCookie}
               setFlashMessages={setFlashMessages}
             />
           </Route>
           <Route exact path="/register">
             <Register
               setFlashMessages={setFlashMessages}
-              isLoggedIn={isLoggedIn}
             />
           </Route>
           <Route exact path="/logout"><Logout /></Route>
-          <Route exact path="/checkout/confirmation/token=:token">
-            <CheckoutProcessor setFlashMessages={setFlashMessages} />
-          </Route>
           <Route exact path="/story">
             <Story />
           </Route>

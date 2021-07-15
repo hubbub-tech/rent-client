@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
-const EditPassForm = ({ user, setFlashMessages }) => {
+const EditPassForm = ({ user, cookies, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -26,7 +26,7 @@ const EditPassForm = ({ user, setFlashMessages }) => {
     e.preventDefault();
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/password/submit', {
       method: 'POST',
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth, password }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

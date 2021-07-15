@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import EditAddressForm from '../forms/EditAddressForm';
 
-const EditUserAddress = ({ setFlashMessages }) => {
+const EditUserAddress = ({ cookies, setFlashMessages }) => {
   const [user, setUser] = useState({
     "profile": {},
     "address": {}
@@ -11,7 +11,11 @@ const EditUserAddress = ({ setFlashMessages }) => {
   const addressDisplay = `${user.address.num} ${user.address.street} ${user.address.apt !== '' ? `Apt ${user.address.apt}` : ''}, ${user.address.city}, ${user.address.state} ${user.address.zip_code}`;
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit")
+    fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' },
+    })
     .then(res => res.json())
     .then(data => setUser(data.user));
   }, []);
@@ -32,7 +36,7 @@ const EditUserAddress = ({ setFlashMessages }) => {
           <div className="row">
             <div className="col-sm-3"></div>
             <div className="col-sm-6">
-              <EditAddressForm user={user} setFlashMessages={setFlashMessages} />
+              <EditAddressForm user={user} cookies={cookies} setFlashMessages={setFlashMessages} />
             </div>
             <div className="col-sm-3"></div>
           </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const EditItemForm = ({ item, setFlashMessages }) => {
+const EditItemForm = ({ item, cookies, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
   const formData = new FormData();
@@ -18,7 +18,8 @@ const EditItemForm = ({ item, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-
+    formData.append('userId', cookies.userId);
+    formData.append('auth', cookies.auth);
     formData.append('itemId', item.id);
     formData.append('image', selectedFile);
 

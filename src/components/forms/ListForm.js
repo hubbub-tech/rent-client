@@ -9,7 +9,7 @@ import 'react-day-picker/lib/style.css';
 import { formatDate, parseDate } from 'react-day-picker/moment';
 import AddressForm from './AddressForm';
 
-const ListForm = ({ setFlashMessages }) => {
+const ListForm = ({ cookies, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
   const formData = new FormData();
@@ -89,10 +89,14 @@ const ListForm = ({ setFlashMessages }) => {
   },[startDate, endDate]);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + '/list')
-    .then(res => res.json())
+    fetch(process.env.REACT_APP_SERVER + '/list', {
+      method: 'POST',
+      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(isStatusOK)
     .then(data => setAddress(data.address));
-  }, []);
+  },[]);
   return (
     <form encType="multipart/form-data" onSubmit={submit}>
       <div className="card mx-auto" style={{"maxWidth": "540px"}}>
