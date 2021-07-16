@@ -4,7 +4,9 @@ import { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const Faqs = () => {
+import FeedbackForm from '../forms/FeedbackForm';
+
+const Faqs = ({ setFlashMessages }) => {
   useEffect(() => {
     AOS.init({duration : 2000, once: true});
   }, []);
@@ -199,6 +201,7 @@ const Faqs = () => {
                 below for quick ways to contact us! We’re always responsive and love helping out :)
               </p>
             </div>
+            <FeedbackForm setFlashMessages={setFlashMessages} href={'/faqs'} />
           </div>
         </div>
         <div className="col-sm-1"></div>

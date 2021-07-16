@@ -115,7 +115,7 @@ const App = () => {
             <Story />
           </Route>
           <Route exact path="/faqs">
-            <Faqs />
+            <Faqs setFlashMessages={setFlashMessages} />
           </Route>
           <Route component={Error404} />
         </Switch>
