@@ -18,7 +18,7 @@ const RegisterForm = ({ setFlashMessages }) => {
     "password": null,
     "confirm": null,
     "payment": null
-  }); 
+  });
   const [address, setAddress] = useState({
     "num": null,
     "street": null,
@@ -74,6 +74,7 @@ const RegisterForm = ({ setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault()
+    setFlashMessages(["Loading... hang on for a sec!"]);
     fetch(process.env.REACT_APP_SERVER + '/register', {
       method: 'POST',
       body: JSON.stringify({ user, profile, address }),

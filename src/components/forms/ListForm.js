@@ -40,6 +40,7 @@ const ListForm = ({ cookies, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    setIsValid(false);
     formData.append('userId', cookies.userId);
     formData.append('auth', cookies.auth);
 
@@ -63,7 +64,7 @@ const ListForm = ({ cookies, setFlashMessages }) => {
     formData.append('zip', address.zip_code);
 
     formData.append('image', selectedFile);
-
+    setFlashMessages(["Loading... please wait!"])
     fetch(process.env.REACT_APP_SERVER + '/list/submit', {method: 'POST', body: formData})
     .then(isStatusOK)
     .then(data => {
@@ -73,6 +74,7 @@ const ListForm = ({ cookies, setFlashMessages }) => {
       }
     })
     .catch(error => console.log(error));
+
     window.scrollTo(0, 0);
   }
 

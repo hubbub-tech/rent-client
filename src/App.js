@@ -50,54 +50,54 @@ const App = () => {
           </Route>
           <Route exact path="/list">
             {isLoggedIn && <ListItem cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/inventory/i/id=:itemId">
             <ItemDetails cookies={cookies} setCookie={setCookie} isLoggedIn={isLoggedIn} setFlashMessages={setFlashMessages} />
           </Route>
           <Route exact path="/checkout">
             {isLoggedIn && <Checkout cookies={cookies} setCookie={setCookie} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/o/extend/id=:orderId">
             {isLoggedIn && <ExtendRental cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/o/early/id=:orderId">
             {isLoggedIn && <EarlyReturn cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/u/id=:userId">
             {isLoggedIn && <Account cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/u/orders">
             {isLoggedIn && <Rentals cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/schedule/dropoffs/:dropoffDate">
             {isLoggedIn && <Dropoffs cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/schedule/pickups/:pickupDate">
             {isLoggedIn && <Pickups cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/i/edit/id=:itemId">
             {isLoggedIn && <EditItem cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/u/edit">
             {isLoggedIn && <EditAccount cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/u/address">
             {isLoggedIn && <EditUserAddress cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/accounts/u/password">
-            {!isLoggedIn && <EditPassword cookies={cookies} setFlashMessages={setFlashMessages} />}
-            {isLoggedIn && <Redirect to='/' />}
+            {isLoggedIn && <EditPassword cookies={cookies} setFlashMessages={setFlashMessages} />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/login">
             {!isLoggedIn && <Login cookies={cookies} setCookie={setCookie} setFlashMessages={setFlashMessages} />}
@@ -109,7 +109,7 @@ const App = () => {
           </Route>
           <Route exact path="/logout">
             {isLoggedIn && <Logout setCookie={setCookie} removeCookie={removeCookie} setFlashMessages={setFlashMessages} />}
-            {!isLoggedIn && <Redirect to='/' />}
+            {!isLoggedIn && <Redirect to='/login' />}
           </Route>
           <Route exact path="/story">
             <Story />
