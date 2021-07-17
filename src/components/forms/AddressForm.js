@@ -15,7 +15,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             maxLength="49"
             required={required}
           />
-        <label htmlFor="addressNum">Building Number</label>
+        <label htmlFor="addressNum">House Number</label>
         </div>
         <div className="form-floating mb-3">
           <input
@@ -28,7 +28,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             maxLength="49"
             required={required}
           />
-          <label htmlFor="addressStreet">Street</label>
+        <label htmlFor="addressStreet">Street Name</label>
         </div>
       </div>
       <div className="col-md">

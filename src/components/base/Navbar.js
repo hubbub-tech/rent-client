@@ -40,6 +40,11 @@ const Navbar = ({ cookies, isLoggedIn }) => {
                 <a className="nav-link" href="/accounts/u/orders">My Rentals</a>
               </li>
             }
+            {isLoggedIn &&
+              <li className="nav-item">
+                <a className="nav-link" href="/logout">Logout</a>
+              </li>
+            }
             {!isLoggedIn &&
               <li className="nav-item">
                 <a className="nav-link" href="/login">Login</a>

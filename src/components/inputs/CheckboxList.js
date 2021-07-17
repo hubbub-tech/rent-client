@@ -4,6 +4,18 @@ import { useState } from 'react';
 
 const CheckboxList = ({ checkboxes, onChangeCheckbox }) => {
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  const onChangeList = (e) => {
+    let copySelectedCheckboxes;
+    if (selectedCheckboxes.includes(e.target.value)) {
+      let index = selectedCheckboxes.indexOf(e.target.value);
+      copySelectedCheckboxes = [...selectedCheckboxes];
+      copySelectedCheckboxes.splice(index);
+    } else {
+      copySelectedCheckboxes = [...selectedCheckboxes, e.target.value]
+    }
+    setSelectedCheckboxes(copySelectedCheckboxes);
+    onChangeCheckbox(copySelectedCheckboxes);
+  }
   return (
     <div className="row">
       {checkboxes.map((checkbox, index) => (
@@ -14,18 +26,7 @@ const CheckboxList = ({ checkboxes, onChangeCheckbox }) => {
               value={checkbox}
               type="checkbox"
               checked={selectedCheckboxes.includes(checkbox)}
-              onChange={e => {
-                let copySelectedCheckboxes;
-                if (selectedCheckboxes.includes(e.target.value)) {
-                  let index = selectedCheckboxes.indexOf(e.target.value)
-                  copySelectedCheckboxes = [...selectedCheckboxes];
-                  copySelectedCheckboxes.splice(index);
-                } else {
-                  copySelectedCheckboxes = [...selectedCheckboxes, e.target.value]
-                }
-                setSelectedCheckboxes(copySelectedCheckboxes);
-                onChangeCheckbox(copySelectedCheckboxes);
-              }}
+              onChange={onChangeList}
             />
             <span> { checkbox }</span>
           </label>

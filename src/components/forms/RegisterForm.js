@@ -74,7 +74,6 @@ const RegisterForm = ({ setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault()
-    setFlashMessages(["Loading... hang on for a sec!"]);
     fetch(process.env.REACT_APP_SERVER + '/register', {
       method: 'POST',
       body: JSON.stringify({ user, profile, address }),
@@ -93,7 +92,7 @@ const RegisterForm = ({ setFlashMessages }) => {
   }
   return (
     <form onSubmit={submit}>
-      <div className="card mx-sm-auto mx-2" style={{"maxWidth": "540px"}}>
+      <div className="card">
         <div className="step-1 card-body">
           <FormErrors errors={errors.server} color={"red"} />
           <div className="row">
