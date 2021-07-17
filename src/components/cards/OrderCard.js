@@ -62,6 +62,7 @@ const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
       })
       .then(isStatusOK)
       .then(data => setFlashMessages(data.flashes));
+      history.push(`/accounts/u/id=${cookies.userId}`);
       window.scrollTo(0, 0);
     } else {
       setFlashMessages([`Your order for ${order.item.name} was not cancelled.`]);
@@ -74,7 +75,7 @@ const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
         <div className="row">
           <div className="col-md-3 my-2">
             <p className="text-start my-0"><strong>Order Placed</strong></p>
-            <p className="text-start my-0">{printDate(order.date_placed)}
+            <p className="text-start my-0"><span>{printDate(order.date_placed)} </span>
               {order.is_extended && <span className="badge bg-success">extended</span>}
             </p>
           </div>
@@ -87,15 +88,17 @@ const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
             <p className="text-start my-0">{printMoney(order.reservation.deposit)}</p>
           </div>
           <div className="col-md-3 my-2">
-            <div className="d-grid gap-2">
-              <button
-                type="button"
-                className="btn btn-dark mx-1 my-1"
-                onClick={handleReceiptOnClick}
-              >
-                Download Receipt
-              </button>
-            </div>
+            {/*
+              <div className="d-grid gap-2">
+                <button
+                  type="button"
+                  className="btn btn-dark mx-1 my-1"
+                  onClick={handleReceiptOnClick}
+                >
+                  Download Receipt
+                </button>
+              </div>
+            */}
           </div>
         </div>
       </div>
