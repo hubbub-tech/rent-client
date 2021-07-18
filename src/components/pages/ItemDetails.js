@@ -112,9 +112,9 @@ const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
 
               <p className="text-start fs-5 fw-bold">More Info</p>
                 <p><strong>Location</strong> - {item.address.city}, {item.address.state}</p>
-                <p><strong>Condition</strong> - { item.details.condition }</p>
-                <p><strong>Weight</strong> - { item.details.weight }</p>
-                <p><strong>Volume</strong> - { item.details.volume }</p>
+                <p><strong>Condition</strong> - { item.details.condition }/3</p>
+                <p><strong>Weight</strong> - { item.details.weight }/3</p>
+                <p><strong>Volume</strong> - { item.details.volume }/3</p>
               </div>
             </div>
           </div>

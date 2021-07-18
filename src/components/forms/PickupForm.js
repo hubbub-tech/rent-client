@@ -54,10 +54,15 @@ const PickupForm = ({ orders, cookies, pickupDate, address, setFlashMessages, se
         <div className="col-md-5">
           <div className="row no-gutters">
             <h4 className="text-start">Orders to Pickup</h4>
-            <div className="col-6">
-              {orders.map((order) => <p className="text-start" key={order.id}>{order.item.name}</p>)}
+            <div className="col-5 border-end border-dark">
+              <p className="text-start fw-bold mb-1">Items</p>
+              <ul class="list-group list-group-flush">
+                {orders.map((order) => <li class="list-group-item" key={order.id}>{order.item.name}</li>)}
+              </ul>
             </div>
+            <div className="col-1"></div>
             <div className="col-6">
+              <p className="text-start fw-bold">Timeslots</p>
               <CheckboxList checkboxes={timeslots} onChangeCheckbox={setTimesChecked} />
             </div>
           </div>

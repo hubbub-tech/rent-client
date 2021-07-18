@@ -2,7 +2,8 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import FormErrors from '../errors/FormErrors'
+import FormErrors from '../errors/FormErrors';
+import CheckboxList from '../inputs/CheckboxList';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 
@@ -29,6 +30,9 @@ const ListForm = ({ cookies, setFlashMessages }) => {
   const [address, setAddress] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
+  const tags = ["books", "kitchen", "hobby", "fitness", "entertainment", "school"];
+  const [tagsChecked, setTagsChecked] = useState([]);
+
   const [isValid, setIsValid] = useState(false);
   const [errors, setErrors] = useState([]);
   const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
@@ -62,6 +66,7 @@ const ListForm = ({ cookies, setFlashMessages }) => {
     formData.append('city', address.city);
     formData.append('state', address.state);
     formData.append('zip', address.zip_code);
+    formData.append('tags', tagsChecked)
 
     formData.append('image', selectedFile);
     setFlashMessages(["Loading... please wait!"])
@@ -188,6 +193,10 @@ const ListForm = ({ cookies, setFlashMessages }) => {
               onChange={e => setSelectedFile(e.target.files[0])}
               required
             />
+          </div>
+          <div className="row">
+            <p className="text-start my-1">Tag your Listing</p>
+            <CheckboxList checkboxes={tags} onChangeCheckbox={setTagsChecked} />
           </div>
           <div className="row">
             <p className="text-start my-1">More Info</p>
