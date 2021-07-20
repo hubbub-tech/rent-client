@@ -26,7 +26,7 @@ const expDecay = (retailPrice, timeNow, discount = .50, timeTotal = 28) => {
     timeTotal = 56;
   }
   let compound = retailPrice / 90;
-  let a = compound * Math.pow(10, - Math.log((1 - discount), 10) / (timeTotal - 1));
+  let a = compound * Math.pow(10, - (Math.log(1 - discount) / Math.log(10)) / (timeTotal - 1));
   let r = 1 - (compound / a);
   let y = a * Math.pow(1 - r, timeNow);
 
