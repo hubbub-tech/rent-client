@@ -16,7 +16,7 @@ const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + '/checkout', {
       method: 'POST',
       body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(res => res.json())
     .then(data => {

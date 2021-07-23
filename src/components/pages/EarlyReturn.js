@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useState, useEffect } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import { printDate } from '../../helper.js';
 import EarlyForm from '../forms/EarlyForm';

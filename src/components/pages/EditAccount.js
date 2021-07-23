@@ -1,13 +1,9 @@
 import React from "react";
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import EditAccountForm from "../forms/EditAccountForm";
 
 const EditAccount = ({ cookies, setFlashMessages }) => {
-  let history = useHistory();
-  let redirectUrl;
-
   const [user, setUser] = useState({
     "profile": {},
     "address": {}

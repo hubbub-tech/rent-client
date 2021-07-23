@@ -20,9 +20,10 @@ const CheckoutCard = ({cookies, setCookie, urlBase, item, toggle, setToggle, set
 
   const removeItem = (e) => {
     e.preventDefault()
-    if (reservation) {
-      let startDate = reservation.date_started;
-      let endDate = reservation.date_ended;
+    if (item.reservation) {
+      let startDate = item.reservation.date_started;
+      let endDate = item.reservation.date_ended;
+      
       fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}&start=${startDate}&end=${endDate}`, {
         method: 'POST',
         body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
@@ -34,6 +35,7 @@ const CheckoutCard = ({cookies, setCookie, urlBase, item, toggle, setToggle, set
         setToggle(!toggle);
       });
     } else {
+      console.log("no, in here")
       fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}`, {
         method: 'POST',
         body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),

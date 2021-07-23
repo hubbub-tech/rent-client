@@ -56,8 +56,8 @@ const PickupForm = ({ orders, cookies, pickupDate, address, setFlashMessages, se
             <h4 className="text-start">Orders to Pickup</h4>
             <div className="col-5 border-end border-dark">
               <p className="text-start fw-bold mb-1">Items</p>
-              <ul class="list-group list-group-flush">
-                {orders.map((order) => <li class="list-group-item" key={order.id}>{order.item.name}</li>)}
+              <ul className="list-group list-group-flush">
+                {orders.map((order) => <li className="list-group-item" key={order.id}>{order.item.name}</li>)}
               </ul>
             </div>
             <div className="col-1"></div>
