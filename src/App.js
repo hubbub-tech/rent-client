@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-
+ 
 import Flash from './components/base/Flash';
 import Navbar from './components/base/Navbar';
 import Footer from './components/base/Footer';
