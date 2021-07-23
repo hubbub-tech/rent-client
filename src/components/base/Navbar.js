@@ -19,45 +19,50 @@ const Navbar = ({ cookies, isLoggedIn }) => {
           data-toggle="collapse"
           data-target="#navbarNavDropdown"
           aria-controls="navbarNavDropdown"
-          aria-expanded={!isNavCollapsed ? true : false}
+          aria-expanded={!isNavCollapsed}
           aria-label="Toggle navigation"
           onClick={handleNavCollapse}
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        <div className={`${isNavCollapsed ? 'collapse' : ''} navbar-collapse`} id="navbarNavDropdown">
+        <div className={`${isNavCollapsed && 'collapse'} navbar-collapse`} id="navbarNavDropdown">
           <ul className="navbar-nav">
-            <li className="nav-item">
+            <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
               <a className="nav-link active fw-bold" aria-current="page" href="/inventory">Rent Now</a>
             </li>
             {isLoggedIn &&
-              <li className="nav-item">
+              <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
                 <a className="nav-link" href={`/accounts/u/id=${ cookies.userId }`}>My Profile</a>
               </li>
             }
             {isLoggedIn &&
-              <li className="nav-item">
+              <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
                 <a className="nav-link" href="/accounts/u/orders">My Rentals</a>
               </li>
             }
             {isLoggedIn &&
-              <li className="nav-item">
+              <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
                 <a className="nav-link" href="/logout">Logout</a>
               </li>
             }
             {!isLoggedIn &&
-              <li className="nav-item">
+              <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
                 <a className="nav-link" href="/login">Login</a>
               </li>
             }
             {!isLoggedIn &&
-              <li className="nav-item">
+              <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
                 <a className="nav-link" href="/register">Sign Up</a>
               </li>
             }
           </ul>
           <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
-            {isNavCollapsed && <SearchForm />}
+            {isLoggedIn && !isNavCollapsed &&
+              <li className="nav-item mb-2 mx-auto">
+                <a className="nav-link" href="/checkout">Cart ({cookies.cartSize})</a>
+              </li>
+            }
+            <SearchForm />
             {isNavCollapsed &&
               <a href="/checkout">
                 <svg
@@ -72,11 +77,6 @@ const Navbar = ({ cookies, isLoggedIn }) => {
                     d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
                 </svg>
               </a>
-            }
-            {isLoggedIn && !isNavCollapsed &&
-              <li className="nav-item">
-                <a className="nav-link" href="/checkout">Cart ({cookies.cartSize})</a>
-              </li>
             }
           </ul>
         </div>
