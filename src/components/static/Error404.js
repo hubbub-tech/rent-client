@@ -6,8 +6,9 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 import { useAnalytics } from '../base/GoogleTags';
+import FeedbackForm from '../forms/FeedbackForm';
 
-const Error404 = () => {
+const Error404 = ({ setFlashMessages }) => {
   const location = useLocation();
   useAnalytics(location.pathname);
 
@@ -31,6 +32,7 @@ const Error404 = () => {
               src="../static/backgrounds/obiwan404.jpeg"
               alt="Jedi Knight"
             />
+            <FeedbackForm setFlashMessages={setFlashMessages} href={location.pathname} />
           </div>
           <div className="col-sm-3"></div>
         </div>

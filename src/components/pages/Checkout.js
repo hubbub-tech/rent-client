@@ -64,7 +64,11 @@ const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
               No items in cart. Check out our <a href="/inventory">Inventory</a>!
             </p>
           }
-          <FeedbackForm setFlashMessages={setFlashMessages} href={'/checkout'} />
+          <FeedbackForm
+            setFlashMessages={setFlashMessages}
+            href={'/checkout'}
+            userId={cookies.userId}
+          />
           </div>
           <div className="col-md-3">
             <PricingCard

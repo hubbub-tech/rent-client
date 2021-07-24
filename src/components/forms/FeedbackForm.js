@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const FeedbackForm = ({ setFlashMessages, href }) => {
+const FeedbackForm = ({ setFlashMessages, href, userId = null }) => {
   const [feedback, setFeedback] = useState(null);
   let statusOK;
 
@@ -14,7 +14,7 @@ const FeedbackForm = ({ setFlashMessages, href }) => {
     e.preventDefault();
     fetch(process.env.REACT_APP_SERVER + '/feedback/submit', {
       method: 'POST',
-      body: JSON.stringify({ feedback, href }),
+      body: JSON.stringify({ feedback, href, userId }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
- 
+
 import Flash from './components/base/Flash';
 import Navbar from './components/base/Navbar';
 import Footer from './components/base/Footer';
@@ -117,7 +117,9 @@ const App = () => {
           <Route exact path="/faqs">
             <Faqs setFlashMessages={setFlashMessages} />
           </Route>
-          <Route component={Error404} />
+          <Route>
+            <Error404 setFlashMessages={setFlashMessages }/>
+          </Route>
         </Switch>
         <Footer />
       </div>
