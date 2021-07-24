@@ -1,11 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CookiesProvider } from 'react-cookie';
+import ReactGA from 'react-ga';
 
-import 'bootstrap/scss/bootstrap.scss'
+import 'bootstrap/scss/bootstrap.scss';
 import './index.css';
 
 import App from './App';
+
+ReactGA.initialize( process.env.UA_TOKEN );
 
 ReactDOM.render(
   <CookiesProvider>

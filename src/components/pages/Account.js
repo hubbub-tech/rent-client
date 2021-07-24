@@ -1,12 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 
+import { useAnalytics } from '../base/GoogleTags';
 import { printDate } from '../../helper.js'
 import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
 
 const Account = ({ cookies, setFlashMessages }) => {
+  const location = useLocation();
+  useAnalytics(location.pathname);
+
   const { userId } = useParams();
   const [user, setUser] = useState({"profile": {}, "cart": {}});
   const isOwner = cookies.userId == userId;

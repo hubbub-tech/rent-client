@@ -1,8 +1,13 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 
+import { useAnalytics } from '../base/GoogleTags';
 import RegisterForm from '../forms/RegisterForm';
 
 const Register = ({ setFlashMessages }) => {
+  const location = useLocation();
+  useAnalytics(location.pathname);
+
   return (
     <main>
       <div className="container-md my-5">

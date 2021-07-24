@@ -1,11 +1,16 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
+import { useAnalytics } from '../base/GoogleTags';
 import FeedbackForm from '../forms/FeedbackForm';
 import CheckoutCard from '../cards/CheckoutCard';
 import PricingCard from '../cards/PricingCard';
 
 const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
+  const location = useLocation();
+  useAnalytics(location.pathname);
+
   const [cart, setCart] = useState({});
   const [items, setItems] = useState([]);
   const [toggle, setToggle] = useState(false);

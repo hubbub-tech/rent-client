@@ -1,8 +1,13 @@
 import React from "react";
+import { useLocation } from 'react-router-dom';
 
+import { useAnalytics } from '../base/GoogleTags';
 import ListForm from "../forms/ListForm";
 
 const ListItem = ({ cookies, setFlashMessages }) => {
+  const location = useLocation();
+  useAnalytics(location.pathname);
+
   return (
     <main>
       <br />

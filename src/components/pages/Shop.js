@@ -1,13 +1,17 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useLocation, Link } from 'react-router-dom';
 
+import { useAnalytics } from '../base/GoogleTags';
 import MicroCard from '../cards/MicroCard';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const Shop = ({ isSearching }) => {
+  const location = useLocation();
+  useAnalytics(location.pathname);
+
   const { searchTerm } = useParams();
   const [urlBase, setUrlBase] = useState(null);
   const [items, setItems] = useState([]);

@@ -1,13 +1,20 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
+
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+import { useAnalytics } from '../base/GoogleTags';
 import OrderCard from '../cards/OrderCard';
 
 const Rentals = ({ cookies, setFlashMessages }) => {
+  const location = useLocation();
+  useAnalytics(location.pathname);
+
   const [isLoading, setIsLoading] = useState(true);
   const [urlBase, setUrlBase] = useState(null);
   const [orders, setOrders] = useState([]);

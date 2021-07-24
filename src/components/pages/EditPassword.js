@@ -1,9 +1,14 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
+import { useAnalytics } from '../base/GoogleTags';
 import EditPassForm from '../forms/EditPassForm';
 
 const EditPassword = ({ cookies, setFlashMessages }) => {
+  const location = useLocation();
+  useAnalytics(location.pathname);
+
   const [user, setUser] = useState({"address": {}, "profile": {}});
 
   useEffect(() => {
