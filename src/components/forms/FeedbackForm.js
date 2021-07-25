@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const FeedbackForm = ({ setFlashMessages, href, userId = null }) => {
+const FeedbackForm = ({ setFlashMessages, userId = null }) => {
   const location = useLocation();
   const [feedback, setFeedback] = useState(null);
   let statusOK;

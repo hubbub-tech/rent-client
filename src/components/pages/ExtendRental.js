@@ -116,7 +116,7 @@ const ExtendRental = ({ cookies, setFlashMessages }) => {
                 </div>
               </div>
             </div>
-            <FeedbackForm setFlashMessages={setFlashMessages} href={`/accounts/o/extend/id=${orderId}`} />
+            <FeedbackForm setFlashMessages={setFlashMessages} />
           </div>
           <div className="col-md-2"></div>
         </div>

@@ -201,7 +201,7 @@ const Faqs = ({ setFlashMessages }) => {
                 below for quick ways to contact us! We’re always responsive and love helping out :)
               </p>
             </div>
-            <FeedbackForm setFlashMessages={setFlashMessages} href={'/faqs'} />
+            <FeedbackForm setFlashMessages={setFlashMessages} />
           </div>
         </div>
         <div className="col-sm-1"></div>

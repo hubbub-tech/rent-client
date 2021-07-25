@@ -77,7 +77,7 @@ const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
               className="card-img-top rounded"
               src={`${urlBase}/${itemId}.jpg`}
               alt={item.name} />
-            <FeedbackForm setFlashMessages={setFlashMessages} href={`/inventory/i/id=${itemId}`} />
+            <FeedbackForm setFlashMessages={setFlashMessages} />
           </div>
           <div className="col-md-4 mt-2">
             <p className="card-text text-center">
