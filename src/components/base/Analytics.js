@@ -8,7 +8,7 @@ const useAnalytics = () => {
 
   useEffect(() => {
       if (!window.location.href.includes("localhost")) {
-        ReactGA.initialize(process.env.UA_TOKEN);
+        ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID);
         console.log("Initializing Thrusters...")
       }
       setInitialized(true);
