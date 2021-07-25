@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
+import ReactGA from 'react-ga';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Flash from './components/base/Flash';
@@ -30,6 +31,8 @@ import EditUserAddress from './components/pages/EditUserAddress';
 import Story from './components/static/Story';
 import Faqs from './components/static/Faqs';
 import Error404 from './components/static/Error404';
+
+ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID);
 
 const App = () => {
   const [flashMessages, setFlashMessages] = useState([]);
