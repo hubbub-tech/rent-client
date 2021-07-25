@@ -24,7 +24,8 @@ const ExtendForm = ({ order, cookies, setFlashMessages, setReservation }) => {
         "userId": cookies.userId,
         "auth": cookies.auth,
         startDate,
-        "endDate": extendDate
+        "endDate": extendDate,
+        "isDiscounted": true
       }),
       headers: { 'Content-Type': 'application/json' }
     })

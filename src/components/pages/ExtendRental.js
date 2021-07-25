@@ -115,6 +115,11 @@ const ExtendRental = ({ cookies, setFlashMessages }) => {
                   </div>
                 </div>
               </div>
+              <div className="row my-1">
+                <div className="col-12">
+                  <p className="text-center text-hubbub">All extensions are discounted 35% from the first time rental rate!</p>
+                </div>
+              </div>
             </div>
             <FeedbackForm setFlashMessages={setFlashMessages} />
           </div>

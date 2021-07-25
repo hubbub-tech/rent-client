@@ -21,7 +21,8 @@ const RentalForm = ({ cookies, calendar, setFlashMessages, setReservation }) => 
         "userId": cookies.userId,
         "auth": cookies.auth,
         startDate,
-        endDate
+        endDate,
+        "isDiscounted": false
       }),
       headers: { 'Content-Type': 'application/json' }
     })
