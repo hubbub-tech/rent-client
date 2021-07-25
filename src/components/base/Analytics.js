@@ -9,7 +9,7 @@ const useAnalytics = () => {
   useEffect(() => {
       if (!window.location.href.includes("localhost")) {
         ReactGA.initialize(process.env.UA_TOKEN);
-        console.log("Initializing gtags...")
+        console.log("Initializing Thrusters...")
       }
       setInitialized(true);
   }, []);
