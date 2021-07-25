@@ -1,17 +1,11 @@
 import React from 'react';
-
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-import { useAnalytics } from '../base/GoogleTags';
 import { printDate } from '../../helper.js';
 import EarlyForm from '../forms/EarlyForm';
 
 const EarlyReturn = ({ cookies, setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   const { orderId } = useParams();
   const [order, setOrder] = useState({
     "item": {"details": {}, "calendar": {}}

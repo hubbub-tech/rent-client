@@ -1,16 +1,11 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-import { useAnalytics } from '../base/GoogleTags';
 import { printDate } from '../../helper.js';
 import EditItemForm from "../forms/EditItemForm";
 
 const EditItem = ({ cookies, setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   let history = useHistory();
   let statusOK;
 

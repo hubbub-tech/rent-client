@@ -1,15 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-import { useAnalytics } from '../base/GoogleTags';
 import TestimonialCarousel from '../carousels/TestimonialCarousel';
 
 const Main = () => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   const [testimonials, setTestimonials] = useState([]);
   const categories = [
     {"link": "/search=kitchen", "title": "Kitchen", "alt": "Pots"},

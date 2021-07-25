@@ -1,9 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-import { useAnalytics } from '../base/GoogleTags';
 import { printDate, printMoney } from '../../helper.js';
 import FeedbackForm from '../forms/FeedbackForm';
 import RentalForm from '../forms/RentalForm';
@@ -13,9 +11,6 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   const { itemId } = useParams();
   const [item, setItem] = useState({
     "address": {},

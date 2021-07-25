@@ -2,17 +2,12 @@ import React from 'react';
 
 import { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-import { useAnalytics } from '../base/GoogleTags';
 import { printDate, printMoney } from '../../helper.js';
 import FeedbackForm from '../forms/FeedbackForm';
 import ExtendForm from '../forms/ExtendForm';
 
 const ExtendRental = ({ cookies, setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   let statusOK;
   let history = useHistory();
   const { orderId } = useParams();

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { CookiesProvider } from 'react-cookie';
-import ReactGA from 'react-ga';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 import 'bootstrap/scss/bootstrap.scss';
 import './index.css';
@@ -10,7 +10,9 @@ import App from './App';
 
 ReactDOM.render(
   <CookiesProvider>
-    <App />
+    <Router>
+      <App />
+    </Router>
   </CookiesProvider>,
   document.getElementById('root')
 );

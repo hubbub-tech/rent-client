@@ -1,7 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 const FeedbackForm = ({ setFlashMessages, href, userId = null }) => {
+  const location = useLocation();
   const [feedback, setFeedback] = useState(null);
   let statusOK;
 
@@ -14,7 +16,7 @@ const FeedbackForm = ({ setFlashMessages, href, userId = null }) => {
     e.preventDefault();
     fetch(process.env.REACT_APP_SERVER + '/feedback/submit', {
       method: 'POST',
-      body: JSON.stringify({ feedback, href, userId }),
+      body: JSON.stringify({ feedback, href: location.pathname + location.search, userId }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

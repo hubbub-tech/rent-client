@@ -1,14 +1,9 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
-import { useAnalytics } from '../base/GoogleTags';
 import EditAddressForm from '../forms/EditAddressForm';
 
 const EditUserAddress = ({ cookies, setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   const [user, setUser] = useState({
     "profile": {},
     "address": {}

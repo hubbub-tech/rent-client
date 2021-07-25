@@ -1,13 +1,8 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { Redirect, useLocation } from 'react-router-dom';
-
-import { useAnalytics } from '../base/GoogleTags';
+import { Redirect } from 'react-router-dom';
 
 const Logout = ({ setCookie, removeCookie, setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   useEffect(() => {
     removeCookie('userId');
     removeCookie('cartSize');

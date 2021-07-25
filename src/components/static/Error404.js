@@ -1,17 +1,12 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-import { useAnalytics } from '../base/GoogleTags';
 import FeedbackForm from '../forms/FeedbackForm';
 
 const Error404 = ({ setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
   }, []);
@@ -32,7 +27,7 @@ const Error404 = ({ setFlashMessages }) => {
               src="../static/backgrounds/obiwan404.jpeg"
               alt="Jedi Knight"
             />
-            <FeedbackForm setFlashMessages={setFlashMessages} href={location.pathname} />
+            <FeedbackForm setFlashMessages={setFlashMessages} />
           </div>
           <div className="col-sm-3"></div>
         </div>

@@ -1,16 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
 
-import { useAnalytics } from '../base/GoogleTags';
 import { printDate } from '../../helper.js';
 import PickupForm from '../forms/PickupForm';
 
 const Pickups = ({ cookies, setFlashMessages }) => {
-  const location = useLocation();
-  useAnalytics(location.pathname);
-
   const { pickupDate } = useParams();
   const [orders, setOrders] = useState([]);
   const [address, setAddress] = useState({});
