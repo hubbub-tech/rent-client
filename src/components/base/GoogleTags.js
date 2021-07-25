@@ -8,6 +8,7 @@ export const makePageView = (pageName) => {
 
 export const useAnalytics = (pageName) => {
   useEffect(() => {
+    ReactGA.initialize( process.env.UA_TOKEN );
     makePageView(pageName);
   }, [pageName]);
 }

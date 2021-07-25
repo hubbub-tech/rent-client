@@ -8,8 +8,6 @@ import './index.css';
 
 import App from './App';
 
-ReactGA.initialize( process.env.UA_TOKEN );
-
 ReactDOM.render(
   <CookiesProvider>
     <App />
