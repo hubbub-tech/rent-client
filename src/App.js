@@ -32,8 +32,6 @@ import Story from './components/static/Story';
 import Faqs from './components/static/Faqs';
 import Error404 from './components/static/Error404';
 
-ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID);
-
 const App = () => {
   const [flashMessages, setFlashMessages] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies(['userId', 'auth', 'cartSize', 'isLoggedIn']);
