@@ -27,6 +27,8 @@ import EditPassword from './components/pages/EditPassword';
 import ExtendRental from './components/pages/ExtendRental';
 import EarlyReturn from './components/pages/EarlyReturn';
 import EditUserAddress from './components/pages/EditUserAddress';
+import RecoverPassword from './components/pages/RecoverPassword';
+import ResetPassword from './components/pages/ResetPassword';
 
 import Story from './components/static/Story';
 import Faqs from './components/static/Faqs';
@@ -114,6 +116,14 @@ const App = () => {
         <Route exact path="/logout">
           {isLoggedIn && <Logout setCookie={setCookie} removeCookie={removeCookie} setFlashMessages={setFlashMessages} />}
           {!isLoggedIn && <Redirect to='/login' />}
+        </Route>
+        <Route exact path="/password/recovery">
+          {!isLoggedIn && <RecoverPassword setFlashMessages={setFlashMessages} />}
+          {isLoggedIn && <Redirect to='/' />}
+        </Route>
+        <Route exact path="/password/reset/token=:resetToken">
+          {!isLoggedIn && <ResetPassword setFlashMessages={setFlashMessages} />}
+          {isLoggedIn && <Redirect to='/' />}
         </Route>
         <Route exact path="/story">
           <Story />
