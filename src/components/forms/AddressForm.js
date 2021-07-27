@@ -12,7 +12,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             name="addressNum"
             onChange={e => setAddress({ ...address, num: e.target.value })}
             minLength="1"
-            maxLength="49"
+            maxLength="10"
             required={required}
           />
         <label htmlFor="addressNum">House Number</label>
@@ -25,7 +25,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             name="addressStreet"
             onChange={e => setAddress({ ...address, street: e.target.value })}
             minLength="1"
-            maxLength="49"
+            maxLength="90"
             required={required}
           />
         <label htmlFor="addressStreet">Street Name</label>
@@ -40,7 +40,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             name="addressApt"
             onChange={e => setAddress({ ...address, apt: e.target.value })}
             minLength="1"
-            maxLength="49"
+            maxLength="19"
           />
           <label htmlFor="addressApt">Apartment</label>
         </div>
@@ -52,7 +52,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             name="addressZip"
             onChange={e => setAddress({ ...address, zip: e.target.value })}
             minLength="1"
-            maxLength="49"
+            maxLength="9"
             required={required}
           />
           <label htmlFor="addressZip">Zip Code</label>
