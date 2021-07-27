@@ -84,7 +84,7 @@ const LoginForm = ({ cookies, setCookie, setFlashMessages }) => {
           <small className="card-text">
             <font size="-1">
               Not on Hubbub yet? Sign up <Link to="/register">here</Link>!
-              Or forgot your password? Get some help <Link to="/password/recovery">here</Link>!
+              Or forgot your password? Email <a href="mailto:hubbubcu@gmail.com">us</a> to reset it.
             </font>
           </small>
         </div>
