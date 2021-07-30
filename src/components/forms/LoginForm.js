@@ -28,9 +28,9 @@ const LoginForm = ({ setFlashMessages }) => {
     .then(data => {
       setFlashMessages(data.flashes);
       if (statusOK) {
-        Cookies.set('hubbubToken', data.hubbubToken, { expires: 7 });
+        Cookies.set('hubbubToken', data.hubbubToken, { expires: 7, sameSite: 'none', secure: true});
         Cookies.set('cartSize', data.cartSize, { expires: 7 });
-        Cookies.set('hubbubId', data.hubbubId, { expires: 7 });
+        Cookies.set('hubbubId', data.hubbubId, { expires: 7, sameSite: 'none', secure: true });
         history.push("/");
       } else {
         setErrors(data.errors);
