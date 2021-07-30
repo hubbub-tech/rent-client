@@ -1,7 +1,7 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import Cookies from 'js-cookie';
 
 import FeedbackForm from '../forms/FeedbackForm';
 import CheckoutCard from '../cards/CheckoutCard';
@@ -25,8 +25,12 @@ const Checkout = ({ setFlashMessages }) => {
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/checkout', {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

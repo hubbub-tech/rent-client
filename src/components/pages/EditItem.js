@@ -1,4 +1,5 @@
 import React from "react";
+import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -23,8 +24,12 @@ const EditItem = ({ setFlashMessages }) => {
   });
 
   useEffect(() => {
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/i/edit/id=${itemId}`, {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

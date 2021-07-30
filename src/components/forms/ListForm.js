@@ -111,8 +111,12 @@ const ListForm = ({ setFlashMessages }) => {
   },[startDate, endDate]);
 
   useEffect(() => {
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/list', {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

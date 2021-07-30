@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
@@ -17,8 +18,12 @@ const EditPassword = ({ setFlashMessages }) => {
   const [user, setUser] = useState({"address": {}, "profile": {}});
 
   useEffect(() => {
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

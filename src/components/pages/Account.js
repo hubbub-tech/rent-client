@@ -1,6 +1,6 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
+import { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
 import { printDate } from '../../helper.js'
@@ -25,8 +25,11 @@ const Account = ({ setFlashMessages }) => {
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/u/id=${userId}`, {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

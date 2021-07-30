@@ -1,6 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const CheckoutForm = ({ setFlashMessages}) => {
@@ -15,8 +15,12 @@ const CheckoutForm = ({ setFlashMessages}) => {
 
   const submit = (e) => {
     e.preventDefault()
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/checkout/submit', {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

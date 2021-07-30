@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 
@@ -20,8 +21,12 @@ const Pickups = ({ setFlashMessages }) => {
   const [address, setAddress] = useState({});
 
   useEffect(() => {
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/schedule/pickups/${pickupDate}`, {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

@@ -1,6 +1,6 @@
-import moment from 'moment';
 import React from 'react';
 import Cookies from 'js-cookie';
+import moment from 'moment';
 import { useHistory, Link } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
@@ -18,9 +18,13 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
   }
 
   const handleReceiptOnClick = () => {
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     let fileName = `D${todaysDateStr}ID${order.id}P${order.date_placed}.txt`;
     fetch(process.env.REACT_APP_SERVER + `/accounts/o/receipt/id=${order.id}/${fileName}`, {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {
