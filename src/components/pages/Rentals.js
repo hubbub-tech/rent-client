@@ -26,7 +26,7 @@ const Rentals = ({ setFlashMessages }) => {
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/orders', {
-      credentials: 'include'
+      credentials: 'same-origin'
     })
     .then(isStatusOK)
     .then(data => {
