@@ -26,13 +26,13 @@ const EarlyForm = ({ order, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     if (window.confirm("Are you sure you want to early return this order? This is different from scheduling a pickup.")) {
       fetch(process.env.REACT_APP_SERVER + "/accounts/o/early/submit", {
         method: 'POST',
         body: JSON.stringify({
-          userId,
+          hubbubId,
           hubbubToken,
           earlyDate,
           "orderId": order.id

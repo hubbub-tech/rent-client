@@ -42,11 +42,11 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
       startDate = reservation.date_started;
       endDate = reservation.date_ended;
     }
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/add/i/id=${itemId}`, {
       method: 'POST',
-      body: JSON.stringify({ userId, hubbubToken, startDate, endDate }),
+      body: JSON.stringify({ hubbubId, hubbubToken, startDate, endDate }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => res.json())

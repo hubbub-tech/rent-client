@@ -26,12 +26,12 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
   }
   const submit = (e) => {
     e.preventDefault();
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/schedule/dropoffs/submit', {
       method: 'POST',
       body: JSON.stringify({
-        userId,
+        hubbubId,
         hubbubToken,
         notes,
         orders,

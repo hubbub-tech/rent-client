@@ -11,12 +11,12 @@ const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => 
 
   const submit = (e) => {
     e.preventDefault()
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/update/i/id=${calendar.item_id}`, {
       method: 'POST',
       body: JSON.stringify({
-        userId,
+        hubbubId,
         hubbubToken,
         startDate,
         endDate

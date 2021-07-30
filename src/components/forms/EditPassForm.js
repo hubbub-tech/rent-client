@@ -25,11 +25,11 @@ const EditPassForm = ({ user, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/password/submit', {
       method: 'POST',
-      body: JSON.stringify({ userId, hubbubToken, password }),
+      body: JSON.stringify({ hubbubId, hubbubToken, password }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

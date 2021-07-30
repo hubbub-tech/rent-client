@@ -40,12 +40,12 @@ const ExtendRental = ({ setFlashMessages }) => {
       startDate = reservation.date_started;
       extendDate = reservation.date_ended;
     }
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/accounts/o/extend/submit', {
       method: 'POST',
       body: JSON.stringify({
-        userId,
+        hubbubId,
         hubbubToken,
         "itemId": order.item.id,
         "orderId": order.id,

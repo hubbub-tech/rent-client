@@ -49,13 +49,13 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
   }
 
   const handleCancelOnClick = () => {
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     if (window.confirm("Are you sure you want to cancel this order?")) {
       fetch(process.env.REACT_APP_SERVER + '/accounts/o/cancel/submit', {
         method: 'POST',
         body: JSON.stringify({
-          userId,
+          hubbubId,
           hubbubToken,
           "orderId": order.id
         }),

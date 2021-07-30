@@ -14,11 +14,11 @@ const ListingCard = ({
     return res.json()
   }
   const onClick = () => {
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/i/hide/id=${item.id}`, {
       method: 'POST',
-      body: JSON.stringify({ userId, hubbubToken, "toggle": !item.is_available }),
+      body: JSON.stringify({ hubbubId, hubbubToken, "toggle": !item.is_available }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

@@ -19,10 +19,10 @@ const EditItemForm = ({ item, cookies, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
 
-    formData.append('userId', userId);
+    formData.append('hubbubId', hubbubId);
     formData.append('hubbubToken', hubbubToken);
 
     formData.append('itemId', item.id);

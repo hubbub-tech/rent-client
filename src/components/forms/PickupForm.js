@@ -25,12 +25,12 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
   }
   const submit = (e) => {
     e.preventDefault();
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/schedule/pickups/submit', {
       method: 'POST',
       body: JSON.stringify({
-        userId,
+        hubbubId,
         hubbubToken,
         notes,
         orders,

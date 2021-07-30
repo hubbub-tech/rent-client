@@ -7,8 +7,8 @@ const Logout = ({ setFlashMessages }) => {
   useEffect(() => {
     Cookies.remove('hubbubToken');
     Cookies.remove('cartSize');
-    Cookies.remove('userId');
-    
+    Cookies.remove('hubbubId');
+
     setFlashMessages(["You've been logged out! Come back soon!"])
   }, []);
   return <Redirect to='/' />

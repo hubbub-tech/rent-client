@@ -38,9 +38,9 @@ import { parseCookies } from './helper.js'
 
 const App = () => {
   useAnalytics();
-  const userId = Cookies.get('userId');
+  const hubbubId = Cookies.get('hubbubId');
   const hubbubToken = Cookies.get('hubbubToken');
-  const isLoggedIn = userId !== undefined && hubbubToken !== undefined;
+  const isLoggedIn = hubbubId !== undefined && hubbubToken !== undefined;
   const [flashMessages, setFlashMessages] = useState([]);
   return (
     <div className="App">

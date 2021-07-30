@@ -31,11 +31,11 @@ const EditAddressForm = ({ user, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    const userId = Cookies.get('userId');
+    const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/address/submit', {
       method: 'POST',
-      body: JSON.stringify({ userId, hubbubToken, address }),
+      body: JSON.stringify({ hubbubId, hubbubToken, address }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)

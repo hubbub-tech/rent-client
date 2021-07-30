@@ -10,8 +10,8 @@ import ListingCard from '../cards/ListingCard';
 const Account = ({ setFlashMessages }) => {
   const { userId } = useParams();
   const [user, setUser] = useState({"profile": {}, "cart": {}});
-  const myId = Cookies.get('userId');
-  const isOwner = myId == userId;
+  const hubbubId = Cookies.get('hubbubId');
+  const isOwner = hubbubId == userId;
   const [urlBase, setUrlBase] = useState({"user": null, "item": null});
   const [listings, setListings] = useState([]);
 

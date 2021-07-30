@@ -7,7 +7,7 @@ import CheckoutCard from '../cards/CheckoutCard';
 import PricingCard from '../cards/PricingCard';
 
 const Checkout = ({ setFlashMessages }) => {
-  const userId = Cookies.get('userId');
+  const hubbubId = Cookies.get('hubbubId');
   const [cart, setCart] = useState({});
   const [items, setItems] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -57,7 +57,7 @@ const Checkout = ({ setFlashMessages }) => {
               No items in cart. Check out our <a href="/inventory">Inventory</a>!
             </p>
           }
-          <FeedbackForm setFlashMessages={setFlashMessages} userId={userId} />
+          <FeedbackForm setFlashMessages={setFlashMessages} userId={hubbubId} />
           </div>
           <div className="col-md-3">
             <PricingCard

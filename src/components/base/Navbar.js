@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import SearchForm from '../forms/SearchForm';
 
 const Navbar = ({ isLoggedIn }) => {
-  const userId = Cookies.get('userId');
+  const hubbubId = Cookies.get('hubbubId');
   const cartSize = Cookies.get('cartSize');
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
@@ -34,7 +34,7 @@ const Navbar = ({ isLoggedIn }) => {
             </li>
             {isLoggedIn &&
               <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
-                <a className="nav-link" href={`/accounts/u/id=${ userId }`}>My Profile</a>
+                <a className="nav-link" href={`/accounts/u/id=${ hubbubId }`}>My Profile</a>
               </li>
             }
             {isLoggedIn &&

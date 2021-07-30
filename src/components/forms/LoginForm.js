@@ -30,7 +30,7 @@ const LoginForm = ({ setFlashMessages }) => {
       if (statusOK) {
         Cookies.set('hubbubToken', data.hubbubToken);
         Cookies.set('cartSize', data.cartSize);
-        Cookies.set('userId', data.userId);
+        Cookies.set('hubbubId', data.hubbubId);
         history.push("/");
       } else {
         setErrors(data.errors);
