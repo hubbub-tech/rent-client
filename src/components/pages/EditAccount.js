@@ -1,9 +1,19 @@
 import React from "react";
+import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import EditAccountForm from "../forms/EditAccountForm";
 
 const EditAccount = ({ cookies, setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
   const [user, setUser] = useState({
     "profile": {},
     "address": {}
@@ -13,8 +23,15 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
       credentials: 'include'
     })
-    .then(res => res.json())
-    .then(data => setUser(data.user));
+    .then(isStatusOK)
+    .then(data => {
+      if (statusOK) {
+        setUser(data.user);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
+    });
   }, []);
 
   return (

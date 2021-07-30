@@ -1,11 +1,20 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 
 import { printDate } from '../../helper.js';
 import PickupForm from '../forms/PickupForm';
 
 const Pickups = ({ setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
   const { pickupDate } = useParams();
   const [orders, setOrders] = useState([]);
   const [address, setAddress] = useState({});
@@ -14,10 +23,15 @@ const Pickups = ({ setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + `/schedule/pickups/${pickupDate}`, {
       credentials: 'include'
     })
-    .then(res => res.json())
+    .then(isStatusOK)
     .then(data => {
-      setAddress(data.address);
-      setOrders(data.orders_to_pickup);
+      if (statusOK) {
+        setAddress(data.address);
+        setOrders(data.orders_to_pickup);
+      } else if (statusCode) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
     });
   }, [pickupDate]);
 

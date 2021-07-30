@@ -6,19 +6,21 @@ import { printDate } from '../../helper.js';
 import EditItemForm from "../forms/EditItemForm";
 
 const EditItem = ({ setFlashMessages }) => {
-  let history = useHistory();
   let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
 
   const { itemId } = useParams();
   const [item, setItem] = useState({
     "calendar": {"date_started": null, "date_ended": null},
     "details": {"description": null}
   });
-
-  const isStatusOK = (res) => {
-    statusOK = res.ok;
-    return res.json()
-  }
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + `/accounts/i/edit/id=${itemId}`, {
@@ -29,6 +31,9 @@ const EditItem = ({ setFlashMessages }) => {
       setFlashMessages(data.flashes);
       if (statusOK) {
         setItem(data.item);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
       } else {
         history.push("/");
       }
@@ -37,11 +42,10 @@ const EditItem = ({ setFlashMessages }) => {
 
   return (
     <main>
-      <br />
-      <h1 className="text-center">Edit {item.name}</h1>
-      <p className="text-center">Listed from {printDate(item.calendar.date_started)} to {printDate(item.calendar.date_ended)}.</p>
-      <div className="container-md">
+      <div className="container-md my-5">
         <div className="row">
+          <h1 className="text-center">Edit {item.name}</h1>
+          <p className="text-center">Listed from {printDate(item.calendar.date_started)} to {printDate(item.calendar.date_ended)}.</p>
           <div className="col-sm-1"></div>
           <div className="col-sm-4">
             <h5 className="text-center">Quick Tips</h5>
@@ -74,7 +78,6 @@ const EditItem = ({ setFlashMessages }) => {
           <div className="col-sm-1"></div>
         </div>
       </div>
-      <br />
     </main>
   );
 }

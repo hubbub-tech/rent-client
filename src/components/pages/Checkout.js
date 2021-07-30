@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
@@ -7,6 +8,15 @@ import CheckoutCard from '../cards/CheckoutCard';
 import PricingCard from '../cards/PricingCard';
 
 const Checkout = ({ setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
   const hubbubId = Cookies.get('hubbubId');
   const [cart, setCart] = useState({});
   const [items, setItems] = useState([]);
@@ -18,12 +28,17 @@ const Checkout = ({ setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + '/checkout', {
       credentials: 'include'
     })
-    .then(res => res.json())
+    .then(isStatusOK)
     .then(data => {
-      setCart(data.cart);
-      setItems(data.items);
-      setUrlBase(data.photo_url);
-      setIsReady(data.is_ready);
+      if (statusOK) {
+        setCart(data.cart);
+        setItems(data.items);
+        setUrlBase(data.photo_url);
+        setIsReady(data.is_ready);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
     });
   }, [toggle]);
   return (

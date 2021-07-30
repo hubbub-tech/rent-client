@@ -1,17 +1,34 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import EditPassForm from '../forms/EditPassForm';
 
 const EditPassword = ({ setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
   const [user, setUser] = useState({"address": {}, "profile": {}});
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
       credentials: 'include'
     })
-    .then(res => res.json())
-    .then(data => setUser(data.user));
+    .then(isStatusOK)
+    .then(data => {
+      if (statusOK) {
+        setUser(data.user);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
+    });
   }, []);
   return (
     <main>

@@ -13,7 +13,16 @@ import AddressForm from './AddressForm';
 
 const ListForm = ({ setFlashMessages }) => {
   let statusOK;
+  let statusCode;
+
   const history = useHistory();
+
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
+
   const formData = new FormData();
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -37,11 +46,6 @@ const ListForm = ({ setFlashMessages }) => {
   const [isValid, setIsValid] = useState(false);
   const [errors, setErrors] = useState([]);
   const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
-
-  const isStatusOK = (res) => {
-    statusOK = res.ok;
-    return res.json();
-  }
 
   const submit = (e) => {
     e.preventDefault();
@@ -111,7 +115,14 @@ const ListForm = ({ setFlashMessages }) => {
       credentials: 'include'
     })
     .then(isStatusOK)
-    .then(data => setAddress(data.address));
+    .then(data => {
+      if (statusOK) {
+        setAddress(data.address);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
+    });
   },[]);
   return (
     <form encType="multipart/form-data" onSubmit={submit}>

@@ -9,7 +9,15 @@ import ExtendForm from '../forms/ExtendForm';
 
 const ExtendRental = ({ setFlashMessages }) => {
   let statusOK;
+  let statusCode;
+
   const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
+
   const { orderId } = useParams();
   const [order, setOrder] = useState({
     "item": {"details": {}, "calendar": {}},
@@ -21,17 +29,17 @@ const ExtendRental = ({ setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
       credentials: 'include'
     })
-    .then(res => res.json())
+    .then(isStatusOK)
     .then(data => {
-      setOrder(data.order);
-      setUrlBase(data.photo_url);
+      if (statusOK) {
+        setOrder(data.order);
+        setUrlBase(data.photo_url);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
     });
   }, [orderId]);
-
-  const isStatusOK = (res) => {
-    statusOK = res.ok;
-    return res.json();
-  }
 
   const extendRental = () => {
     let startDate = null;

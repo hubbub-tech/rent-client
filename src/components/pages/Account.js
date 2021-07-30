@@ -1,13 +1,22 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useHistory, Link } from 'react-router-dom';
 
 import { printDate } from '../../helper.js'
 import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
 
 const Account = ({ setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
   const { userId } = useParams();
   const [user, setUser] = useState({"profile": {}, "cart": {}});
   const hubbubId = Cookies.get('hubbubId');
@@ -19,11 +28,16 @@ const Account = ({ setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + `/accounts/u/id=${userId}`, {
       credentials: 'include'
     })
-    .then(res => res.json())
+    .then(isStatusOK)
     .then(data => {
-      setUser(data.user);
-      setListings(data.listings);
-      setUrlBase(data.photo_url);
+      if (statusOK) {
+        setUser(data.user);
+        setListings(data.listings);
+        setUrlBase(data.photo_url);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
     });
   }, [userId]);
 

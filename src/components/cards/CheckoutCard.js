@@ -46,7 +46,7 @@ const CheckoutCard = ({
       setToggle(!toggle);
     });
     let oldCartSize = Cookies.get('cartSize')
-    Cookies.set('cartSize', parseInt(oldCartSize) - 1);
+    Cookies.set('cartSize', parseInt(oldCartSize) - 1, { expires: 7 });
   }
   return (
     <div className="card mb-3">

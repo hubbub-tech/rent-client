@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useHistory } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
 import FeedbackForm from '../forms/FeedbackForm';
@@ -12,6 +12,15 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
   const { itemId } = useParams();
   const [item, setItem] = useState({
     "address": {},
@@ -24,9 +33,7 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
 
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
-    fetch(process.env.REACT_APP_SERVER + `/inventory/i/id=${itemId}`, {
-      credentials: 'include'
-    })
+    fetch(process.env.REACT_APP_SERVER + `/inventory/i/id=${itemId}`)
     .then(res => res.json())
     .then(data => {
       setItem(data.item);
@@ -49,11 +56,15 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
       body: JSON.stringify({ hubbubId, hubbubToken, startDate, endDate }),
       headers: { 'Content-Type': 'application/json' },
     })
-    .then(res => res.json())
+    .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
-      let oldCartSize = Cookies.get('cartSize');
-      Cookies.set('cartSize', parseInt(oldCartSize) + 1);
+      if (statusOK) {
+        setFlashMessages(data.flashes);
+        let oldCartSize = Cookies.get('cartSize');
+        Cookies.set('cartSize', parseInt(oldCartSize) + 1, { expires: 7 });
+      } else {
+        setFlashMessages(data.flashes);
+      }
     });
     window.scrollTo(0, 0);
   }

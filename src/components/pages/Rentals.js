@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +9,16 @@ import 'aos/dist/aos.css';
 import OrderCard from '../cards/OrderCard';
 
 const Rentals = ({ setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
+
   const [isLoading, setIsLoading] = useState(true);
   const [urlBase, setUrlBase] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -17,10 +28,15 @@ const Rentals = ({ setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/orders', {
       credentials: 'include'
     })
-    .then(res => res.json())
+    .then(isStatusOK)
     .then(data => {
-      setOrders(data.orders);
-      setUrlBase(data.photo_url);
+      if (statusOK) {
+        setOrders(data.orders);
+        setUrlBase(data.photo_url);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
     });
     setIsLoading(false);
   }, []);

@@ -1,9 +1,19 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import EditAddressForm from '../forms/EditAddressForm';
 
 const EditUserAddress = ({ setFlashMessages }) => {
+  let statusOK;
+  let statusCode;
+
+  const history = useHistory();
+  const isStatusOK = (res) => {
+    statusOK = res.ok;
+    statusCode = res.status;
+    return res.json();
+  }
   const [user, setUser] = useState({
     "profile": {},
     "address": {}
@@ -14,32 +24,35 @@ const EditUserAddress = ({ setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
       credentials: 'include'
     })
-    .then(res => res.json())
-    .then(data => setUser(data.user));
+    .then(isStatusOK)
+    .then(data => {
+      if (statusOK) {
+        setUser(data.user);
+      } else if (statusCode === 403) {
+        setFlashMessages(data.flashes);
+        history.push('/logout');
+      }
+    });
   }, []);
   return (
     <main>
-      <br />
-
-      <br />
-        <div className="container-md">
-          <div className="row">
-            <div className="col-sm-1"></div>
-            <div className="col-sm-10">
-              <h1 className="text-center">Change Address</h1>
-              <p className="text-center">Address on record: <strong className="text-hubbub">{addressDisplay}</strong></p>
-            </div>
-            <div className="col-sm-1"></div>
+      <div className="container-md my-5">
+        <div className="row">
+          <div className="col-sm-1"></div>
+          <div className="col-sm-10">
+            <h1 className="text-center">Change Address</h1>
+            <p className="text-center">Address on record: <strong className="text-hubbub">{addressDisplay}</strong></p>
           </div>
-          <div className="row">
-            <div className="col-sm-3"></div>
-            <div className="col-sm-6">
-              <EditAddressForm user={user} setFlashMessages={setFlashMessages} />
-            </div>
-            <div className="col-sm-3"></div>
-          </div>
+          <div className="col-sm-1"></div>
         </div>
-      <br />
+        <div className="row">
+          <div className="col-sm-3"></div>
+          <div className="col-sm-6">
+            <EditAddressForm user={user} setFlashMessages={setFlashMessages} />
+          </div>
+          <div className="col-sm-3"></div>
+        </div>
+      </div>
     </main>
   );
 }

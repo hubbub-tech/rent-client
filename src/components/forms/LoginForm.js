@@ -6,8 +6,8 @@ import { Link, useHistory } from 'react-router-dom';
 import FormErrors from '../errors/FormErrors';
 
 const LoginForm = ({ setFlashMessages }) => {
-  let history = useHistory();
   let statusOK;
+  const history = useHistory();
 
   const [user, setUser] = useState({"email": null, "password": null});
   const [errors, setErrors] = useState([]);
@@ -28,9 +28,9 @@ const LoginForm = ({ setFlashMessages }) => {
     .then(data => {
       setFlashMessages(data.flashes);
       if (statusOK) {
-        Cookies.set('hubbubToken', data.hubbubToken);
-        Cookies.set('cartSize', data.cartSize);
-        Cookies.set('hubbubId', data.hubbubId);
+        Cookies.set('hubbubToken', data.hubbubToken, { expires: 7 });
+        Cookies.set('cartSize', data.cartSize, { expires: 7 });
+        Cookies.set('hubbubId', data.hubbubId, { expires: 7 });
         history.push("/");
       } else {
         setErrors(data.errors);
