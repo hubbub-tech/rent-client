@@ -1,4 +1,5 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -10,9 +11,9 @@ import 'react-day-picker/lib/style.css';
 import { formatDate, parseDate } from 'react-day-picker/moment';
 import AddressForm from './AddressForm';
 
-const ListForm = ({ cookies, setFlashMessages }) => {
-  let history = useHistory();
+const ListForm = ({ setFlashMessages }) => {
   let statusOK;
+  const history = useHistory();
   const formData = new FormData();
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -30,7 +31,7 @@ const ListForm = ({ cookies, setFlashMessages }) => {
   const [address, setAddress] = useState({});
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
-  const tags = ["books", "kitchen", "hobby", "fitness", "entertainment", "school"];
+  const tags = ["books", "kitchen", "hobby", "fitness", "entertainment", "school", "nyu"];
   const [tagsChecked, setTagsChecked] = useState([]);
 
   const [isValid, setIsValid] = useState(false);
@@ -45,8 +46,11 @@ const ListForm = ({ cookies, setFlashMessages }) => {
   const submit = (e) => {
     e.preventDefault();
     setIsValid(false);
-    formData.append('userId', cookies.userId);
-    formData.append('auth', cookies.auth);
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
+
+    formData.append('userId', userId);
+    formData.append('hubbubToken', hubbubToken);
 
     formData.append('name', item.name);
     formData.append('price', item.price);
@@ -69,8 +73,12 @@ const ListForm = ({ cookies, setFlashMessages }) => {
     formData.append('tags', tagsChecked)
 
     formData.append('image', selectedFile);
+
     setFlashMessages(["Loading... please wait!"])
-    fetch(process.env.REACT_APP_SERVER + '/list/submit', {method: 'POST', body: formData})
+    fetch(process.env.REACT_APP_SERVER + '/list/submit', {
+      method: 'POST',
+      body: formData
+    })
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
@@ -100,9 +108,7 @@ const ListForm = ({ cookies, setFlashMessages }) => {
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + '/list', {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' }
+      credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => setAddress(data.address));

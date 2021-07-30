@@ -40,4 +40,16 @@ const expDecay = (retailPrice, timeNow, discount = .50, timeTotal = 28) => {
   return costToDate;
 }
 
-export { stringToMoment, printDate, printMoney, expDecay };
+const parseCookies = () => {
+  let cookies = {};
+  if (document.cookies) {
+    const cookieArr = document.cookies.split("; ");
+    for (const keyAndValue of cookieArr) {
+      let cookie = keyAndValue.split("=");
+      cookies[cookie[0]] = cookie[1];
+    }
+  }
+  return cookies;
+}
+
+export { stringToMoment, printDate, printMoney, expDecay, parseCookies };

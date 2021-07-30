@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors'
 import AddressForm from './AddressForm';
 
-const EditAddressForm = ({ user, cookies, setFlashMessages }) => {
+const EditAddressForm = ({ user, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -30,10 +31,12 @@ const EditAddressForm = ({ user, cookies, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/address/submit', {
       method: 'POST',
-      body: JSON.stringify({ address, "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, hubbubToken, address }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {

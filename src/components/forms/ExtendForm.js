@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 import { stringToMoment } from '../../helper.js';
 import SingleDateInput from '../inputs/SingleDateInput';
 
-const ExtendForm = ({ order, cookies, setFlashMessages, setReservation }) => {
+const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
   let statusOK;
 
   const [extendDate, setExtendDate] = useState(null);
@@ -17,12 +18,14 @@ const ExtendForm = ({ order, cookies, setFlashMessages, setReservation }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     const startDate = stringToMoment(order.ext_date_end).toDate();
     fetch(process.env.REACT_APP_SERVER + `/validate/i/id=${order.item.id}`, {
       method: 'POST',
       body: JSON.stringify({
-        "userId": cookies.userId,
-        "auth": cookies.auth,
+        userId,
+        hubbubToken,
         startDate,
         "endDate": extendDate,
         "isDiscounted": true

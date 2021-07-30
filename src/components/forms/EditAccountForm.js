@@ -1,12 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
 import TextInput from '../inputs/TextInput';
 import AddressForm from './AddressForm';
 import FormErrors from '../errors/FormErrors';
 
-const EditAccountForm = ({ user, cookies, setFlashMessages }) => {
+const EditAccountForm = ({ user, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -40,8 +41,11 @@ const EditAccountForm = ({ user, cookies, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    formData.append('userId', cookies.userId);
-    formData.append('auth', cookies.auth);
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
+
+    formData.append('userId', userId);
+    formData.append('hubbubToken', hubbubToken);
 
     if (typeof bio === 'undefined') {
       formData.append('bio', user.profile.bio);

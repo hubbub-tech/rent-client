@@ -1,12 +1,13 @@
 import moment from 'moment';
 
 import React from 'react';
+import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import SingleDateInput from '../inputs/SingleDateInput';
 
-const EarlyForm = ({ order, cookies, setFlashMessages }) => {
+const EarlyForm = ({ order, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -25,24 +26,30 @@ const EarlyForm = ({ order, cookies, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
-    fetch(process.env.REACT_APP_SERVER + "/accounts/o/early/submit", {
-      method: 'POST',
-      body: JSON.stringify({
-        "userId": cookies.userId,
-        "auth": cookies.auth,
-        "orderId": order.id,
-        earlyDate
-      }),
-      headers: { 'Content-Type': 'application/json' }
-    })
-    .then(isStatusOK)
-    .then(data => {
-      setFlashMessages(data.flashes);
-      if (statusOK) {
-        history.push(`/accounts/u/id=${order.reservation.renter_id}`)
-      }
-    });
-    window.scrollTo(0, 0);
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
+    if (window.confirm("Are you sure you want to early return this order? This is different from scheduling a pickup.")) {
+      fetch(process.env.REACT_APP_SERVER + "/accounts/o/early/submit", {
+        method: 'POST',
+        body: JSON.stringify({
+          userId,
+          hubbubToken,
+          earlyDate,
+          "orderId": order.id
+        }),
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(isStatusOK)
+      .then(data => {
+        setFlashMessages(data.flashes);
+        if (statusOK) {
+          history.push(`/accounts/u/id=${order.reservation.renter_id}`)
+        }
+      });
+      window.scrollTo(0, 0);
+    } else {
+      setFlashMessages(["Your rental was NOT early returned."]);
+    }
   }
   return (
     <form onSubmit={submit}>

@@ -1,20 +1,23 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 import DateRangeInput from '../inputs/DateRangeInput';
 
-const RentalUpdateForm = ({ cookies, calendar, toggle, setToggle, setFlashMessages }) => {
+const RentalUpdateForm = ({ calendar, toggle, setToggle, setFlashMessages }) => {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isValid, setIsValid] = useState(false);
 
   const submit = (e) => {
     e.preventDefault()
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/update/i/id=${calendar.item_id}`, {
       method: 'POST',
       body: JSON.stringify({
-        "userId": cookies.userId,
-        "auth": cookies.auth,
+        userId,
+        hubbubToken,
         startDate,
         endDate
       }),

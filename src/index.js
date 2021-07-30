@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { CookiesProvider } from 'react-cookie';
 import { BrowserRouter as Router } from 'react-router-dom';
 
 import 'bootstrap/scss/bootstrap.scss';
@@ -9,11 +8,9 @@ import './index.css';
 import App from './App';
 
 ReactDOM.render(
-  <CookiesProvider>
-    <Router>
-      <App />
-    </Router>
-  </CookiesProvider>,
+  <Router>
+    <App />
+  </Router>,
   document.getElementById('root')
 );
 

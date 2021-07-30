@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
-const EditPassForm = ({ user, cookies, setFlashMessages }) => {
+const EditPassForm = ({ user, setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -24,9 +25,11 @@ const EditPassForm = ({ user, cookies, setFlashMessages }) => {
 
   const submit = (e) => {
     e.preventDefault();
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/password/submit', {
       method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth, password }),
+      body: JSON.stringify({ userId, hubbubToken, password }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

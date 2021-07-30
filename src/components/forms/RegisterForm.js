@@ -82,11 +82,7 @@ const RegisterForm = ({ setFlashMessages }) => {
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
-      if (statusOK) {
-        history.push("/login");
-      } else {
-        setErrors({ ...errors, server: data.errors });
-      }
+      statusOK ? history.push("/login") : setErrors({ ...errors, server: data.errors });
     });
     window.scrollTo(0, 0);
   }

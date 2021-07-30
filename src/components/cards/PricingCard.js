@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { printMoney } from '../../helper.js'
 import CheckoutForm from '../forms/CheckoutForm';
 
-const PricingCard = ({ cookies, setCookie, cart, isReady, toggle, setToggle, setFlashMessages }) => {
+const PricingCard = ({ cart, isReady, toggle, setToggle, setFlashMessages }) => {
   useEffect(() => setToggle(!toggle), []);
   return (
     <div className="card">
@@ -21,13 +21,7 @@ const PricingCard = ({ cookies, setCookie, cart, isReady, toggle, setToggle, set
         {isReady && <hr/>}
         {isReady && <p className="text-start"><span className="badge bg-dark">Total</span> { printMoney(cart.total + cart.total_deposit + cart.total_tax) }</p>}
         <hr/>
-        {isReady &&
-          <CheckoutForm
-            cookies={cookies}
-            setCookie={setCookie}
-            setFlashMessages={setFlashMessages}
-          />
-        }
+        {isReady && <CheckoutForm setFlashMessages={setFlashMessages} />}
         {!isReady && <p>Set reservations on all your items before paying.</p>}
       </div>
     </div>

@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { Link, useHistory } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
-const LoginForm = ({ cookies, setCookie, setFlashMessages }) => {
+const LoginForm = ({ setFlashMessages }) => {
   let history = useHistory();
   let statusOK;
 
@@ -21,20 +22,18 @@ const LoginForm = ({ cookies, setCookie, setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + '/login', {
       method: 'POST',
       body: JSON.stringify({ user }),
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
       if (statusOK) {
-        setCookie('auth', data.auth, { path: '/' });
-        setCookie('isLoggedIn', true, { path: '/' });
-        setCookie('userId', data.user_id, { path: '/' });
-        setCookie('cartSize', data.cart_size, { path: '/' });
+        Cookies.set('hubbubToken', data.hubbubToken);
+        Cookies.set('cartSize', data.cartSize);
+        Cookies.set('userId', data.userId);
         history.push("/");
       } else {
         setErrors(data.errors);
-        setCookie('isLoggedIn', false, { path: '/' });
       }
     });
     window.scrollTo(0, 0);

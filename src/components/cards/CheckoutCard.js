@@ -1,12 +1,19 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
 import RentalUpdateForm from '../forms/RentalUpdateForm';
 
-const CheckoutCard = ({cookies, setCookie, urlBase, item, toggle, setToggle, setFlashMessages}) => {
-  let history = useHistory();
+const CheckoutCard = ({
+  urlBase,
+  item,
+  toggle,
+  setToggle,
+  setFlashMessages
+}) => {
+  const history = useHistory();
   const [reservation, setReservation] = useState(item.reservation);
 
   const editItem = (e) => {
@@ -20,35 +27,26 @@ const CheckoutCard = ({cookies, setCookie, urlBase, item, toggle, setToggle, set
 
   const removeItem = (e) => {
     e.preventDefault()
+    let startDate;
+    let endDate;
     if (item.reservation) {
       let startDate = item.reservation.date_started;
       let endDate = item.reservation.date_ended;
-      
-      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}&start=${startDate}&end=${endDate}`, {
-        method: 'POST',
-        body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then(res => res.json())
-      .then(data => {
-        setFlashMessages(data.flashes)
-        setToggle(!toggle);
-      });
-    } else {
-      console.log("no, in here")
-      fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}`, {
-        method: 'POST',
-        body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then(res => res.json())
-      .then(data => {
-        setFlashMessages(data.flashes)
-        setToggle(!toggle);
-      });
     }
-    let newCartSize = parseInt(cookies.cartSize) - 1;
-    setCookie("cartSize", newCartSize, { path: '/' });
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
+    fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}`, {
+      method: 'POST',
+      body: JSON.stringify({ userId, hubbubToken, startDate, endDate }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(res => res.json())
+    .then(data => {
+      setFlashMessages(data.flashes)
+      setToggle(!toggle);
+    });
+    let oldCartSize = Cookies.get('cartSize')
+    Cookies.set('cartSize', parseInt(oldCartSize) - 1);
   }
   return (
     <div className="card mb-3">
@@ -63,11 +61,11 @@ const CheckoutCard = ({cookies, setCookie, urlBase, item, toggle, setToggle, set
             <hr />
             {!reservation &&
               <RentalUpdateForm
-                cookies={cookies}
-                calendar={item.calendar}
                 toggle={toggle}
                 setToggle={setToggle}
-                setFlashMessages={setFlashMessages} />
+                calendar={item.calendar}
+                setFlashMessages={setFlashMessages}
+              />
             }
             {reservation && <p className="card-text">Rental Starting - {printDate(reservation.date_started)}</p>}
             {reservation && <p className="card-text">Rental Ending - {printDate(reservation.date_ended)}</p>}

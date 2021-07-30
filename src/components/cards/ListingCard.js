@@ -1,22 +1,24 @@
 import React from 'react';
+import Cookies from 'js-cookie';
 
 import { printDate } from '../../helper.js';
 
-const ListingCard = ({ cookies, item, urlBase, isOwner, setFlashMessages }) => {
-
+const ListingCard = ({
+  item,
+  urlBase,
+  isOwner,
+  setFlashMessages
+}) => {
   const isStatusOK = (res) => {
     // some action that is dependent on the status of the POST
     return res.json()
   }
-
   const onClick = () => {
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/i/hide/id=${item.id}`, {
       method: 'POST',
-      body: JSON.stringify({
-        "userId": cookies.userId,
-        "auth": cookies.auth,
-        "toggle": !item.is_available
-      }),
+      body: JSON.stringify({ userId, hubbubToken, "toggle": !item.is_available }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)

@@ -2,15 +2,15 @@ import React from "react";
 
 import ListForm from "../forms/ListForm";
 
-const ListItem = ({ cookies, setFlashMessages }) => {
+const ListItem = ({ setFlashMessages }) => {
   return (
     <main>
-      <br />
-      <h1 className="text-center">List</h1>
-      <p className="text-center">Start your side hustle <i><mark>today</mark></i>.</p>
-      <div className="container-md">
-        <div className="row justify-content-md-center">
-          <div className="col-lg-5">
+      <div className="container-md my-5">
+        <div className="row">
+          <h1 className="text-center">List</h1>
+          <p className="text-center">Start your side hustle <i><mark>today</mark></i>.</p>
+          <div className="col-md-1"></div>
+          <div className="col-md-4">
             <h5 className="text-center">Quick Tips</h5>
               <ul className="instructions">
                 <li>
@@ -35,12 +35,12 @@ const ListItem = ({ cookies, setFlashMessages }) => {
                 </li>
               </ul>
           </div>
-          <div className="col-lg-7">
-            <ListForm cookies={cookies} setFlashMessages={setFlashMessages} />
+          <div className="col-md-6">
+            <ListForm setFlashMessages={setFlashMessages} />
           </div>
+          <div className="col-md-1"></div>
         </div>
       </div>
-      <br />
     </main>
   );
 }

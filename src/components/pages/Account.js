@@ -1,23 +1,23 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import { useParams, Link } from 'react-router-dom';
 
 import { printDate } from '../../helper.js'
 import ProfileCard from '../cards/ProfileCard';
 import ListingCard from '../cards/ListingCard';
 
-const Account = ({ cookies, setFlashMessages }) => {
+const Account = ({ setFlashMessages }) => {
   const { userId } = useParams();
   const [user, setUser] = useState({"profile": {}, "cart": {}});
-  const isOwner = cookies.userId == userId;
+  const myId = Cookies.get('userId');
+  const isOwner = myId == userId;
   const [urlBase, setUrlBase] = useState({"user": null, "item": null});
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + `/accounts/u/id=${userId}`, {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(res => res.json())
     .then(data => {
@@ -82,7 +82,6 @@ const Account = ({ cookies, setFlashMessages }) => {
               {listings.map((item) => (
                 <div className="col-12 my-2" key={item.id}>
                   <ListingCard
-                    cookies={cookies}
                     setFlashMessages={setFlashMessages}
                     urlBase={urlBase.item}
                     isOwner={isOwner}

@@ -5,16 +5,14 @@ import { useParams } from 'react-router-dom';
 import { printDate } from '../../helper.js';
 import PickupForm from '../forms/PickupForm';
 
-const Pickups = ({ cookies, setFlashMessages }) => {
+const Pickups = ({ setFlashMessages }) => {
   const { pickupDate } = useParams();
   const [orders, setOrders] = useState([]);
   const [address, setAddress] = useState({});
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + `/schedule/pickups/${pickupDate}`, {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(res => res.json())
     .then(data => {
@@ -37,7 +35,6 @@ const Pickups = ({ cookies, setFlashMessages }) => {
         </div>
         <PickupForm
           orders={orders}
-          cookies={cookies}
           address={address}
           setAddress={setAddress}
           pickupDate={pickupDate}

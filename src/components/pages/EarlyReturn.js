@@ -14,9 +14,7 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(res => res.json())
     .then(data => {
@@ -60,10 +58,7 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
                     </div>
                   </div>
                   <div className="col-md-6">
-                    <EarlyForm
-                      order={order}
-                      cookies={cookies}
-                      setFlashMessages={setFlashMessages} />
+                    <EarlyForm order={order} setFlashMessages={setFlashMessages} />
                   </div>
                 </div>
               </div>

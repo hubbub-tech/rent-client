@@ -1,10 +1,11 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
-const CheckoutForm = ({ cookies, setCookie, setFlashMessages}) => {
-  let history = useHistory();
+const CheckoutForm = ({ setFlashMessages}) => {
   let statusOK;
+  const history = useHistory();
   const [paymentMethod, setPaymentMethod] = useState("in-person");
 
   const isStatusOK = (res) => {
@@ -15,15 +16,13 @@ const CheckoutForm = ({ cookies, setCookie, setFlashMessages}) => {
   const submit = (e) => {
     e.preventDefault()
     fetch(process.env.REACT_APP_SERVER + '/checkout/submit', {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
       if (statusOK) {
-        setCookie('cartSize', 0, { path: '/' });
+        Cookies.set('cartSize', 0);
         history.push('/accounts/u/orders');
       } else {
         history.push('/inventory');

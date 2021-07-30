@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 
 import FeedbackForm from '../forms/FeedbackForm';
 import CheckoutCard from '../cards/CheckoutCard';
 import PricingCard from '../cards/PricingCard';
 
-const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
+const Checkout = ({ setFlashMessages }) => {
+  const userId = Cookies.get('userId');
   const [cart, setCart] = useState({});
   const [items, setItems] = useState([]);
   const [toggle, setToggle] = useState(false);
@@ -14,9 +16,7 @@ const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + '/checkout', {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' }
+      credentials: 'include'
     })
     .then(res => res.json())
     .then(data => {
@@ -46,8 +46,6 @@ const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
             <CheckoutCard
               key={item.id}
               item={item}
-              cookies={cookies}
-              setCookie={setCookie}
               urlBase={urlBase}
               toggle={toggle}
               setToggle={setToggle}
@@ -59,13 +57,11 @@ const Checkout = ({ cookies, setCookie, setFlashMessages }) => {
               No items in cart. Check out our <a href="/inventory">Inventory</a>!
             </p>
           }
-          <FeedbackForm setFlashMessages={setFlashMessages} userId={cookies.userId} />
+          <FeedbackForm setFlashMessages={setFlashMessages} userId={userId} />
           </div>
           <div className="col-md-3">
             <PricingCard
               cart={cart}
-              cookies={cookies}
-              setCookie={setCookie}
               isReady={isReady}
               toggle={toggle}
               setToggle={setToggle}

@@ -1,14 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
 import { printDate } from '../../helper.js';
 import AddressForm from './AddressForm';
 import CheckboxList from '../inputs/CheckboxList';
 
-const PickupForm = ({ orders, cookies, pickupDate, address, setFlashMessages, setAddress }) => {
+const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
-  let history = useHistory();
+  const history = useHistory();
   const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
   const timeslots = [
     "8-9am","9-10am", "10-11am", "11-12pm", "12-1pm",
@@ -24,11 +25,13 @@ const PickupForm = ({ orders, cookies, pickupDate, address, setFlashMessages, se
   }
   const submit = (e) => {
     e.preventDefault();
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/schedule/pickups/submit', {
       method: 'POST',
       body: JSON.stringify({
-        "userId": cookies.userId,
-        "auth": cookies.auth,
+        userId,
+        hubbubToken,
         notes,
         orders,
         timesChecked,

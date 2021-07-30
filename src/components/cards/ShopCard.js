@@ -5,7 +5,6 @@ import QuoteInput from '../inputs/QuoteInput';
 
 const ShopCard = ({ urlBase, item }) => {
 return (
-
     <div data-aos="fade-up" className="card px-0 mb-3">
       <div className="card-body card-shadow">
         <div className="row">

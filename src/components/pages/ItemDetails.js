@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import Cookies from 'js-cookie';
 import { Link, useParams } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
@@ -10,7 +11,7 @@ import ShopCard from '../cards/ShopCard';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
+const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
   const { itemId } = useParams();
   const [item, setItem] = useState({
     "address": {},
@@ -23,7 +24,9 @@ const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
 
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
-    fetch(process.env.REACT_APP_SERVER + `/inventory/i/id=${itemId}`)
+    fetch(process.env.REACT_APP_SERVER + `/inventory/i/id=${itemId}`, {
+      credentials: 'include'
+    })
     .then(res => res.json())
     .then(data => {
       setItem(data.item);
@@ -39,22 +42,18 @@ const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
       startDate = reservation.date_started;
       endDate = reservation.date_ended;
     }
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/add/i/id=${itemId}`, {
       method: 'POST',
-      body: JSON.stringify({
-        "userId": cookies.userId,
-        "auth": cookies.auth,
-        startDate,
-        endDate
-      }),
+      body: JSON.stringify({ userId, hubbubToken, startDate, endDate }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => res.json())
     .then(data => {
       setFlashMessages(data.flashes);
-
-      let newCartSize = parseInt(cookies.cartSize) + 1;
-      setCookie("cartSize", newCartSize, { path: '/' });
+      let oldCartSize = Cookies.get('cartSize');
+      Cookies.set('cartSize', parseInt(oldCartSize) + 1);
     });
     window.scrollTo(0, 0);
   }
@@ -90,7 +89,6 @@ const ItemDetails = ({ cookies, setCookie, isLoggedIn, setFlashMessages }) => {
                 {!reservation && <p className="text-start fs-5 fw-bold">How long do you want to rent?</p>}
                 {isLoggedIn &&
                   <RentalForm
-                    cookies={cookies}
                     calendar={item.calendar}
                     setFlashMessages={setFlashMessages}
                     setReservation={setReservation}

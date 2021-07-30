@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Flash = ({ flashMessages, setFlashMessages }) => {
-  const onClick = (e, index) => {
+  const closeMessage = (e, index) => {
     let editedFlashes = [...flashMessages];
     editedFlashes.splice(index, 1);
     setFlashMessages(editedFlashes);
@@ -18,7 +18,7 @@ const Flash = ({ flashMessages, setFlashMessages }) => {
             {message}
             <button
               type="button"
-              onClick={e => onClick(e, index)}
+              onClick={e => closeMessage(e, index)}
               className="btn-close"
               data-bs-dismiss="alert"
               aria-label="Close">

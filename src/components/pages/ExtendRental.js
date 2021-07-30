@@ -1,5 +1,5 @@
 import React from 'react';
-
+import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
@@ -7,9 +7,9 @@ import { printDate, printMoney } from '../../helper.js';
 import FeedbackForm from '../forms/FeedbackForm';
 import ExtendForm from '../forms/ExtendForm';
 
-const ExtendRental = ({ cookies, setFlashMessages }) => {
+const ExtendRental = ({ setFlashMessages }) => {
   let statusOK;
-  let history = useHistory();
+  const history = useHistory();
   const { orderId } = useParams();
   const [order, setOrder] = useState({
     "item": {"details": {}, "calendar": {}},
@@ -19,9 +19,7 @@ const ExtendRental = ({ cookies, setFlashMessages }) => {
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(res => res.json())
     .then(data => {
@@ -42,11 +40,13 @@ const ExtendRental = ({ cookies, setFlashMessages }) => {
       startDate = reservation.date_started;
       extendDate = reservation.date_ended;
     }
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/accounts/o/extend/submit', {
       method: 'POST',
       body: JSON.stringify({
-        "userId": cookies.userId,
-        "auth": cookies.auth,
+        userId,
+        hubbubToken,
         "itemId": order.item.id,
         "orderId": order.id,
         startDate,
@@ -100,7 +100,6 @@ const ExtendRental = ({ cookies, setFlashMessages }) => {
                   <div className="col-md-6">
                     <ExtendForm
                       order={order}
-                      cookies={cookies}
                       setFlashMessages={setFlashMessages}
                       setReservation={setReservation}
                     />

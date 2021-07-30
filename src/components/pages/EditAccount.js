@@ -11,9 +11,7 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(res => res.json())
     .then(data => setUser(data.user));
@@ -21,11 +19,11 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
 
   return (
     <main>
-      <br />
-      <h1 className="text-center">Edit Your Account</h1>
-      <div className="container" style={{"maxWidth": "900px"}}>
-        <div className="row justify-content-md-center">
-          <div className="col-lg-4">
+      <div className="container-md my-5">
+        <div className="row">
+          <h1 className="text-center">Edit Your Account</h1>
+          <div className="col-md-1"></div>
+          <div className="col-md-3">
             <h5>Instructions</h5>
             <p>
               Enter the information that you would like to enter. This profile is meant
@@ -33,12 +31,12 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
               can leave them unedited.
             </p>
           </div>
-          <div className="col-lg-8">
-            <EditAccountForm user={user} cookies={cookies} setFlashMessages={setFlashMessages} />
+          <div className="col-md-7">
+            <EditAccountForm user={user} setFlashMessages={setFlashMessages} />
           </div>
+          <div className="col-md-1"></div>
         </div>
       </div>
-      <br />
     </main>
   );
 }

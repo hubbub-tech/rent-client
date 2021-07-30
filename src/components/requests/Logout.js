@@ -1,15 +1,14 @@
 import React from 'react';
 import { useEffect } from 'react';
+import Cookies from 'js-cookie';
 import { Redirect } from 'react-router-dom';
 
-const Logout = ({ setCookie, removeCookie, setFlashMessages }) => {
+const Logout = ({ setFlashMessages }) => {
   useEffect(() => {
-    removeCookie('userId');
-    removeCookie('cartSize');
-    removeCookie('auth');
-
-    setCookie('isLoggedIn', false, { path: '/' });
-
+    Cookies.remove('hubbubToken');
+    Cookies.remove('cartSize');
+    Cookies.remove('userId');
+    
     setFlashMessages(["You've been logged out! Come back soon!"])
   }, []);
   return <Redirect to='/' />

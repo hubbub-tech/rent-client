@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 import EditAddressForm from '../forms/EditAddressForm';
 
-const EditUserAddress = ({ cookies, setFlashMessages }) => {
+const EditUserAddress = ({ setFlashMessages }) => {
   const [user, setUser] = useState({
     "profile": {},
     "address": {}
@@ -12,9 +12,7 @@ const EditUserAddress = ({ cookies, setFlashMessages }) => {
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(res => res.json())
     .then(data => setUser(data.user));
@@ -36,7 +34,7 @@ const EditUserAddress = ({ cookies, setFlashMessages }) => {
           <div className="row">
             <div className="col-sm-3"></div>
             <div className="col-sm-6">
-              <EditAddressForm user={user} cookies={cookies} setFlashMessages={setFlashMessages} />
+              <EditAddressForm user={user} setFlashMessages={setFlashMessages} />
             </div>
             <div className="col-sm-3"></div>
           </div>

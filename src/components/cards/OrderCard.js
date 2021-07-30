@@ -1,11 +1,12 @@
 import moment from 'moment';
 import React from 'react';
+import Cookies from 'js-cookie';
 import { useHistory, Link } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
 
-const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
-  let history = useHistory();
+const OrderCard = ({ urlBase, order, setFlashMessages }) => {
+  const history = useHistory();
 
   let todaysDateStr = moment.utc().format("YYYY-MM-DD");
   let isActive = todaysDateStr < order.ext_date_end;
@@ -19,9 +20,7 @@ const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
   const handleReceiptOnClick = () => {
     let fileName = `D${todaysDateStr}ID${order.id}P${order.date_placed}.txt`;
     fetch(process.env.REACT_APP_SERVER + `/accounts/o/receipt/id=${order.id}/${fileName}`, {
-      method: 'POST',
-      body: JSON.stringify({ "userId": cookies.userId, "auth": cookies.auth }),
-      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
@@ -50,25 +49,26 @@ const OrderCard = ({ cookies, urlBase, order, setFlashMessages }) => {
   }
 
   const handleCancelOnClick = () => {
+    const userId = Cookies.get('userId');
+    const hubbubToken = Cookies.get('hubbubToken');
     if (window.confirm("Are you sure you want to cancel this order?")) {
       fetch(process.env.REACT_APP_SERVER + '/accounts/o/cancel/submit', {
         method: 'POST',
         body: JSON.stringify({
-          "userId": cookies.userId,
-          "auth": cookies.auth,
+          userId,
+          hubbubToken,
           "orderId": order.id
         }),
         headers: { 'Content-Type': 'application/json' },
       })
       .then(isStatusOK)
       .then(data => setFlashMessages(data.flashes));
-      history.push(`/accounts/u/id=${cookies.userId}`);
+      history.push(`/accounts/u/id=${order.renter_id}`);
       window.scrollTo(0, 0);
     } else {
-      setFlashMessages([`Your order for ${order.item.name} was not cancelled.`]);
+      setFlashMessages([`Your order for ${order.item.name} was NOT cancelled.`]);
     }
   }
-
   return (
     <div data-aos="fade-up" className="card px-0 mb-3">
       <div className="card-header">

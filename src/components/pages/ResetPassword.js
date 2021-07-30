@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import ResetPassForm from '../forms/ResetPassForm';
 
-const ResetPassword = ({ cookies, setFlashMessages }) => {
+const ResetPassword = ({ setFlashMessages }) => {
   const { resetToken } = useParams();
   return (
     <main>

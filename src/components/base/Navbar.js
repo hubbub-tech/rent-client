@@ -1,10 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useCookies } from 'react-cookie';
+import Cookies from 'js-cookie';
 
 import SearchForm from '../forms/SearchForm';
 
-const Navbar = ({ cookies, isLoggedIn }) => {
+const Navbar = ({ isLoggedIn }) => {
+  const userId = Cookies.get('userId');
+  const cartSize = Cookies.get('cartSize');
   const [isNavCollapsed, setIsNavCollapsed] = useState(true);
   const handleNavCollapse = () => setIsNavCollapsed(!isNavCollapsed);
   return (
@@ -32,7 +34,7 @@ const Navbar = ({ cookies, isLoggedIn }) => {
             </li>
             {isLoggedIn &&
               <li className={`nav-item ${!isNavCollapsed && 'mx-auto'}`}>
-                <a className="nav-link" href={`/accounts/u/id=${ cookies.userId }`}>My Profile</a>
+                <a className="nav-link" href={`/accounts/u/id=${ userId }`}>My Profile</a>
               </li>
             }
             {isLoggedIn &&
@@ -59,7 +61,7 @@ const Navbar = ({ cookies, isLoggedIn }) => {
           <ul className="navbar-nav flex-row flex-wrap ms-md-auto">
             {isLoggedIn && !isNavCollapsed &&
               <li className="nav-item mb-2 mx-auto">
-                <a className="nav-link" href="/checkout">Cart ({cookies.cartSize})</a>
+                <a className="nav-link" href="/checkout">Cart ({ cartSize })</a>
               </li>
             }
             <SearchForm />
