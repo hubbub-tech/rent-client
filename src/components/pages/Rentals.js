@@ -1,7 +1,7 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import { useHistory, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -25,8 +25,12 @@ const Rentals = ({ setFlashMessages }) => {
 
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/orders', {
-      credentials: 'include'
+      method: 'POST',
+      body: JSON.stringify({ hubbubId, hubbubToken }),
+      headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {
