@@ -19,13 +19,11 @@
 .env.test.local
 .env.production.local
 
-# python
-env
-__pycache__
-
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
 # development notes
 todo.txt
+server.crt
+server.key
