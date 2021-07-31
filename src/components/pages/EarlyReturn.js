@@ -26,9 +26,7 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
-      method: 'POST',
-      body: JSON.stringify({ hubbubId, hubbubToken }),
-      headers: { 'Content-Type': 'application/json' }
+      credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {

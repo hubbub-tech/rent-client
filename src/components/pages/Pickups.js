@@ -24,9 +24,7 @@ const Pickups = ({ setFlashMessages }) => {
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/schedule/pickups/${pickupDate}`, {
-      method: 'POST',
-      body: JSON.stringify({ hubbubId, hubbubToken }),
-      headers: { 'Content-Type': 'application/json' }
+      credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {

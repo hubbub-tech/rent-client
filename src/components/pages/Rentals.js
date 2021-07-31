@@ -27,10 +27,8 @@ const Rentals = ({ setFlashMessages }) => {
     AOS.init({duration : 1000, once: true});
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
-    fetch(process.env.REACT_APP_SERVER + '/accounts/u/orders', {
-      method: 'POST',
-      body: JSON.stringify({ hubbubId, hubbubToken }),
-      headers: { 'Content-Type': 'application/json' }
+    fetch(process.env.REACT_APP_SERVER + '/accounts/u/orders', {  // https://server.hubbub.shop
+      credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
