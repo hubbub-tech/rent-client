@@ -29,7 +29,6 @@ const CheckoutCard = ({
     e.preventDefault()
     let startDate;
     let endDate;
-    console.log({ item })
     if (item.reservation) {
       startDate = item.reservation.date_started;
       endDate = item.reservation.date_ended;

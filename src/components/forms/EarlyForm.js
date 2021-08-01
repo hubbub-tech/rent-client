@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import SingleDateInput from '../inputs/SingleDateInput';
 
 const EarlyForm = ({ order, setFlashMessages }) => {
-  let history = useHistory();
+  const history = useHistory();
   let statusOK;
 
   let minDateStr = moment.utc().format("YYYY-MM-DD");

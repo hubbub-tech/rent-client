@@ -6,8 +6,8 @@ import AddressForm from './AddressForm';
 import FormErrors from '../errors/FormErrors';
 
 const RegisterForm = ({ setFlashMessages }) => {
-  let history = useHistory();
   let statusOK;
+  const history = useHistory();
 
   const [hasVenmo, setHasVenmo] = useState(true);
 

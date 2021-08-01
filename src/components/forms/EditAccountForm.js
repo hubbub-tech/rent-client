@@ -8,7 +8,7 @@ import AddressForm from './AddressForm';
 import FormErrors from '../errors/FormErrors';
 
 const EditAccountForm = ({ user, setFlashMessages }) => {
-  let history = useHistory();
+  const history = useHistory();
   let statusOK;
 
   const formData = new FormData();

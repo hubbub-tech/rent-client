@@ -34,6 +34,9 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
       } else if (statusCode === 403) {
         setFlashMessages(data.flashes);
         history.push('/logout');
+      } else if (statusCode === 404) {
+        setFlashMessages(data.flashes);
+        history.push('/404');
       }
     });
   }, [orderId]);

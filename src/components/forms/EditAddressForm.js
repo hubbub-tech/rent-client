@@ -7,7 +7,7 @@ import FormErrors from '../errors/FormErrors'
 import AddressForm from './AddressForm';
 
 const EditAddressForm = ({ user, setFlashMessages }) => {
-  let history = useHistory();
+  const history = useHistory();
   let statusOK;
 
   const [address, setAddress] = useState({

@@ -29,9 +29,12 @@ const Pickups = ({ setFlashMessages }) => {
       if (statusOK) {
         setAddress(data.address);
         setOrders(data.orders_to_pickup);
-      } else if (statusCode) {
+      } else if (statusCode === 403) {
         setFlashMessages(data.flashes);
         history.push('/logout');
+      } else if (statusCode === 404) {
+        setFlashMessages(data.flashes);
+        history.push('/404');
       }
     });
   }, [pickupDate]);

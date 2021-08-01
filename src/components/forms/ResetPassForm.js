@@ -5,8 +5,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import FormErrors from '../errors/FormErrors';
 
 const ResetPassForm = ({ resetToken, setFlashMessages }) => {
-  const history = useHistory();
   let statusOK;
+  const history = useHistory();
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState({

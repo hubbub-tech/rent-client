@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 const SearchForm = () => {
-  let history = useHistory();
+  const history = useHistory();
   const [search, setSearch] = useState("all");
 
   const submit = (e) => {

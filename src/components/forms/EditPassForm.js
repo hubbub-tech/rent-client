@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import FormErrors from '../errors/FormErrors';
 
 const EditPassForm = ({ user, setFlashMessages }) => {
-  let history = useHistory();
+  const history = useHistory();
   let statusOK;
 
   const [password, setPassword] = useState({

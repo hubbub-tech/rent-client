@@ -4,7 +4,7 @@ import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
 const EditItemForm = ({ item, cookies, setFlashMessages }) => {
-  let history = useHistory();
+  const history = useHistory();
   let statusOK;
   const formData = new FormData();
 

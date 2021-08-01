@@ -34,11 +34,16 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
     fetch(process.env.REACT_APP_SERVER + `/inventory/i/id=${itemId}`)
-    .then(res => res.json())
+    .then(isStatusOK)
     .then(data => {
-      setItem(data.item);
-      setUrlBase(data.photo_url);
-      setRecommendations(data.recommendations);
+      if (statusOK) {
+        setItem(data.item);
+        setUrlBase(data.photo_url);
+        setRecommendations(data.recommendations);
+      } else if (statusCode === 404) {
+        setFlashMessages(data.flashes);
+        history.push("/404");
+      }
     });
   }, [itemId]);
 
