@@ -29,9 +29,10 @@ const CheckoutCard = ({
     e.preventDefault()
     let startDate;
     let endDate;
+    console.log({ item })
     if (item.reservation) {
-      let startDate = item.reservation.date_started;
-      let endDate = item.reservation.date_ended;
+      startDate = item.reservation.date_started;
+      endDate = item.reservation.date_ended;
     }
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
