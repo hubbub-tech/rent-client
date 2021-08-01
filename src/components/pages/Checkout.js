@@ -25,8 +25,6 @@ const Checkout = ({ setFlashMessages }) => {
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/checkout', {
       credentials: 'include'
     })

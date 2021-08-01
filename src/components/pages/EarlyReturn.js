@@ -23,8 +23,6 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
       credentials: 'include'
     })

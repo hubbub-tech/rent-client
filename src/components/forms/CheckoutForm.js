@@ -15,8 +15,6 @@ const CheckoutForm = ({ setFlashMessages}) => {
 
   const submit = (e) => {
     e.preventDefault()
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/checkout/submit', {
       credentials: 'include'
     })

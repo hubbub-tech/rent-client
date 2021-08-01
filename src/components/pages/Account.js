@@ -25,7 +25,6 @@ const Account = ({ setFlashMessages }) => {
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/u/id=${userId}`, {
       credentials: 'include'
     })

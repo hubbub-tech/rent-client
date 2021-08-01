@@ -21,8 +21,6 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
   });
 
   useEffect(() => {
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
       credentials: 'include'
     })

@@ -22,8 +22,6 @@ const EditUserAddress = ({ setFlashMessages }) => {
   const addressDisplay = `${user.address.num} ${user.address.street} ${user.address.apt !== '' ? `Apt ${user.address.apt}` : ''}, ${user.address.city}, ${user.address.state} ${user.address.zip_code}`;
 
   useEffect(() => {
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
       credentials: 'include'
     })

@@ -18,8 +18,6 @@ const EditPassword = ({ setFlashMessages }) => {
   const [user, setUser] = useState({"address": {}, "profile": {}});
 
   useEffect(() => {
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
       credentials: 'include'
     })

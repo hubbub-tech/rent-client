@@ -21,8 +21,6 @@ const Dropoffs = ({ setFlashMessages }) => {
   const [address, setAddress] = useState({});
 
   useEffect(() => {
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/schedule/dropoffs/${dropoffDate}`, {
       credentials: 'include'
     })
