@@ -28,8 +28,14 @@ const LoginForm = ({ setFlashMessages }) => {
     .then(data => {
       setFlashMessages(data.flashes);
       if (statusOK) {
-        Cookies.set('hubbubToken', data.hubbubToken, { sameSite: 'none', secure: true});
-        Cookies.set('hubbubId', data.hubbubId, { sameSite: 'none', secure: true});
+        let configs;
+        if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+          configs = { sameSite: 'none', secure: true}
+        } else {
+          configs = { domain: '.hubbub.shop', sameSite: 'none', secure: true}
+        }
+        Cookies.set('hubbubToken', data.hubbubToken, configs);
+        Cookies.set('hubbubId', data.hubbubId, configs);
         Cookies.set('cartSize', data.cartSize);
         history.push("/");
       } else {

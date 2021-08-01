@@ -5,9 +5,16 @@ import { Redirect } from 'react-router-dom';
 
 const Logout = ({ setFlashMessages }) => {
   useEffect(() => {
-    Cookies.remove('hubbubToken');
-    Cookies.remove('cartSize');
-    Cookies.remove('hubbubId');
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      Cookies.remove('hubbubToken');
+      Cookies.remove('hubbubId');
+      Cookies.remove('cartSize');
+    } else {
+      const configs = { domain: '.hubbub.shop'}
+      Cookies.remove('hubbubToken', configs);
+      Cookies.remove('hubbubId', configs);
+      Cookies.remove('cartSize');
+    }
 
     setFlashMessages(["You've been logged out! Come back soon!"])
   }, []);
