@@ -10,6 +10,9 @@ const Logout = ({ setFlashMessages }) => {
       Cookies.remove('hubbubId');
       Cookies.remove('cartSize');
     } else {
+      const configs = { domain: '.hubbub.shop'}
+      Cookies.remove('hubbubToken', configs);
+      Cookies.remove('hubbubId', configs);
       Cookies.remove('hubbubToken');
       Cookies.remove('hubbubId');
       Cookies.remove('cartSize');
