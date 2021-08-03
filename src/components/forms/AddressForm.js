@@ -6,13 +6,13 @@ const AddressForm = ({ address, setAddress, required = false }) => {
       <div className="col-md">
         <div className="form-floating mb-3">
           <input
-            type="text"
+            type="number"
             className="form-control"
             id="addressNum"
             name="addressNum"
             onChange={e => setAddress({ ...address, num: e.target.value })}
-            minLength="1"
-            maxLength="10"
+            min="0"
+            maxLength="100000"
             required={required}
           />
         <label htmlFor="addressNum">House Number</label>
