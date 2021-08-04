@@ -28,7 +28,6 @@ const ListForm = ({ setFlashMessages }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isDefaultAddress, setIsDefaultAddress] = useState(true);
   const [item, setItem] = useState({
-    "id": null,
     "name": null,
     "price": null
   });
@@ -57,7 +56,6 @@ const ListForm = ({ setFlashMessages }) => {
     formData.append('hubbubId', hubbubId);
     formData.append('hubbubToken', hubbubToken);
 
-    formData.append('id', item.id);
     formData.append('name', item.name);
     formData.append('price', item.price);
 
@@ -132,19 +130,6 @@ const ListForm = ({ setFlashMessages }) => {
         <div className="card-body">
           <div className="row">
             <div className="col-sm-12 mt-3 mb-0">
-              <div className="form-floating mb-3">
-                <input
-                  type="number"
-                  className="form-control"
-                  id="newItemId"
-                  name="itemId"
-                  onChange={e => setItem({ ...item, id: e.target.value })}
-                  min={273}
-                  max={1000}
-                  required
-                />
-              <label htmlFor="newItemName">Item Id</label>
-              </div>
               <div className="form-floating mb-3">
                 <input
                   type="text"
