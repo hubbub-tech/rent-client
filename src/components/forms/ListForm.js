@@ -73,7 +73,7 @@ const ListForm = ({ setFlashMessages }) => {
     formData.append('apt', address.apt);
     formData.append('city', address.city);
     formData.append('state', address.state);
-    formData.append('zip', address.zip_code);
+    formData.append('zip_code', address.zip_code);
     formData.append('tags', tagsChecked)
 
     formData.append('image', selectedFile);

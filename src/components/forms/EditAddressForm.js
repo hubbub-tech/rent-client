@@ -16,7 +16,7 @@ const EditAddressForm = ({ user, setFlashMessages }) => {
     "apt": "",
     "city": "New York",
     "state": "NY",
-    "zip": null
+    "zip_code": null
   });
 
   const [errors, setErrors] = useState({

@@ -25,7 +25,7 @@ const RegisterForm = ({ setFlashMessages }) => {
     "apt": "",
     "city": "New York",
     "state": "NY",
-    "zip": null
+    "zip_code": null
   });
   const [profile, setProfile] = useState({
     "phone": null

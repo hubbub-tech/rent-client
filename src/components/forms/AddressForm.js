@@ -48,9 +48,9 @@ const AddressForm = ({ address, setAddress, required = false }) => {
           <input
             type="text"
             className="form-control"
-            id="addressZip"
-            name="addressZip"
-            onChange={e => setAddress({ ...address, zip: e.target.value })}
+            id="addressZipCode"
+            name="addressZipCode"
+            onChange={e => setAddress({ ...address, zip_code: e.target.value })}
             minLength="1"
             maxLength="9"
             required={required}
