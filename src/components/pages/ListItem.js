@@ -9,8 +9,8 @@ const ListItem = ({ setFlashMessages }) => {
         <div className="row">
           <h1 className="text-center">List</h1>
           <p className="text-center">Start your side hustle <i><mark>today</mark></i>.</p>
-          <div className="col-md-1"></div>
-          <div className="col-md-4">
+          <div className="col-sm-1"></div>
+          <div className="col-sm-4">
             <h5 className="text-center">Quick Tips</h5>
               <ul className="instructions">
                 <li>
@@ -35,10 +35,10 @@ const ListItem = ({ setFlashMessages }) => {
                 </li>
               </ul>
           </div>
-          <div className="col-md-6">
+          <div className="col-sm-6">
             <ListForm setFlashMessages={setFlashMessages} />
           </div>
-          <div className="col-md-1"></div>
+          <div className="col-sm-1"></div>
         </div>
       </div>
     </main>

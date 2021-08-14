@@ -230,13 +230,13 @@ const RegisterForm = ({ setFlashMessages }) => {
             />
             <label className="form-check-label" htmlFor="communityGuidelinesDial">
               <span>Yes, I have read and agree to the terms outlined in the </span>
-              <Link
-                to="https://docs.google.com/document/d/1rRKafml--o5q6L3HA8EtFHCedQTncR8rUZhAeVsEqfI/edit?usp=sharing"
+              <a
+                href="https://docs.google.com/document/d/1rRKafml--o5q6L3HA8EtFHCedQTncR8rUZhAeVsEqfI/edit?usp=sharing"
                 target="_blank"
                 rel="noreferrer"
               >
                 Community Guidelines Agreement
-              </Link>.
+              </a>.
             </label>
           </div>
           <br />
