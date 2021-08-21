@@ -45,7 +45,7 @@ const ListForm = ({ setFlashMessages }) => {
 
   const [isValid, setIsValid] = useState(false);
   const [errors, setErrors] = useState([]);
-  const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
+  const addressDisplay = `${address.num} ${address.street}, ${address.city} ${address.state} ${address.zip_code}`;
 
   const submit = (e) => {
     e.preventDefault();
