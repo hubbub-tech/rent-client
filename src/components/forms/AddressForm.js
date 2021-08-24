@@ -12,7 +12,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             name="addressNum"
             onChange={e => setAddress({ ...address, num: e.target.value })}
             min="0"
-            maxLength="100000"
+            max="10000"
             required={required}
           />
         <label htmlFor="addressNum">House Number</label>
