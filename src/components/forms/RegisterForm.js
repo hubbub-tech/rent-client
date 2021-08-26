@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
+import ReCAPTCHA from "react-google-recaptcha";
 
 import AddressForm from './AddressForm';
 import FormErrors from '../errors/FormErrors';
@@ -36,7 +37,9 @@ const RegisterForm = ({ setFlashMessages }) => {
     "address": [],
     "server": []
   });
-
+  const onChange = (value) => {
+    console.log("Not cool, dude.");
+  }
   const isReadyForSubmission = () => {
     let isReady = false;
     if (errors.email.length == 0) {
@@ -239,6 +242,10 @@ const RegisterForm = ({ setFlashMessages }) => {
               </a>.
             </label>
           </div>
+          <ReCAPTCHA
+            sitekey="Your client site key"
+            onChange={onChange}
+          />
           <br />
           <div className="d-grid gap-2">
             <input
