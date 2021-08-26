@@ -9,7 +9,7 @@ import FormErrors from '../errors/FormErrors';
 const RegisterForm = ({ setFlashMessages }) => {
   let statusOK;
   const history = useHistory();
-
+  const [token, setToken] = useState(null);
   const [hasVenmo, setHasVenmo] = useState(true);
 
   const [user, setUser] = useState({
@@ -37,7 +37,8 @@ const RegisterForm = ({ setFlashMessages }) => {
     "address": [],
     "server": []
   });
-  const onChange = (value) => {
+  const onChange = (token) => {
+    setToken(token);
     console.log("Not cool, dude.");
   }
   const isReadyForSubmission = () => {
@@ -45,7 +46,9 @@ const RegisterForm = ({ setFlashMessages }) => {
     if (errors.email.length == 0) {
       if (errors.password.length == 0) {
         if (errors.address.length == 0) {
-          isReady = true;
+          if (token !== null) {
+            isReady = true;
+          }
         }
       }
     }
@@ -79,7 +82,7 @@ const RegisterForm = ({ setFlashMessages }) => {
     e.preventDefault()
     fetch(process.env.REACT_APP_SERVER + '/register', {
       method: 'POST',
-      body: JSON.stringify({ user, profile, address }),
+      body: JSON.stringify({ token, user, profile, address }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
@@ -245,6 +248,7 @@ const RegisterForm = ({ setFlashMessages }) => {
           <ReCAPTCHA
             sitekey={process.env.REACT_APP_RECAPTCHA_API_KEY}
             onChange={onChange}
+            onExpired={e => setToken(null)}
           />
           <br />
           <div className="d-grid gap-2">
