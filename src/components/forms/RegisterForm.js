@@ -243,7 +243,7 @@ const RegisterForm = ({ setFlashMessages }) => {
             </label>
           </div>
           <ReCAPTCHA
-            sitekey="Your client site key"
+            sitekey={process.env.REACT_APP_RECAPTCHA_API_KEY}
             onChange={onChange}
           />
           <br />
