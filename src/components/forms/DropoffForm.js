@@ -16,6 +16,7 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
     "1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"
   ];
   const [isDefaultAddress, setIsDefaultAddress] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [timesChecked, setTimesChecked] = useState([]);
   const [referral, setReferral] = useState(null);
   const [notes, setNotes] = useState(null);
@@ -26,6 +27,7 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
   }
   const submit = (e) => {
     e.preventDefault();
+    setIsDisabled(true);
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + '/schedule/dropoffs/submit', {
@@ -131,7 +133,12 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
             <label htmlFor="deliveryNotes"> Delivery Notes</label>
           </div>
           <div className="d-grid gap-2">
-            <input className="btn btn-outline-success" type="submit" value="Submit" />
+            <input
+              className="btn btn-outline-success"
+              type="submit"
+              value="Submit" 
+              disabled={isDisabled}
+            />
           </div>
         </div>
       </div>

@@ -7,6 +7,7 @@ const CheckoutForm = ({ setFlashMessages}) => {
   let statusOK;
   const history = useHistory();
   const [paymentMethod, setPaymentMethod] = useState("in-person");
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const isStatusOK = (res) => {
     statusOK = res.ok;
@@ -14,7 +15,8 @@ const CheckoutForm = ({ setFlashMessages}) => {
   }
 
   const submit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    setIsDisabled(true);
     fetch(process.env.REACT_APP_SERVER + '/checkout/submit', {
       credentials: 'include'
     })
@@ -43,7 +45,7 @@ const CheckoutForm = ({ setFlashMessages}) => {
           onChange={e => setPaymentMethod("in-person")} />
         <label
           className="form-check-label"
-          htmlFor="inPersonPay">In-Person (CashApp, Venmo, Cash, or Card)</label>
+          htmlFor="inPersonPay">In-Person (CashApp, Venmo, or Card)</label>
       </div>
       { /*
         <div className="form-check">
@@ -59,7 +61,12 @@ const CheckoutForm = ({ setFlashMessages}) => {
         </div>
       */ }
       <div className="d-grid gap-2 my-3">
-        <input className="btn btn-outline-success" type='submit' value='Order Now' />
+        <input
+          className="btn btn-outline-success"
+          type='submit'
+          value='Order Now'
+          disabled={isDisabled}
+        />
       </div>
     </form>
   );
