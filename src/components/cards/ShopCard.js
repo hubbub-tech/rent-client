@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { printDate, printMoney } from '../../helper.js';
+import FeaturedBadge from '../decor/FeaturedBadge';
 import QuoteInput from '../inputs/QuoteInput';
 
 const ShopCard = ({ urlBase, item }) => {
@@ -9,7 +10,7 @@ return (
       <div className="card-body card-shadow">
         <div className="row">
           <div className="col-sm-2 my-2">
-            {item.is_featured && <span className="badge badge-primary badge-pill mb-3">Featured</span>}
+            {item.is_featured && <FeaturedBadge />}
             <a className="custom-card zoom-in" href={`/inventory/i/id=${item.id}`}>
               <img
                 className="card-img img-fluid"

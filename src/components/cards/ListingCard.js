@@ -2,6 +2,7 @@ import React from 'react';
 import Cookies from 'js-cookie';
 
 import { printDate } from '../../helper.js';
+import FeaturedBadge from '../decor/FeaturedBadge';
 
 const ListingCard = ({
   item,
@@ -29,7 +30,7 @@ const ListingCard = ({
       <div className="card-body card-shadow">
         <div className="row">
           <div className="col-sm-3 my-2">
-            {item.is_featured && <span className="badge badge-primary badge-pill mb-3">Featured</span>}
+            {item.is_featured && <FeaturedBadge />}
             <img
               className="card-img img-fluid"
               src={`${urlBase}/${item.id}.jpg`}
