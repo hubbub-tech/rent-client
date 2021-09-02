@@ -279,11 +279,14 @@ const ListForm = ({ setFlashMessages }) => {
                   name="isDefaultAddress"
                   id="isDefaultAddressCheckbox"
                   type="checkbox"
-                  checked={isDefaultAddress}
+                  checked={!isDefaultAddress}
                   onChange={e => setIsDefaultAddress(!isDefaultAddress)}
+                  disabled={!isDefaultAddress}
                 />
                 <label className="form-check-label" htmlFor="isDefaultAddressCheckbox">
-                  Are you listing from this address: {addressDisplay}?
+                    {isDefaultAddress && 'Would you like to change your listing location? It is currently:'}
+                    {!isDefaultAddress && `Your listing location is now:`}
+                    <span className="text-hubbub"> {addressDisplay}</span>
                 </label>
               </div>
             </div>

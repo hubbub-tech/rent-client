@@ -10,7 +10,7 @@ import CheckboxList from '../inputs/CheckboxList';
 const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
   const history = useHistory();
-  const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
+  const addressDisplay = `${address.num} ${address.street}, ${address.city}, ${address.state} ${address.zip_code}`;
   const timeslots = [
     "8-9am","9-10am", "10-11am", "11-12pm", "12-1pm",
     "1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"
@@ -90,11 +90,14 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
               name="isDefaultAddress"
               id="isDefaultAddressCheckbox"
               type="checkbox"
-              checked={isDefaultAddress}
+              checked={!isDefaultAddress}
               onChange={e => setIsDefaultAddress(!isDefaultAddress)}
+              disabled={!isDefaultAddress}
             />
             <label className="form-check-label" htmlFor="isDefaultAddressCheckbox">
-              Should we pickup from the following address: {addressDisplay}?
+                {isDefaultAddress && 'Would you like to change your pickup address? It is currently:'}
+                {!isDefaultAddress && `We will now pickup your rental from:`}
+                <span className="text-hubbub"> {addressDisplay}</span>
             </label>
           </div>
           <br />

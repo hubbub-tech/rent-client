@@ -10,7 +10,7 @@ import CheckboxList from '../inputs/CheckboxList';
 const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
   const history = useHistory();
-  const addressDisplay = `${address.num} ${address.street}, ${address.city}`;
+  const addressDisplay = `${address.num} ${address.street}, ${address.city}, ${address.state} ${address.zip_code}`;
   const timeslots = [
     "8-9am","9-10am", "10-11am", "11-12pm", "12-1pm",
     "1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"
@@ -102,18 +102,23 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
             />
             <label htmlFor="referralName">Referral Name</label>
           </div>
-          <small className="card-text"><font size="-1">Please provide a complete address for your drop off location.</font></small>
-          <div className="form-check">
+          <small className="card-text">
+            <font size="-1">Please provide a complete address for your drop off location.</font>
+          </small>
+          <div className="form-check mt-2">
             <input
               className="form-check-input"
               name="isDefaultAddress"
               id="isDefaultAddressCheckbox"
               type="checkbox"
-              checked={isDefaultAddress}
+              checked={!isDefaultAddress}
               onChange={e => setIsDefaultAddress(!isDefaultAddress)}
+              disabled={!isDefaultAddress}
             />
-            <label className="form-check-label" htmlFor="isDefaultAddressCheckbox">
-              Should we deliver to the following address: {addressDisplay}?
+          <label className="form-check-label" htmlFor="isDefaultAddressCheckbox">
+              {isDefaultAddress && 'Would you like to change your default delivery address? It is currently:'}
+              {!isDefaultAddress && `Your delivery address is now:`}
+              <span className="text-hubbub"> {addressDisplay}</span>
             </label>
           </div>
           <br />
@@ -136,7 +141,7 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
             <input
               className="btn btn-outline-success"
               type="submit"
-              value="Submit" 
+              value="Submit"
               disabled={isDisabled}
             />
           </div>
