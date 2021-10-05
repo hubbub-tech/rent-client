@@ -74,19 +74,19 @@ const Story = () => {
         <div className="col-sm-3 col-12">
           <img src="../static/backgrounds/caro_perez_hubbub.jpeg" className="mx-auto d-block" style={{"borderRadius": "50%", "height": "160px"}} alt="Caro" />
           <br />
-          <p className="text-center">Caro Perez SEAS '22</p>
+          <p className="text-center">Caro Perez SEAS 22</p>
           <p className="text-center">Co-Founder, Operations</p>
         </div>
         <div className="col-sm-3 col-12">
           <img src="../static/backgrounds/ade_balogun_hubbub.jpeg" className="mx-auto d-block" style={{"borderRadius": "50%", "height": "160px"}} alt="Ade" />
           <br />
-          <p className="text-center">Ade Balogun SEAS '20</p>
+          <p className="text-center">Ade Balogun SEAS 20</p>
           <p className="text-center">Co-Founder, Technology</p>
         </div>
         <div className="col-sm-3 col-12">
           <img src="../static/backgrounds/patty_varuzza_hubbub.jpeg" className="mx-auto d-block" style={{"borderRadius": "50%", "height": "160px"}} alt="Patty" />
           <br />
-          <p className="text-center">Patrick Varuzza SEAS '20</p>
+          <p className="text-center">Patrick Varuzza SEAS 20</p>
           <p className="text-center">Co-Founder, Business Development</p>
         </div>
       </div>

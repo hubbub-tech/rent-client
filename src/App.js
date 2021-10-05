@@ -37,11 +37,12 @@ import Error404 from './components/static/Error404';
 import { parseCookies } from './helper.js'
 
 const App = () => {
-  useAnalytics();
   const hubbubId = Cookies.get('hubbubId');
   const hubbubToken = Cookies.get('hubbubToken');
   const isLoggedIn = hubbubId !== undefined && hubbubToken !== undefined;
   const [flashMessages, setFlashMessages] = useState([]);
+
+  useAnalytics(hubbubId);
   return (
     <div className="App">
       <Navbar isLoggedIn={isLoggedIn} />

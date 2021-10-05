@@ -1,22 +1,15 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-const FilterForm = ({ items, setFilters }) => {
-  const boundary = 10015;
-  const [options, setOptions] = useState({
-    "isNorth": true
-  });
-
-  const onChangeLocation = (e) => {
-    let filters = [];
-    for (let i = 0, i < items.length, i++) {
-      if (parseInt(items[i].address_zip) > boundary && e.target.value === 'Near Columbia') {
-        filters.push(items[i]);
-      } else if (parseInt(items[i].address_zip) < boundary && e.target.value === 'Near NYU') {
-        filters.push(items[i]);
+const LocationFilter = ({ items, filteredItems, setFilteredItems }) => {
+  const onChangeTaskType = (e) => {
+    let newFilteredItems = []
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type == e.target.value) {
+        newFilteredItems.push(tasks[i]);
       }
     }
-    setFilters(filters);
+    setFilteredTasks(newFilteredTasks);
   }
   return (
     <div className="row">
@@ -26,7 +19,7 @@ const FilterForm = ({ items, setFilters }) => {
             <input
               className="form-check-input"
               type="radio"
-              name="location" 
+              name="location"
               id="columbia"
               value="Near Columbia"
               onChange={onChangeLocation}
