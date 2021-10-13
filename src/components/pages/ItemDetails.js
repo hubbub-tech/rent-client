@@ -118,7 +118,7 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
                 {!isLoggedIn &&
                   <div className="mt-1">
                     <p className="text-start fs-5 fw-bold">Join Hubbub to get everything you need for low cost!</p>
-                    <p>Sign up <a href="/register">here</a> to order this item!</p>
+                    <p>Create an account <a href="/register">here</a> to order this item!</p>
                   </div>
                 }
                 <hr />

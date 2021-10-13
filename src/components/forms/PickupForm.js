@@ -26,29 +26,33 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
   }
   const submit = (e) => {
     e.preventDefault();
-    setIsDisabled(true);
-    const hubbubId = Cookies.get('hubbubId');
-    const hubbubToken = Cookies.get('hubbubToken');
-    fetch(process.env.REACT_APP_SERVER + '/schedule/pickups/submit', {
-      method: 'POST',
-      body: JSON.stringify({
-        hubbubId,
-        hubbubToken,
-        notes,
-        orders,
-        timesChecked,
-        pickupDate,
-        address
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-    .then(isStatusOK)
-    .then(data => {
-      setFlashMessages(data.flashes);
-      if (statusOK) {
-        history.push('/accounts/u/orders');
-      }
-    });
+    if (timesChecked.length > 0) {
+      setIsDisabled(true);
+      const hubbubId = Cookies.get('hubbubId');
+      const hubbubToken = Cookies.get('hubbubToken');
+      fetch(process.env.REACT_APP_SERVER + '/schedule/pickups/submit', {
+        method: 'POST',
+        body: JSON.stringify({
+          hubbubId,
+          hubbubToken,
+          notes,
+          orders,
+          timesChecked,
+          pickupDate,
+          address
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+      .then(isStatusOK)
+      .then(data => {
+        setFlashMessages(data.flashes);
+        if (statusOK) {
+          history.push('/accounts/u/orders');
+        }
+      });
+    } else {
+      setFlashMessages(["You must select at least one availability before submitting."])
+    }
     window.scrollTo(0, 0);
   }
 
