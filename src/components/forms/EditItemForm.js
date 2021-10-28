@@ -73,11 +73,6 @@ const EditItemForm = ({ item, cookies, setFlashMessages }) => {
           </div>
           <div className="mb-3">
             <label className="form-label" htmlFor="changeItemDescription">Item Description</label>
-            <small className="card-text">
-              <font size="-1">
-                The more descriptive you are, the more customers you'll bring in!
-              </font>
-            </small>
             <textarea
               className="form-control"
               id="changeItemDescription"
@@ -85,6 +80,7 @@ const EditItemForm = ({ item, cookies, setFlashMessages }) => {
               placeholder={item.details.description}
               onChange={e => setDescription(e.target.value)}
             />
+          <div id="descriptionHelp" class="form-text">The more descriptive you are, the more customers you'll bring in!</div>
           </div>
           <div className="mb-3">
             <label htmlFor="formFile" className="form-label">Product Photo (Portrait Ideally)</label>
