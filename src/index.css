@@ -41,6 +41,19 @@ h1, h2, h3, h4, h5, h6
   animation: grow 5000ms ease-in-out infinite;
 }
 
+.icon-rating {
+
+}
+
+.icon-rating:hover {
+  background-color: #3d4fe0;
+  border-width: 1px 1px;
+  border: #3d4fe0;
+  color: white;
+  transform: scale(1);
+  animation: grow 5000ms ease-in-out infinite;
+}
+
 @keyframes grow {
   0% {
     transform: scale(1);

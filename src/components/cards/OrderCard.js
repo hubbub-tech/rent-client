@@ -48,6 +48,10 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
     history.push(`/accounts/o/extend/id=${order.id}`)
   }
 
+  const handleReviewOnClick = () => {
+    history.push(`/accounts/o/review/id=${order.id}`)
+  }
+
   const handleCancelOnClick = () => {
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
@@ -186,6 +190,17 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                       >
                         See Details
                       </Link>
+                    </div>
+                  }
+                  {order.is_dropoff_scheduled &&
+                    <div className="d-grid gap-2">
+                      <button
+                        type="button"
+                        className="btn btn-lg btn-hubbub mx-1 my-1"
+                        onClick={handleReviewOnClick}
+                      >
+                        Review Item
+                      </button>
                     </div>
                   }
                 </div>
