@@ -1,11 +1,11 @@
-const HeartIcon = ({ fill = 'black', size = '16', onClick = null }) => {
+const HeartIcon = ({ fill = 'black', size = '16', className = null, onClick = null }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={size}
       height={size}
       fill={fill}
-      className="bi bi-heart-fill mx-1"
+      className={`bi bi-heart-fill mx-1 ${className !== null ? className : '' }`}
       viewBox="0 0 16 16"
       onClick={onClick}
     >

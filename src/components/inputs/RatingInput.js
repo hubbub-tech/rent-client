@@ -29,9 +29,9 @@ const RatingInput = ({ rating, setRating, label }) => {
       <div>
         {icons.map((icon, index) => (
           <HeartIcon
-            key={`heart-${index}`}
             size={icon.size}
             fill={icon.fill}
+            key={`heart-${index}`}
             onClick={index => updateRating(index)}
           />
         ))}
