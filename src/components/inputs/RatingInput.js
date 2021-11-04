@@ -14,15 +14,11 @@ const RatingInput = ({ rating, setRating, label }) => {
   const updateRating = (value) => {
     setRating(value);
     for (let i = 0; i < value; i++) {
-      icons[i].size = "3rem";
-      icons[i].fill = "red";
+      setIcons([
+        ...icons, {"size": "3rem", "fill": "red"}
+      ]);
     }
-    setToggle(!toggle);
   }
-  useEffect(() => {
-    console.log("hey")
-    // Refresh the component;
-  }, [toggle]);
   return (
     <div className="mb-3">
       <label className="form-label">{label}</label>

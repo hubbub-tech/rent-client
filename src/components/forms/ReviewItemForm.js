@@ -29,13 +29,15 @@ const ReviewItemForm = ({ item, setFlashMessages }) => {
         hubbubId,
         hubbubToken,
         body,
-        rating
+        rating,
+        "itemId": item.id,
       }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
+      history.push('/accounts/u/orders');
     });
     window.scrollTo(0, 0);
   }
@@ -53,7 +55,7 @@ const ReviewItemForm = ({ item, setFlashMessages }) => {
               placeholder="Tell us how it went--for the future renters :)"
               onChange={e => setBody(e.target.value)}
             />
-            <div id="reviewHelp" class="form-text">How was the rental? Was the item what you expected?</div>
+          <div id="reviewHelp" className="form-text">How was the rental? Was the item what you expected?</div>
           </div>
           <RatingInput
             rating={rating}
