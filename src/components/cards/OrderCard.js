@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import moment from 'moment';
 import { useHistory, Link } from 'react-router-dom';
 
+import ReceiptDownload from '../requests/Receipts';
 import { printDate, printMoney } from '../../helper.js';
 
 const OrderCard = ({ urlBase, order, setFlashMessages }) => {
@@ -92,17 +93,9 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
             <p className="text-start my-0">{printMoney(order.reservation.deposit)}</p>
           </div>
           <div className="col-md-3 my-2">
-            {/*
-              <div className="d-grid gap-2">
-                <button
-                  type="button"
-                  className="btn btn-dark mx-1 my-1"
-                  onClick={handleReceiptOnClick}
-                >
-                  Download Receipt
-                </button>
-              </div>
-            */}
+            <div className="d-grid gap-2">
+              <ReceiptDownload order={order} setFlashMessages={setFlashMessages} />
+            </div>
           </div>
         </div>
       </div>
