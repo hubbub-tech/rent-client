@@ -41,17 +41,13 @@ h1, h2, h3, h4, h5, h6
   animation: grow 5000ms ease-in-out infinite;
 }
 
-.icon-rating {
+.heart-rating {
 
 }
 
-.icon-rating:hover {
-  background-color: #3d4fe0;
-  border-width: 1px 1px;
-  border: #3d4fe0;
-  color: white;
-  transform: scale(1);
-  animation: grow 5000ms ease-in-out infinite;
+.heart-rating:hover {
+  background-color: red;
+  color: red;
 }
 
 @keyframes grow {
@@ -191,7 +187,6 @@ a.custom-card:hover {
 
 .crop-circle img {
   max-width: 100%;
-  margin: -30px -50px -100px 0;
 }
 
 hr.divider {

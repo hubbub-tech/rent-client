@@ -27,6 +27,7 @@ import EditAccount from './components/pages/EditAccount';
 import EditPassword from './components/pages/EditPassword';
 import ExtendRental from './components/pages/ExtendRental';
 import EarlyReturn from './components/pages/EarlyReturn';
+import EditAccountPhoto from './components/pages/EditAccountPhoto';
 import EditUserAddress from './components/pages/EditUserAddress';
 import RecoverPassword from './components/pages/RecoverPassword';
 import ResetPassword from './components/pages/ResetPassword';
@@ -103,6 +104,10 @@ const App = () => {
         </Route>
         <Route exact path="/accounts/u/edit">
           {isLoggedIn && <EditAccount setFlashMessages={setFlashMessages} />}
+          {!isLoggedIn && <Redirect to='/login' />}
+        </Route>
+        <Route exact path="/accounts/u/photo">
+          {isLoggedIn && <EditAccountPhoto setFlashMessages={setFlashMessages} />}
           {!isLoggedIn && <Redirect to='/login' />}
         </Route>
         <Route exact path="/accounts/u/address">
