@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useHistory, Link } from 'react-router-dom';
 
 import { printDate } from '../../helper.js'
-import ProfileCard from '../cards/ProfileCard';
+import ProfilePhoto from '../icons/ProfilePhoto';
 import ListingCard from '../cards/ListingCard';
 
 const Account = ({ setFlashMessages }) => {
@@ -49,9 +49,7 @@ const Account = ({ setFlashMessages }) => {
       <div className="container-md">
         <div className="row mt-5">
           <div className="col-sm-4 col-12 my-3">
-            <div className="mx-auto d-block" style={{"width": "300px", "height": "300px"}}>
-              <ProfileCard urlBase={urlBase.user} user={user} />
-            </div>
+            <ProfilePhoto urlBase={urlBase.user} user={user} size="300px" />
             <div className="row justify-content-center g-0">
               <h2 className="text-center mt-3">{user.name}</h2>
             </div>
@@ -86,7 +84,8 @@ const Account = ({ setFlashMessages }) => {
                     <span> {user.payment}</span>
                   </li>
                 </ul>
-                {/*<Link className="btn btn-outline-dark" to="/accounts/u/edit">Edit Profile</Link>*/}
+                <Link className="btn btn-outline-dark" to="/accounts/u/edit">Edit Profile</Link>
+                <Link className="btn btn-outline-dark" to="/accounts/u/photo">Change Photo</Link>
                 <Link className="btn btn-outline-dark" to="/accounts/u/password">Change Password</Link>
                 <Link className="btn btn-outline-dark" to="/accounts/u/address">Change Address</Link>
               </div>

@@ -1,29 +1,25 @@
-import React from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
-import TextInput from '../inputs/TextInput';
-import AddressForm from './AddressForm';
 import FormErrors from '../errors/FormErrors';
 
 const EditAccountForm = ({ user, setFlashMessages }) => {
-  const history = useHistory();
   let statusOK;
+  const history = useHistory();
 
-  const formData = new FormData();
   const [hasVenmo, setHasVenmo] = useState(true);
   const [errors, setErrors] = useState({
-    "email": [],
     "payment": [],
-    "server": []
+    "server": [],
+    "email": [],
+    "phone": []
   });
 
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [email, setEmail] = useState(user.email);
-  const [payment, setPayment] = useState(user.payment);
-  const [bio, setBio] = useState(user.profile.bio);
-  const [phone, setPhone] = useState(user.profile.phone);
+  const [payment, setPayment] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [bio, setBio] = useState(null);
 
   const isStatusOK = (res) => {
     statusOK = res.ok;
@@ -43,39 +39,17 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
     e.preventDefault();
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
-
-    formData.append('hubbubId', hubbubId);
-    formData.append('hubbubToken', hubbubToken);
-
-    if (typeof bio === 'undefined') {
-      formData.append('bio', user.profile.bio);
-    } else {
-      formData.append('bio', bio);
-    }
-
-    if (typeof phone === 'undefined') {
-      formData.append('phone', user.profile.phone);
-    } else {
-      formData.append('phone', phone);
-    }
-
-    if (typeof email === 'undefined') {
-      formData.append('email', user.email);
-    } else {
-      formData.append('email', email);
-    }
-
-    if (typeof payment === 'undefined') {
-      formData.append('payment', user.payment);
-    } else {
-      formData.append('payment', payment);
-    }
-
-    formData.append('image', selectedFile);
-
     fetch(process.env.REACT_APP_SERVER + '/accounts/u/edit/submit', {
       method: 'POST',
-      body: formData
+      body: JSON.stringify({
+        hubbubId,
+        hubbubToken,
+        payment,
+        email,
+        phone,
+        bio
+      }),
+      headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
     .then(data => {
@@ -91,7 +65,7 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
   }
   return (
     <form encType="multipart/form-data" onSubmit={submit}>
-      <div className="card mx-auto" style={{"maxWidth": "540px"}}>
+      <div className="card">
         <div className="card-body">
           <FormErrors errors={errors.server} color={"red"} />
             <div className="mb-3">
@@ -161,19 +135,12 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
               onChange={e => setBio(e.target.value)}
             />
           </div>
-          <div className="mb-3">
-            <label htmlFor="formFile" className="form-label">Product Photo (Portrait Ideally)</label>
-            <input
-              className="form-control"
-              type="file"
-              id="formFile"
-              name="image"
-              accept="image/*"
-              onChange={e => setSelectedFile(e.target.files[0])}
-            />
-          </div>
           <div className="d-grid gap-2">
-            <input className="btn btn-outline-success" type='submit' value='Submit' />
+            <input
+              className="btn btn-outline-success"
+              type='submit'
+              value='Submit'
+            />
           </div>
         </div>
       </div>

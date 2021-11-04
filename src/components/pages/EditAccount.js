@@ -3,9 +3,10 @@ import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
+import ProfilePhoto from '../icons/ProfilePhoto';
 import EditAccountForm from "../forms/EditAccountForm";
 
-const EditAccount = ({ cookies, setFlashMessages }) => {
+const EditAccount = ({ setFlashMessages }) => {
   let statusOK;
   let statusCode;
 
@@ -19,6 +20,7 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
     "profile": {},
     "address": {}
   });
+  const [urlBase, setUrlBase] = useState();
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
@@ -28,6 +30,7 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
     .then(data => {
       if (statusOK) {
         setUser(data.user);
+        setUrlBase(data.photo_url);
       } else if (statusCode === 403) {
         setFlashMessages(data.flashes);
         history.push('/logout');
@@ -39,20 +42,14 @@ const EditAccount = ({ cookies, setFlashMessages }) => {
     <main>
       <div className="container-md my-5">
         <div className="row">
-          <h1 className="text-center">Edit Your Account</h1>
-          <div className="col-md-1"></div>
-          <div className="col-md-3">
-            <h5>Instructions</h5>
-            <p>
-              Enter the information that you would like to enter. This profile is meant
-              to increase trust in Hubbub Buds :)! All of these fields are optional and you
-              can leave them unedited.
-            </p>
-          </div>
-          <div className="col-md-7">
+          <h1 className="text-center mb-3">Edit Your Account</h1>
+          <div className="col-md-3"></div>
+          <div className="col-md-6">
+            <ProfilePhoto urlBase={urlBase} user={user} size="200px" />
+            <p className="text-center mt-3">This profile is meant to increase trust in Hubbub Buds :)!</p>
             <EditAccountForm user={user} setFlashMessages={setFlashMessages} />
           </div>
-          <div className="col-md-1"></div>
+          <div className="col-md-3"></div>
         </div>
       </div>
     </main>
