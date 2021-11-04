@@ -3,8 +3,10 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
-import { printDate, printMoney } from '../../helper.js';
+import ItemPhoto from '../icons/ItemPhoto';
 import RentalUpdateForm from '../forms/RentalUpdateForm';
+import { printDate, printMoney } from '../../helper.js';
+
 
 const CheckoutCard = ({
   urlBase,
@@ -15,6 +17,10 @@ const CheckoutCard = ({
 }) => {
   const history = useHistory();
   const [reservation, setReservation] = useState(item.reservation);
+
+  const handleItemPhotoOnClick = () => {
+    history.push(`/inventory/i/id=${item.id}`);
+  }
 
   const editItem = (e) => {
     setReservation(null);
@@ -45,7 +51,7 @@ const CheckoutCard = ({
       setFlashMessages(data.flashes)
       setToggle(!toggle);
     });
-    let oldCartSize = Cookies.get('cartSize')
+    let oldCartSize = Cookies.get('cartSize');
     Cookies.set('cartSize', parseInt(oldCartSize) - 1, { expires: 7 });
   }
   return (
@@ -53,7 +59,12 @@ const CheckoutCard = ({
       <div className="card-body">
         <div className="row">
           <div className="col-md-5">
-            <img className="card-img-top" src={`${urlBase}/${item.id}.jpg`} alt={item.name} />
+            <ItemPhoto
+              className="card-img-top"
+              src={`${urlBase}/${item.id}.jpg`}
+              onClick={handleItemPhotoOnClick}
+              item={item}
+            />
           </div>
           <div className="col-md-7">
             <h4 className="card-title">{ item.name }</h4>

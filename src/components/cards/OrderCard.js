@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import moment from 'moment';
 import { useHistory, Link } from 'react-router-dom';
 
+import ItemPhoto from '../icons/ItemPhoto';
 import ReceiptDownload from '../requests/Receipts';
 import { printDate, printMoney } from '../../helper.js';
 
@@ -33,24 +34,28 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
     });
   }
 
+  const handleItemPhotoOnClick = () => {
+    history.push(`/inventory/i/id=${order.item.id}`);
+  }
+
   const handleDropoffOnClick = () => {
-    history.push(`/schedule/dropoffs/${order.res_date_start}`)
+    history.push(`/schedule/dropoffs/${order.res_date_start}`);
   }
 
   const handlePickupOnClick = () => {
-    history.push(`/schedule/pickups/${order.ext_date_end}`)
+    history.push(`/schedule/pickups/${order.ext_date_end}`);
   }
 
   const handleEarlyOnClick = () => {
-    history.push(`/accounts/o/early/id=${order.id}`)
+    history.push(`/accounts/o/early/id=${order.id}`);
   }
 
   const handleExtendOnClick = () => {
-    history.push(`/accounts/o/extend/id=${order.id}`)
+    history.push(`/accounts/o/extend/id=${order.id}`);
   }
 
   const handleReviewOnClick = () => {
-    history.push(`/accounts/o/review/id=${order.id}`)
+    history.push(`/accounts/o/review/id=${order.id}`);
   }
 
   const handleCancelOnClick = () => {
@@ -102,10 +107,11 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
       <div className="card-body">
         <div className="row">
           <div className="col-sm-2 my-2">
-            <img
+            <ItemPhoto
               className="img-fluid"
               src={`${urlBase}/${order.item.id}.jpg`}
-              alt={order.item.name}
+              onClick={handleItemPhotoOnClick}
+              item={order.item}
             />
           </div>
           <div className="col-sm-10">

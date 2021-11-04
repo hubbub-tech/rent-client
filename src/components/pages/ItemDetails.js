@@ -6,6 +6,7 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 import { printDate, printMoney } from '../../helper.js';
 import FeedbackForm from '../forms/FeedbackForm';
 import RentalForm from '../forms/RentalForm';
+import ItemPhoto from '../icons/ItemPhoto';
 import ShopCard from '../cards/ShopCard';
 
 import AOS from 'aos';
@@ -88,10 +89,10 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
         <div className="row">
           <div className="col-md-1"></div>
           <div className="col-md-6 mt-5">
-            <img
+            <ItemPhoto
               className="card-img-top rounded"
               src={`${urlBase}/${itemId}.jpg`}
-              alt={item.name}
+              item={item}
             />
             <FeedbackForm setFlashMessages={setFlashMessages} />
           </div>

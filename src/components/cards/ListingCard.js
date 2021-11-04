@@ -1,8 +1,10 @@
 import React from 'react';
 import Cookies from 'js-cookie';
+import { useHistory } from 'react-router-dom';
 
+import ItemPhoto from '../icons/ItemPhoto';
+import FeaturedBadge from '../icons/FeaturedBadge';
 import { printDate } from '../../helper.js';
-import FeaturedBadge from '../decor/FeaturedBadge';
 
 const ListingCard = ({
   item,
@@ -10,10 +12,16 @@ const ListingCard = ({
   isOwner,
   setFlashMessages
 }) => {
+  const history = useHistory();
+
   const isStatusOK = (res) => {
-    // some action that is dependent on the status of the POST
     return res.json()
   }
+
+  const handleItemPhotoOnClick = () => {
+    history.push(`/inventory/i/id=${item.id}`)
+  }
+
   const onClick = () => {
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
@@ -31,16 +39,17 @@ const ListingCard = ({
         <div className="row">
           <div className="col-sm-3 my-2">
             {item.is_featured && <FeaturedBadge />}
-            <img
+            <ItemPhoto
               className="card-img img-fluid"
               src={`${urlBase}/${item.id}.jpg`}
-              alt={item.name}
+              onClick={handleItemPhotoOnClick}
+              item={item}
             />
           </div>
           <div className="col-sm-9">
             <div className="card-body">
               <div className="row">
-                <div className="col-md-9 my-1">
+                <div className="col-sm-11 my-1">
                   <h3 className="card-title">
                     {item.name}
                     {!item.is_available && <span className="text-alert"> (Inactive)</span>}
@@ -64,7 +73,7 @@ const ListingCard = ({
                     </div>
                   </div>
                 </div>
-                <div className="col-md-3 my-1"></div>
+                <div className="col-sm-1 my-1"></div>
               </div>
             </div>
           </div>

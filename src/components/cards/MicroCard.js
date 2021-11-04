@@ -1,24 +1,26 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
-import FeaturedBadge from '../decor/FeaturedBadge';
+import FeaturedBadge from '../icons/FeaturedBadge';
 import QuoteInput from '../inputs/QuoteInput';
+import ItemPhoto from '../icons/ItemPhoto';
 
 const MicroCard = ({ urlBase, item }) => {
-return (
-
+  const history = useHistory();
+  const onClick = () => history.push(`/inventory/i/id=${item.id}`);
+  return (
     <div data-aos="fade-up" className="card px-0 mb-3">
       <div className="card-body card-shadow">
         <div className="row">
           <div className="col-sm-4 my-2">
             {item.is_featured && <FeaturedBadge />}
-            <a className="custom-card zoom-in" href={`/inventory/i/id=${item.id}`}>
-              <img
-                className="card-img img-fluid"
-                src={`${urlBase}/${item.id}.jpg`}
-                alt={item.name}
-              />
-            </a>
+            <ItemPhoto
+              className="card-img img-fluid"
+              src={`${urlBase}/${item.id}.jpg`}
+              onClick={onClick}
+              item={item}
+            />
           </div>
           <div className="col-sm-8">
             <div className="card-body">
