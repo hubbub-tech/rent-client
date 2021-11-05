@@ -1,12 +1,12 @@
 import React from 'react';
 
-const ProfilePhoto = ({urlBase, user, size }) => {
+const ProfilePhoto = ({src, user, size }) => {
   if (user.profile.has_pic) {
     return (
       <div className="mx-auto d-block"  style={{"width": size, "height": size}}>
         <img
           className="card-img-top"
-          src={`${urlBase}/${user.id}.jpg`}
+          src={src}
           style={{"borderRadius": "50%"}}
           alt={user.name}
         />

@@ -45,7 +45,7 @@ const EditAccountPhoto = ({ setFlashMessages }) => {
           <h1 className="text-center mb-3">Change Your Account Photo</h1>
           <div className="col-md-3"></div>
           <div className="col-md-6">
-            <ProfilePhoto urlBase={urlBase} user={user} size="200px" />
+            <ProfilePhoto src={`${urlBase}/${user.id}.jpg`} user={user} size="200px" />
             <p className="text-center mt-3">This profile is meant to increase trust in Hubbub Buds :)!</p>
             <EditAccountPhotoForm user={user} setFlashMessages={setFlashMessages} />
           </div>

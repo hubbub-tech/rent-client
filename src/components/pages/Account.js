@@ -49,7 +49,7 @@ const Account = ({ setFlashMessages }) => {
       <div className="container-md">
         <div className="row mt-5">
           <div className="col-sm-4 col-12 my-3">
-            <ProfilePhoto urlBase={urlBase.user} user={user} size="300px" />
+            <ProfilePhoto src={`${urlBase.user}/${user.id}.jpg`} user={user} size="300px" />
             <div className="row justify-content-center g-0">
               <h2 className="text-center mt-3">{user.name}</h2>
             </div>

@@ -13,6 +13,25 @@ h1, h2, h3, h4, h5, h6
   animation: animateText 20000ms linear infinite;
 }
 
+.border-hubbub {
+  border-style: solid;
+  border-width: thick;
+  border-color: #69b6e7;
+  animation: animateBorder 20000ms linear infinite;
+}
+
+@keyframes animateBorder {
+  0% {
+    border-color: #69b6e7;
+  }
+  50% {
+    border-color: #3d4fe0;
+  }
+  100% {
+    border-color: #69b6e7;
+  }
+}
+
 @keyframes animateText {
   0% {
     color: #69b6e7;

@@ -2,23 +2,25 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import TestimonialCarousel from '../carousels/TestimonialCarousel';
+import TestimonialCard from '../cards/TestimonialCard';
 
 const Main = () => {
+  const [urlBase, setUrlBase] = useState();
   const [testimonials, setTestimonials] = useState([]);
   const categories = [
     {"link": "/search=kitchen", "title": "Kitchen", "alt": "Pots"},
-    {"link": "", "title": "Everything", "alt": "Fridge"},
     {"link": "/search=entertainment", "title": "Entertainment", "alt": "Kindle Fire"},
-    {"link": "/search=all", "title": "Random", "alt": "Lights"},
-    {"link": "/search=school", "title": "School", "alt": "Calculator"},
-    {"link": "/search=living", "title": "Living", "alt": "Weights"}
+    {"link": "/search=living", "title": "Living", "alt": "Lights"},
+    {"link": "/search=school", "title": "School", "alt": "Calculator"}
   ]
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + '/index')
     .then(res => res.json())
-    .then(data => setTestimonials(data.testimonials));
+    .then(data => {
+      setUrlBase(data.photo_url);
+      setTestimonials(data.testimonials);
+    });
   }, []);
   return (
     <main>
@@ -29,7 +31,7 @@ const Main = () => {
             <h1 className="text-center display-1 mt-5 text-hubbub">
               <big>HUBBUB</big>
             </h1>
-            <h5 className="text-center mb-3">Conveniently rent the items you need, and have them delivered to your door</h5>
+            <h5 className="text-center mb-3">Discover the better, faster, cheaper way to get the items you need</h5>
           </div>
           <div className="col-md-2"></div>
         </div>
@@ -45,8 +47,9 @@ const Main = () => {
         <div className="row mt-5">
           <h1 className="text-center">Top Categories</h1>
           <p className="text-center">Rent from the most active categories on Hubbub!</p>
+          <div className="col-sm-2"></div>
           {categories.map((category) => (
-            <div className="col-md-2 col-6 mb-1" key={category.title}>
+            <div className="col-sm-2 col-6 mb-1" key={category.title}>
               <h6 className="text-center my-3">{ category.title }</h6>
               <a className="custom-card" href={`/inventory${category.link}`}>
                 <img
@@ -57,12 +60,14 @@ const Main = () => {
               </a>
             </div>
           ))}
+          <div className="col-sm-2"></div>
         </div>
-        <hr/>
         <div className="row mt-5 d-flex justify-content-center">
           <div className="col-md-2"></div>
           <div className="col-8">
-            <TestimonialCarousel testimonials={testimonials} />
+            <h2 className="text-center mt-5">Your Friends &#128147; Hubbub!</h2>
+            <p className="text-center mb-3">See what they have to say about their experience with us :)</p>
+            <TestimonialCard testimonials={testimonials} urlBase={urlBase} />
           </div>
           <div className="col-md-2"></div>
         </div>
