@@ -3,14 +3,19 @@ import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useHistory } from 'react-router-dom';
 
-const EditItemForm = ({ item, cookies, setFlashMessages }) => {
-  const history = useHistory();
-  let statusOK;
-  const formData = new FormData();
+import FormErrors from '../errors/FormErrors';
 
-  const [selectedFile, setSelectedFile] = useState(null);
+const EditItemForm = ({ item, cookies, setFlashMessages }) => {
+  let statusOK;
+  const history = useHistory();
+
   const [price, setPrice] = useState(item.price);
   const [description, setDescription] = useState(item.details.description);
+  const [errors, setErrors] = useState({
+    "price": [],
+    "server": [],
+    "description": []
+  });
 
   const isStatusOK = (res) => {
     statusOK = res.ok;
@@ -22,41 +27,36 @@ const EditItemForm = ({ item, cookies, setFlashMessages }) => {
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
 
-    formData.append('hubbubId', hubbubId);
-    formData.append('hubbubToken', hubbubToken);
-
-    formData.append('itemId', item.id);
-    formData.append('image', selectedFile);
-
-    if (typeof price === 'undefined') {
-      formData.append('price', item.price);
-    } else {
-      formData.append('price', price);
-    }
-
-    if (description === null) {
-      formData.append('description', item.details.description);
-    } else {
-      formData.append('description', description);
-    }
-
     fetch(process.env.REACT_APP_SERVER + '/accounts/i/edit/submit', {
       method: 'POST',
-      body: formData
+      body: JSON.stringify({
+        hubbubId,
+        hubbubToken,
+        price,
+        description,
+        "itemId": item.id
+      }),
+      headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
     .then(data => {
       setFlashMessages(data.flashes);
+
       if (statusOK) {
         history.push(`/accounts/u/id=${item.lister_id}`);
+      } else {
+        setErrors({ ...errors, server: data.errors });
       }
     })
     .catch(error => console.log(error));
   }
+
   return (
     <form encType="multipart/form-data" onSubmit={submit}>
       <div className="card">
         <div className="card-body">
+          <FormErrors errors={errors.server} color={"red"} />
+          <FormErrors errors={errors.price} color={"red"} />
           <div className="mb-3">
             <label className="form-label" htmlFor="changeItemPrice">Retail Price (USD)</label>
             <input
@@ -65,12 +65,13 @@ const EditItemForm = ({ item, cookies, setFlashMessages }) => {
               id="changeItemPrice"
               name="itemPrice"
               step="0.01"
-              placeholder={item.price}
-              onChange={e => setPrice(e.target.value)}
               min="1.00"
               max="1000.00"
+              placeholder={item.price}
+              onChange={e => setPrice(e.target.value)}
             />
           </div>
+          <FormErrors errors={errors.description} color={"red"} />
           <div className="mb-3">
             <label className="form-label" htmlFor="changeItemDescription">Item Description</label>
             <textarea
@@ -80,18 +81,7 @@ const EditItemForm = ({ item, cookies, setFlashMessages }) => {
               placeholder={item.details.description}
               onChange={e => setDescription(e.target.value)}
             />
-          <div id="descriptionHelp" class="form-text">The more descriptive you are, the more customers you'll bring in!</div>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="formFile" className="form-label">Product Photo (Portrait Ideally)</label>
-            <input
-              className="form-control"
-              type="file"
-              id="formFile"
-              name="image"
-              accept="image/*"
-              onChange={e => setSelectedFile(e.target.files[0])}
-            />
+            <div id="descriptionHelp" className="form-text">The more descriptive you are, the more renters you'll bring in!</div>
           </div>
           <div className="d-grid gap-2">
             <input className="btn btn-outline-success" type='submit' value='Submit' />

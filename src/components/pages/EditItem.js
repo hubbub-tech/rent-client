@@ -66,12 +66,6 @@ const EditItem = ({ setFlashMessages }) => {
                 </li>
                 <br />
                 <li>
-                  If you are updating the item photo, take a clear, unobstructed photo
-                  of your item for the listing with a solid background and good lighting.
-                  Portrait photos preferred. These small steps will make it more attractive for customers!
-                </li>
-                <br />
-                <li>
                   Photos must be formatted as <mark><i>.jpg, .png, or .jpeg</i></mark> to be accepted.
                 </li>
               </ul>
