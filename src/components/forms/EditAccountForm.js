@@ -68,19 +68,19 @@ const EditAccountForm = ({ user, setFlashMessages }) => {
       <div className="card">
         <div className="card-body">
           <FormErrors errors={errors.server} color={"red"} />
-            <div className="mb-3">
-              <label className="form-label" htmlFor="editUserEmail">Email address</label>
-              <input
-                type="email"
-                className="form-control"
-                id="editUserEmail"
-                name="userEmail"
-                placeholder={user.email}
-                onChange={handleEmailOnChange}
-                minLength="5"
-                maxLength="49"
-              />
-            </div>
+          <div className="mb-3">
+            <label className="form-label" htmlFor="editUserEmail">Email address</label>
+            <input
+              type="email"
+              className="form-control"
+              id="editUserEmail"
+              name="userEmail"
+              placeholder={user.email}
+              onChange={handleEmailOnChange}
+              minLength="5"
+              maxLength="49"
+            />
+          </div>
           <FormErrors errors={errors.email} color={"red"} />
           <div className="form-check mb-3">
             <input

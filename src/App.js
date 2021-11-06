@@ -22,6 +22,7 @@ import Rentals from './components/pages/Rentals';
 import Dropoffs from './components/pages/Dropoffs';
 import Pickups from './components/pages/Pickups';
 import EditItem from './components/pages/EditItem';
+import EditItemPhoto from './components/pages/EditItemPhoto';
 import ReviewItem from './components/pages/ReviewItem';
 import EditAccount from './components/pages/EditAccount';
 import EditPassword from './components/pages/EditPassword';
@@ -51,7 +52,7 @@ const App = () => {
       <Flash flashMessages={flashMessages} setFlashMessages={setFlashMessages} />
       <Switch>
         <Route exact path="/">
-          <Main />
+          <Main setFlashMessages={setFlashMessages} />
         </Route>
         <Route exact path="/inventory">
           <Shop isSearching={false} />
@@ -96,6 +97,10 @@ const App = () => {
         </Route>
         <Route exact path="/accounts/i/edit/id=:itemId">
           {isLoggedIn && <EditItem setFlashMessages={setFlashMessages} />}
+          {!isLoggedIn && <Redirect to='/login' />}
+        </Route>
+        <Route exact path="/accounts/i/photo/id=:itemId">
+          {isLoggedIn && <EditItemPhoto setFlashMessages={setFlashMessages} />}
           {!isLoggedIn && <Redirect to='/login' />}
         </Route>
         <Route exact path="/accounts/o/review/id=:orderId">

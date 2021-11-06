@@ -51,7 +51,7 @@ const EditAccountPhotoForm = ({ user, setFlashMessages }) => {
 
   return (
     <form encType="multipart/form-data" onSubmit={submit}>
-      <div className="card mx-auto" style={{"maxWidth": "540px"}}>
+      <div className="card mx-auto">
         <div className="card-body">
           <FormErrors errors={errors.server} color={"red"} />
           <CropInput
