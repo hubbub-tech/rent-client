@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import TestimonialCard from '../cards/TestimonialCard';
+import NewsletterForm from '../forms/NewsletterForm';
 
-const Main = () => {
+const Main = ({ setFlashMessages }) => {
   const [urlBase, setUrlBase] = useState();
   const [testimonials, setTestimonials] = useState([]);
   const categories = [
@@ -62,28 +63,36 @@ const Main = () => {
           ))}
           <div className="col-sm-2"></div>
         </div>
-        <div className="row mt-5 d-flex justify-content-center">
-          <div className="col-md-2"></div>
-          <div className="col-8">
-            <h2 className="text-center mt-5">Your Friends &#128147; Hubbub!</h2>
-            <p className="text-center mb-3">See what they have to say about their experience with us :)</p>
-            <TestimonialCard testimonials={testimonials} urlBase={urlBase} />
-          </div>
-          <div className="col-md-2"></div>
-        </div>
       </div>
       <div className="container-fluid mt-5 hubbub-background">
         <div className="row">
-          <div className="col-2"></div>
-          <div className="col-8">
-            <h2 className="text-center mt-5 mb-2 text-white">Let's Reinvent Ownership!</h2>
+          <div className="col-sm-2"></div>
+          <div className="col-sm-8">
+            <h2 className="text-center mt-5 mb-2 text-white">Let's Reinvent Ownership</h2>
             <p className="text-center fs-5 mb-5 text-white">
-              We are driven by a mission to get more use out of everyday items.
-              We created Hubbub to make sharing items easier for everyone.
-              Together we can reduce landfill waste and make ownership more flexible.
+              We’re here to help you avoid the hassle and costs of conventional ownership.
+              Rent whatever you need from Hubbub, delivered and picked up whenever works for you!
             </p>
           </div>
-          <div className="col-2"></div>
+          <div className="col-sm-2"></div>
+        </div>
+        <div className="row d-flex justify-content-center">
+          <div className="col-sm-2 mb-5"></div>
+          <div className="col-sm-8 mb-5">
+            <h2 className="text-center text-white">Your Friends &#128147; Hubbub!</h2>
+            <p className="text-center mb-3 text-white">See what they have to say about their experience with us :)</p>
+            <TestimonialCard testimonials={testimonials} urlBase={urlBase} />
+          </div>
+          <div className="col-sm-2 mb-5"></div>
+        </div>
+      </div>
+      <div className="container-md mb-5">
+        <div className="row">
+          <div className="col-sm-2"></div>
+          <div className="col-sm-8">
+            <NewsletterForm setFlashMessages={setFlashMessages} />
+          </div>
+          <div className="col-sm-2"></div>
         </div>
       </div>
     </main>
