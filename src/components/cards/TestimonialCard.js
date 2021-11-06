@@ -20,7 +20,7 @@ const TestimonialCard = ({ testimonials, urlBase }) => {
     console.log(testimonial);
   },[]);
   return (
-    <div class="card border-hubbub">
+    <div class="card shadow-lg p-3 mb-5 bg-body rounded">
       <div class="card-body">
         <div className="row g-0">
           <div className="col-sm-1 mb-0"></div>
