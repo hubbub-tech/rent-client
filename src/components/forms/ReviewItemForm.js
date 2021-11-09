@@ -57,11 +57,13 @@ const ReviewItemForm = ({ item, setFlashMessages }) => {
             />
           <div id="reviewHelp" className="form-text">How was the rental? Was the item what you expected?</div>
           </div>
+          {/*
           <RatingInput
             rating={rating}
             setRating={setRating}
             label={"Tell us about your experience!"}
           />
+          */}
           <div className="d-grid gap-2">
             <input className="btn btn-outline-success" type='submit' value='Submit' />
           </div>
