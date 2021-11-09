@@ -16,7 +16,7 @@ const Main = ({ setFlashMessages }) => {
   const categories = [
     {"link": "/search=kitchen", "title": "Kitchen", "alt": "Pots"},
     {"link": "/search=entertainment", "title": "Entertainment", "alt": "TV"},
-    {"link": "/search=living", "title": "Lighting", "alt": "Lights"},
+    {"link": "/search=lamp", "title": "Lighting", "alt": "Lights"},
     {"link": "/search=school", "title": "School", "alt": "Calculator"},
     {"link": "/search=fitness", "title": "Fitness", "alt": "Weights"},
     {"link": "/search=fridge", "title": "Fridges", "alt": "Fridge"},
