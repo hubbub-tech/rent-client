@@ -37,14 +37,13 @@ const Main = ({ setFlashMessages }) => {
     <main>
       <div className="container-fluid">
         <div className="row justify-content-center">
-          <div className="col-md-2"></div>
-          <div className="col-md-8 mt-5">
-            <h1 className="text-center display-1 mt-5 text-hubbub">
-              <big>HUBBUB</big>
+          <div className="col-sm-2"></div>
+          <div className="col-sm-8 mt-5">
+            <h1 className="text-center display-6 mt-5 mb-3 text-hubbub">
+              Discover the better, faster, cheaper way to get the items you need.
             </h1>
-            <h5 className="text-center mb-3">Discover the better, faster, cheaper way to get the items you need</h5>
           </div>
-          <div className="col-md-2"></div>
+          <div className="col-sm-2"></div>
         </div>
         <div className="row justify-content-center">
           <div className="col-md-4">
@@ -66,7 +65,7 @@ const Main = ({ setFlashMessages }) => {
           <h1 className="text-center">Top Categories</h1>
           <p className="text-center">Rent from the most active categories on Hubbub!</p>
           {categories.map((category) => (
-            <div className="col-sm-3 mb-1" key={category.title}>
+            <div className="col-sm-3 col-6 mb-1" key={category.title}>
               <h4 className="text-center my-3">{ category.title }</h4>
               <a className="custom-card" href={`/inventory${category.link}`}>
                 <img
@@ -80,11 +79,6 @@ const Main = ({ setFlashMessages }) => {
         </div>
       </div>
       <div className="container-fluid mt-5 hubbub-background">
-        <div className="row">
-          <div className="col-sm-2"></div>
-
-          <div className="col-sm-2"></div>
-        </div>
         <div className="row d-flex justify-content-center">
           <div className="col-sm-2 my-5"></div>
           <div className="col-sm-8 my-5">
@@ -101,7 +95,7 @@ const Main = ({ setFlashMessages }) => {
           <div className="col-sm-5">
             <h2 className="text-start mt-5 mb-3">
               We believe that what’s best for <span className="text-hubbub">you</span> can
-               also be what’s best for the <span className="text-hubbub">climate</span>.
+               also be what’s best for the <span className="text-hubbub">climate</span> 🌎.
             </h2>
             <p className="text-start fs-5 mb-5">
               Our goal is to make it incredibly easy and enjoyable for you to get
