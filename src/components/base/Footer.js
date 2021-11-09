@@ -38,7 +38,7 @@ const Footer = () => {
                 <a href="/story">Our Story</a>
               </li>
               <li>
-                <a href="mailto:hubbubcu@gmail.com">Contact Us</a>
+                <a href="mailto:hello@hubbub.shop">Contact Us</a>
               </li>
               <li>
                 <a href="https://docs.google.com/document/d/1kAOBVmgYaBEq_cEQiJqARuJUUviSENLr_Y0QeaD-Yik/edit?usp=sharing" target="_blank" rel="noreferrer">Press</a>
