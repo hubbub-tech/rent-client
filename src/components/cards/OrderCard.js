@@ -129,30 +129,30 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                       type="button"
                       className="btn btn-lg btn-success mx-1 my-1"
                       onClick={handleDropoffOnClick}
-                      disabled={order.is_dropoff_scheduled}
+                      disabled={order.is_dropoff_sched}
                     >
                       Book Dropoff
                     </button>
                   </div>
-                  {order.is_dropoff_scheduled &&
+                  {order.is_dropoff_sched &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"
                         className="btn btn-lg btn-secondary mx-1 my-1"
                         onClick={handlePickupOnClick}
-                        disabled={order.is_pickup_scheduled || !order.is_dropoff_scheduled}
+                        disabled={order.is_pickup_sched || !order.is_dropoff_sched}
                       >
                         Book Pickup
                       </button>
                     </div>
                   }
-                  {!order.is_dropoff_scheduled &&
+                  {!order.is_dropoff_sched &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"
                         className="btn btn-lg btn-danger mx-1 my-1"
                         onClick={handleCancelOnClick}
-                        disabled={order.is_dropoff_scheduled}
+                        disabled={order.is_dropoff_sched}
                       >
                         Cancel Order
                       </button>
@@ -164,7 +164,7 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                         type="button"
                         className="btn btn-lg btn-warning mx-1 my-1"
                         onClick={handleEarlyOnClick}
-                        disabled={order.is_pickup_scheduled}
+                        disabled={order.is_pickup_sched}
                       >
                         Early Return
                       </button>
@@ -191,7 +191,7 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                       </Link>
                     </div>
                   }
-                  {order.is_dropoff_scheduled &&
+                  {order.is_dropoff_sched &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"

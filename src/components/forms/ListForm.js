@@ -45,7 +45,7 @@ const ListForm = ({ setFlashMessages }) => {
 
   const [isValid, setIsValid] = useState(false);
   const [errors, setErrors] = useState([]);
-  const addressDisplay = `${address.num} ${address.street}, ${address.city} ${address.state} ${address.zip_code}`;
+  const addressDisplay = `${address.num} ${address.street}, ${address.city} ${address.state} ${address.zip}`;
 
   const submit = (e) => {
     e.preventDefault();
@@ -73,7 +73,7 @@ const ListForm = ({ setFlashMessages }) => {
     formData.append('apt', address.apt);
     formData.append('city', address.city);
     formData.append('state', address.state);
-    formData.append('zip_code', address.zip_code);
+    formData.append('zip', address.zip);
     formData.append('tags', tagsChecked)
 
     formData.append('image', selectedFile);

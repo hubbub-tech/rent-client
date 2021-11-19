@@ -10,7 +10,7 @@ import CheckboxList from '../inputs/CheckboxList';
 const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
   const history = useHistory();
-  const addressDisplay = `${address.num} ${address.street}, ${address.city}, ${address.state} ${address.zip_code}`;
+  const addressDisplay = `${address.num} ${address.street}, ${address.city}, ${address.state} ${address.zip}`;
   const timeslots = [
     "8-9am","9-10am", "10-11am", "11-12pm", "12-1pm",
     "1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"

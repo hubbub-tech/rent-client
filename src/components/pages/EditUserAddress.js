@@ -19,7 +19,7 @@ const EditUserAddress = ({ setFlashMessages }) => {
     "profile": {},
     "address": {}
   });
-  const addressDisplay = `${user.address.num} ${user.address.street} ${user.address.apt !== '' ? `Apt ${user.address.apt}` : ''}, ${user.address.city}, ${user.address.state} ${user.address.zip_code}`;
+  const addressDisplay = `${user.address.num} ${user.address.street} ${user.address.apt !== '' ? `Apt ${user.address.apt}` : ''}, ${user.address.city}, ${user.address.state} ${user.address.zip}`;
 
   useEffect(() => {
     fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {

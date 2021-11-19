@@ -50,7 +50,7 @@ const AddressForm = ({ address, setAddress, required = false }) => {
             className="form-control"
             id="addressZipCode"
             name="addressZipCode"
-            onChange={e => setAddress({ ...address, zip_code: e.target.value })}
+            onChange={e => setAddress({ ...address, zip: e.target.value })}
             minLength="1"
             maxLength="9"
             required={required}
