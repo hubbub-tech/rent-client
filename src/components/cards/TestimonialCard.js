@@ -5,8 +5,8 @@ import ProfilePhoto from '../icons/ProfilePhoto';
 
 const TestimonialCard = ({ user, testimonial, urlBase }) => {
   return (
-    <div class="card shadow-lg p-3 mb-5 bg-body rounded">
-      <div class="card-body">
+    <div className="card shadow-lg p-3 mb-5 bg-body rounded">
+      <div className="card-body">
         <div className="row g-0">
           <div className="col-sm-1 mb-0"></div>
           <div className="col-sm-10 mb-0">

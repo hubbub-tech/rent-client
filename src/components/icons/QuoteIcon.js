@@ -5,7 +5,7 @@ const QuoteIcon = ({ fill = 'black', size = '16', onClick = null }) => {
       width={size}
       height={size}
       fill={fill}
-      class="bi bi-quote"
+      className="bi bi-quote"
       viewBox="0 0 16 16"
     >
       <path
