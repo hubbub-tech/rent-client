@@ -34,13 +34,13 @@ const EditItemPhoto = ({ setFlashMessages }) => {
         setItem(data.item);
         setUrlBase(data.photo_url);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       } else if (statusCode === 404){
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/404');
       } else {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/');
       }
     });

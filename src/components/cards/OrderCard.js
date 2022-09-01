@@ -11,7 +11,7 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
   const history = useHistory();
 
   let todaysDateStr = moment.utc().format("YYYY-MM-DD");
-  let isActive = todaysDateStr < order.ext_date_end;
+  let isActive = todaysDateStr < order.ext_dt_end;
   let statusOK;
 
   const isStatusOK = (res) => {
@@ -20,8 +20,8 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
   }
 
   const handleReceiptOnClick = () => {
-    let fileName = `D${todaysDateStr}ID${order.id}P${order.date_placed}.txt`;
-    fetch(process.env.REACT_APP_SERVER + `/accounts/o/receipt/id=${order.id}/${fileName}`, {
+    let fileName = `D${todaysDateStr}ID${order.id}P${order.dt_placed}.txt`;
+    fetch(process.env.REACT_APP_SERVER + `/orders/receipt?order_id=${order.id}`, {
       credentials: 'include'
     })
     .then(isStatusOK)
@@ -35,15 +35,17 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
   }
 
   const handleItemPhotoOnClick = () => {
-    history.push(`/inventory/i/id=${order.item.id}`);
+    history.push(`/inventory/i/id=${order.item_id}`);
   }
 
   const handleDropoffOnClick = () => {
-    history.push(`/schedule/dropoffs/${order.res_date_start}`);
+    let orderDtDropoff = order.res_dt_start.split(" ").join("T") + "Z"
+    history.push(`/schedule/dropoffs/${orderDtDropoff}`);
   }
 
   const handlePickupOnClick = () => {
-    history.push(`/schedule/pickups/${order.ext_date_end}`);
+    let orderDtPickup = order.ext_dt_end.split(" ").join("T") + "Z"
+    history.push(`/schedule/pickups/${orderDtPickup}`);
   }
 
   const handleEarlyOnClick = () => {
@@ -62,7 +64,7 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     if (window.confirm("Are you sure you want to cancel this order?")) {
-      fetch(process.env.REACT_APP_SERVER + '/accounts/o/cancel/submit', {
+      fetch(process.env.REACT_APP_SERVER + `/orders/cancel?order_id=${order.id}`, {
         method: 'POST',
         body: JSON.stringify({
           hubbubId,
@@ -72,11 +74,11 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
         headers: { 'Content-Type': 'application/json' },
       })
       .then(isStatusOK)
-      .then(data => setFlashMessages(data.flashes));
-      history.push(`/accounts/u/id=${order.renter_id}`);
+      .then(data => setFlashMessages(data.messages));
+
       window.scrollTo(0, 0);
     } else {
-      setFlashMessages([`Your order for ${order.item.name} was NOT cancelled.`]);
+      setFlashMessages([`Your order for ${order.item_name} was NOT cancelled.`]);
     }
   }
   return (
@@ -85,17 +87,17 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
         <div className="row">
           <div className="col-md-3 my-2">
             <p className="text-start my-0"><strong>Order Placed</strong></p>
-            <p className="text-start my-0"><span>{printDate(order.date_placed)} </span>
-              {order.is_extended && <span className="badge bg-success">extended</span>}
+            <p className="text-start my-0"><span>{printDate(order.dt_placed)} </span>
+              {order.reservation.is_extension && <span className="badge bg-success">extended</span>}
             </p>
           </div>
           <div className="col-md-3 my-2">
             <p className="text-start my-0"><strong>Charge</strong></p>
-            <p className="text-start my-0">{printMoney(order.reservation.charge)}</p>
+            <p className="text-start my-0">{printMoney(order.reservation.est_charge)}</p>
           </div>
           <div className="col-md-3 my-2">
             <p className="text-start my-0"><strong>Deposit</strong></p>
-            <p className="text-start my-0">{printMoney(order.reservation.deposit)}</p>
+            <p className="text-start my-0">{printMoney(order.reservation.est_deposit)}</p>
           </div>
           <div className="col-md-3 my-2">
             <div className="d-grid gap-2">
@@ -109,19 +111,18 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
           <div className="col-sm-2 my-2">
             <ItemPhoto
               className="img-fluid"
-              src={`${urlBase}/${order.item.id}.jpg`}
+              src={`${urlBase}/${order.item_id}.jpg`}
               onClick={handleItemPhotoOnClick}
-              item={order.item}
+              item={{name: order.item_name}}
             />
           </div>
           <div className="col-sm-10">
             <div className="card-body">
               <div className="row">
                 <div className="col-md-8 my-1">
-                  <h5 className="card-title">Start - {printDate(order.res_date_start)}</h5>
-                  <h5 className="card-title">End - {printDate(order.ext_date_end)}</h5>
-                  <p className="card-text">{order.item.name}</p>
-                  <p className="card-text">{order.item.details.description}</p>
+                  <h5 className="card-title">Start - {printDate(order.res_dt_start)}</h5>
+                  <h5 className="card-title">End - {printDate(order.ext_dt_end)}</h5>
+                  <p className="card-text">{order.item_name}</p>
                 </div>
                 <div className="col-md-4 my-1">
                   <div className="d-grid gap-2">
@@ -129,30 +130,30 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                       type="button"
                       className="btn btn-lg btn-success mx-1 my-1"
                       onClick={handleDropoffOnClick}
-                      disabled={order.is_dropoff_sched}
+                      disabled={order.dropoff_id !== null}
                     >
                       Book Dropoff
                     </button>
                   </div>
-                  {order.is_dropoff_sched &&
+                  {(order.dropoff_id !== null) &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"
                         className="btn btn-lg btn-secondary mx-1 my-1"
                         onClick={handlePickupOnClick}
-                        disabled={order.is_pickup_sched || !order.is_dropoff_sched}
+                        disabled={order.dropoff_id === null || order.pickup_id !== null}
                       >
                         Book Pickup
                       </button>
                     </div>
                   }
-                  {!order.is_dropoff_sched &&
+                  {(order.dropoff_id === null) &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"
                         className="btn btn-lg btn-danger mx-1 my-1"
                         onClick={handleCancelOnClick}
-                        disabled={order.is_dropoff_sched}
+                        disabled={order.dropoff_id !== null}
                       >
                         Cancel Order
                       </button>
@@ -164,7 +165,7 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                         type="button"
                         className="btn btn-lg btn-warning mx-1 my-1"
                         onClick={handleEarlyOnClick}
-                        disabled={order.is_pickup_sched}
+                        disabled={order.pickup_id !== null}
                       >
                         Early Return
                       </button>
@@ -185,13 +186,13 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                     <div className="d-grid gap-2">
                       <Link
                         className="btn btn-lg btn-dark mx-1 my-1"
-                        to={`/inventory/i/id=${order.item.id}`}
+                        to={`/inventory/i/id=${order.item_id}`}
                       >
                         See Details
                       </Link>
                     </div>
                   }
-                  {order.is_dropoff_sched &&
+                  {(order.dropoff_id !== null) &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"

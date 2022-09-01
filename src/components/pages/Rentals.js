@@ -25,7 +25,7 @@ const Rentals = ({ setFlashMessages }) => {
 
   useEffect(() => {
     AOS.init({duration : 1000, once: true});
-    fetch(process.env.REACT_APP_SERVER + '/accounts/u/orders', {  // https://server.hubbub.shop
+    fetch(process.env.REACT_APP_SERVER + '/orders/history', {  // https://server.hubbub.shop
       credentials: 'include'
     })
     .then(isStatusOK)
@@ -34,7 +34,7 @@ const Rentals = ({ setFlashMessages }) => {
         setOrders(data.orders);
         setUrlBase(data.photo_url);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       }
     });

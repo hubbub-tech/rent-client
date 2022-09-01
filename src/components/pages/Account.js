@@ -18,10 +18,10 @@ const Account = ({ setFlashMessages }) => {
     return res.json();
   }
   const { userId } = useParams();
-  const [user, setUser] = useState({"profile": {}, "cart": {}});
+  const [user, setUser] = useState({"cart": {}});
   const hubbubId = Cookies.get('hubbubId');
   const isOwner = hubbubId == userId;
-  const [urlBase, setUrlBase] = useState({"user": null, "item": null});
+  const [urlBase, setUrlBase] = useState();
   const [listings, setListings] = useState([]);
 
   useEffect(() => {
@@ -32,13 +32,13 @@ const Account = ({ setFlashMessages }) => {
     .then(data => {
       if (statusOK) {
         setUser(data.user);
-        setListings(data.listings);
+        setListings(data.listed_items);
         setUrlBase(data.photo_url);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       } else if (statusCode === 404) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/404');
       }
     });
@@ -49,13 +49,13 @@ const Account = ({ setFlashMessages }) => {
       <div className="container-md">
         <div className="row mt-5">
           <div className="col-sm-4 col-12 my-3">
-            <ProfilePhoto src={`${urlBase.user}/${user.id}.jpg`} user={user} size="300px" />
+            <ProfilePhoto src={`${urlBase}/${userId}.jpg`} user={user} size="300px" />
             <div className="row justify-content-center g-0">
               <h2 className="text-center mt-3">{user.name}</h2>
             </div>
             <p className="text-center text-muted mb-1"><small>Bio</small></p>
             <p className="text-center text-muted mt-0">
-              <small>{ user.profile.bio }</small>
+              <small>{ user.bio }</small>
             </p>
             <div className="card my-3">
               <ul className="list-group list-group-flush">
@@ -77,11 +77,7 @@ const Account = ({ setFlashMessages }) => {
                 <ul className="list-group list-group-flush">
                   <li className="list-group-item">
                     <span className="badge bg-dark">Phone</span>
-                    <span> {user.profile.phone}</span>
-                  </li>
-                  <li className="list-group-item">
-                    <span className="badge bg-dark">Payment</span>
-                    <span> {user.payment}</span>
+                    <span> {user.phone}</span>
                   </li>
                 </ul>
                 <Link className="btn btn-outline-dark" to="/accounts/u/edit">Edit Profile</Link>
@@ -99,7 +95,7 @@ const Account = ({ setFlashMessages }) => {
                 <div className="col-12 my-2" key={item.id}>
                   <ListingCard
                     setFlashMessages={setFlashMessages}
-                    urlBase={urlBase.item}
+                    urlBase={urlBase}
                     isOwner={isOwner}
                     item={item}
                   />

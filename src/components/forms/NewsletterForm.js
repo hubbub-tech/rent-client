@@ -23,7 +23,7 @@ const NewsletterForm = ({ setFlashMessages }) => {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
-    .then(data => setFlashMessages(data.flashes));
+    .then(data => setFlashMessages(data.messages));
     window.scrollTo(0, 0);
   }
   return (

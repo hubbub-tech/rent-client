@@ -40,7 +40,7 @@ const EditItemForm = ({ item, cookies, setFlashMessages }) => {
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
 
       if (statusOK) {
         history.push(`/accounts/u/id=${item.lister_id}`);

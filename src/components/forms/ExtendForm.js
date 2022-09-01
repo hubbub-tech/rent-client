@@ -39,7 +39,7 @@ const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
         setFlashMessages(["Great, you can extend this item! When you are ready to place your order, select 'Extend Rental'!"]);
       } else {
         let newFlashes = [
-          data.flashes[data.flashes.length - 1],
+          data.messages[data.messages.length - 1],
           `Since someone has already booked within the period you provided, it doesn't look like this item can be extended :(`,
           `However, you can start a new rental for the requested it! Just check out the item's details page!`
         ]

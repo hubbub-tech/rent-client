@@ -19,24 +19,29 @@ const Checkout = ({ setFlashMessages }) => {
   }
   const hubbubId = Cookies.get('hubbubId');
   const [cart, setCart] = useState({});
-  const [items, setItems] = useState([]);
+  const [reservedItems, setReservedItems] = useState([]);
+  const [unreservedItems, setUnreservedItems] = useState([]);
+
+  const [checkoutSession, setCheckoutSession] = useState();
+
   const [toggle, setToggle] = useState(false);
-  const [isReady, setIsReady] = useState(false);
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + '/checkout', {
+    fetch(process.env.REACT_APP_SERVER + '/cart', {
       credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
       if (statusOK) {
         setCart(data.cart);
-        setItems(data.items);
+        setReservedItems(data.reserved_items);
+        setUnreservedItems(data.unreserved_items);
+        setCheckoutSession(data.checkout_session);
+        console.log(typeof(data.checkout_session), data.checkout_session)
         setUrlBase(data.photo_url);
-        setIsReady(data.is_ready);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       }
     });
@@ -57,7 +62,7 @@ const Checkout = ({ setFlashMessages }) => {
         <div className="row mb-3">
           <div className="col-md-1"></div>
           <div className="col-md-7">
-          {items.map((item, index) => (
+          {reservedItems.map((item, index) => (
             <CheckoutCard
               key={item.id}
               item={item}
@@ -67,7 +72,17 @@ const Checkout = ({ setFlashMessages }) => {
               setFlashMessages={setFlashMessages}
             />
           ))}
-          {items.length === 0 &&
+          {unreservedItems.map((item, index) => (
+            <CheckoutCard
+              key={item.id}
+              item={item}
+              urlBase={urlBase}
+              toggle={toggle}
+              setToggle={setToggle}
+              setFlashMessages={setFlashMessages}
+            />
+          ))}
+          {(reservedItems.length === 0 && unreservedItems.length === 0) &&
             <p className="text-center fs-5 my-5">
               No items in cart. Check out our <a href="/inventory">Inventory</a>!
             </p>
@@ -77,9 +92,10 @@ const Checkout = ({ setFlashMessages }) => {
           <div className="col-md-3">
             <PricingCard
               cart={cart}
-              isReady={isReady}
+              isReady={unreservedItems.length === 0}
               toggle={toggle}
               setToggle={setToggle}
+              checkoutSession={checkoutSession}
               setFlashMessages={setFlashMessages}
             />
           </div>

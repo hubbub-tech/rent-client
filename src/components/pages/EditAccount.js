@@ -32,7 +32,7 @@ const EditAccount = ({ setFlashMessages }) => {
         setUser(data.user);
         setUrlBase(data.photo_url);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       }
     });

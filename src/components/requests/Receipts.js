@@ -13,13 +13,13 @@ const ReceiptDownload = ({ order, setFlashMessages }) => {
   const [receipt, setReceipt] = useState();
 
   const generateDownload = () => {
-    fetch(process.env.REACT_APP_SERVER + `/accounts/o/receipt/id=${order.id}`, {
+    fetch(process.env.REACT_APP_SERVER + `/orders/receipt?order_id=${order.id}`, {
       credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
       if (statusOK) setReceipt(data.receipt);
-      else setFlashMessages(data.flashes);
+      else setFlashMessages(data.messages);
     });
     console.log({receipt})
     if (!receipt) return;

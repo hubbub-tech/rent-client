@@ -38,7 +38,7 @@ const EditAccountPhotoForm = ({ user, setFlashMessages }) => {
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
 
       if (statusOK) {
         history.push(`/accounts/u/id=${user.id}`);

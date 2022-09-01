@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-const CheckoutForm = ({ setFlashMessages}) => {
+const CheckoutForm = ({ setFlashMessages, checkoutSession}) => {
   let statusOK;
   const history = useHistory();
   const [paymentMethod, setPaymentMethod] = useState("in-person");
@@ -17,17 +17,21 @@ const CheckoutForm = ({ setFlashMessages}) => {
   const submit = (e) => {
     e.preventDefault();
     setIsDisabled(true);
-    fetch(process.env.REACT_APP_SERVER + '/checkout/submit', {
+    fetch(process.env.REACT_APP_SERVER + `/checkout/validate?session=${checkoutSession}`, {
       credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
       if (statusOK) {
-        Cookies.set('cartSize', 0, { expires: 7 });
-        history.push('/accounts/u/orders');
-      } else {
-        history.push('/inventory');
+        fetch(process.env.REACT_APP_SERVER + `/checkout?txn=${1}&method=${paymentMethod}`, {
+          credentials: 'include'
+        })
+        .then(isStatusOK)
+        .then(data => {
+          setFlashMessages(data.messages);
+          history.push('/inventory');
+        })
       }
     });
   }
@@ -47,19 +51,17 @@ const CheckoutForm = ({ setFlashMessages}) => {
           className="form-check-label"
           htmlFor="inPersonPay">In-Person (CashApp, Venmo, or Card)</label>
       </div>
-      { /*
-        <div className="form-check">
-          <input
-            className="form-check-input"
-            type="radio"
-            name="payment_method"
-            id="onlinePay"
-            onChange={e => setPaymentMethod("online")} />
-          <label
-            className="form-check-label"
-            htmlFor="onlinePay">Online (Paypal or Card)</label>
-        </div>
-      */ }
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          type="radio"
+          name="payment_method"
+          id="onlinePay"
+          onChange={e => setPaymentMethod("online")} />
+        <label
+          className="form-check-label"
+          htmlFor="onlinePay">Online (Paypal or Card)</label>
+      </div>
       <div className="d-grid gap-2 my-3">
         <input
           className="btn btn-outline-success"

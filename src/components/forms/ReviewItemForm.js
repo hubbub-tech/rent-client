@@ -36,7 +36,7 @@ const ReviewItemForm = ({ item, setFlashMessages }) => {
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
       history.push('/accounts/u/orders');
     });
     window.scrollTo(0, 0);

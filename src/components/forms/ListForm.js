@@ -85,7 +85,7 @@ const ListForm = ({ setFlashMessages }) => {
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
       if (statusOK) {
         history.push('/');
       }
@@ -119,7 +119,7 @@ const ListForm = ({ setFlashMessages }) => {
       if (statusOK) {
         setAddress(data.address);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       }
     });

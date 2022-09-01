@@ -28,8 +28,8 @@ const MicroCard = ({ urlBase, item }) => {
                 <div className="col-12 my-1">
                   <h5 className="card-title">{item.name}</h5>
                   <small className="card-text text-success">Available starting {printDate(item.next_available_start)}</small>
-                  <p className="card-text my-1">{printMoney(item.price_per_day)} estimate for 1 day</p>
-                  <QuoteInput price={item.price} />
+                  <p className="card-text my-1">{printMoney(item.retail_price / 10)} estimate for 1 day</p>
+                  <QuoteInput price={item.retail_price} />
                   <div className="d-grid gap-2 col-sm-6 mt-3">
                     <a href={`/inventory/i/id=${item.id}`} className="btn btn-hubbub">See Details</a>
                   </div>

@@ -28,9 +28,9 @@ const Main = ({ setFlashMessages }) => {
     fetch(process.env.REACT_APP_SERVER + '/index')
     .then(res => res.json())
     .then(data => {
-      setUser(data.user);
-      setUrlBase(data.photo_url);
-      setTestimonial(data.testimonial);
+      // setUser(data.user);
+      // setUrlBase(data.photo_url);
+      // setTestimonial(data.testimonial);
     });
   }, []);
   return (
@@ -84,7 +84,7 @@ const Main = ({ setFlashMessages }) => {
           <div className="col-sm-8 my-5">
             <h2 className="text-center text-white">Your Friends &#128147; Hubbub!</h2>
             <p className="text-center mb-3 text-white">See what they have to say about their experience with us :)</p>
-            <TestimonialCard user={user} testimonial={testimonial} urlBase={urlBase} />
+            // <TestimonialCard user={user} testimonial={testimonial} urlBase={urlBase} />
           </div>
           <div className="col-sm-2 my-5"></div>
         </div>

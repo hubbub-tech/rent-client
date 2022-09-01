@@ -26,7 +26,7 @@ const EditPassword = ({ setFlashMessages }) => {
       if (statusOK) {
         setUser(data.user);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       }
     });

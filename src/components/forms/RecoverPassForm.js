@@ -24,10 +24,10 @@ const RecoverPassForm = ({ setFlashMessages }) => {
     .then(isStatusOK)
     .then(data => {
       if (statusOK) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push(`/login`);
       } else {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
       }
     });
   }

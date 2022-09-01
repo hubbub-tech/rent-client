@@ -35,10 +35,10 @@ const ExtendRental = ({ setFlashMessages }) => {
         setOrder(data.order);
         setUrlBase(data.photo_url);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/logout');
       } else if (statusCode === 404) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push('/404');
       }
     });
@@ -67,7 +67,7 @@ const ExtendRental = ({ setFlashMessages }) => {
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
       if (statusOK) {
         history.push(`/accounts/u/id=${order.reservation.renter_id}`);
       }

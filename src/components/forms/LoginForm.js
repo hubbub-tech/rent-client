@@ -9,7 +9,8 @@ const LoginForm = ({ setFlashMessages }) => {
   let statusOK;
   const history = useHistory();
 
-  const [user, setUser] = useState({"email": null, "password": null});
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [errors, setErrors] = useState([]);
 
   const isStatusOK = (res) => {
@@ -21,12 +22,12 @@ const LoginForm = ({ setFlashMessages }) => {
     e.preventDefault();
     fetch(process.env.REACT_APP_SERVER + '/login', {
       method: 'POST',
-      body: JSON.stringify({ user }),
+      body: JSON.stringify({ email, password }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
       if (statusOK) {
         let configs;
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
@@ -57,7 +58,7 @@ const LoginForm = ({ setFlashMessages }) => {
               id="userEmail"
               name="email"
               placeholder="ah1754@columbia.edu"
-              onChange={e => setUser({ ...user, email: e.target.value })}
+              onChange={e => setEmail(e.target.value)}
               minLength="5"
               maxLength="49"
               required
@@ -70,7 +71,7 @@ const LoginForm = ({ setFlashMessages }) => {
               className="form-control"
               id="userPassword"
               name="password"
-              onChange={e => setUser({ ...user, password: e.target.value })}
+              onChange={e => setPassword(e.target.value)}
               minLength="8"
               maxLength="49"
               required

@@ -41,7 +41,7 @@ const EditAddressForm = ({ user, setFlashMessages }) => {
     .then(isStatusOK)
     .then(data => {
       if (statusOK) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push(`/accounts/u/id=${user.id}`);
       } else {
         setErrors({ ...errors, server: data.errors });

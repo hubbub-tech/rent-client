@@ -27,11 +27,11 @@ const ListingCard = ({
     const hubbubToken = Cookies.get('hubbubToken');
     fetch(process.env.REACT_APP_SERVER + `/accounts/i/hide/id=${item.id}`, {
       method: 'POST',
-      body: JSON.stringify({ hubbubId, hubbubToken, "toggle": !item.is_available }),
+      body: JSON.stringify({ hubbubId, hubbubToken, "toggle": !item.is_visible }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
-    .then(data => setFlashMessages(data.flashes));
+    .then(data => setFlashMessages(data.messages));
   }
   return (
     <div className="card px-0 mb-3">
@@ -52,11 +52,11 @@ const ListingCard = ({
                 <div className="col-sm-11 my-1">
                   <h3 className="card-title">
                     {item.name}
-                    {!item.is_available && <span className="text-alert"> (Inactive)</span>}
+                    {!item.is_visible && <span className="text-alert"> (Inactive)</span>}
                   </h3>
                   <small className="card-subtitle text-success">Available starting {printDate(item.next_available_start)}</small>
                   <hr className="my-2" />
-                  <p className="card-text">{item.details.description}</p>
+                  <p className="card-text">{item.description}</p>
                   <div className="row mt-3">
                     <div className="btn-group" role="group" aria-label="Basic outlined example">
                       <a href={`/inventory/i/id=${item.id}`} type="button" className="btn btn-outline-dark">View Item</a>
@@ -65,9 +65,9 @@ const ListingCard = ({
                         <button
                           onClick={onClick}
                           type="button"
-                          className={`btn btn-outline-${item.is_available ? 'danger' : 'success'}`}
+                          className={`btn btn-outline-${item.is_visible ? 'danger' : 'success'}`}
                         >
-                          {item.is_available ? 'Hide Item' : 'Make Available'}
+                          {item.is_visible ? 'Hide Item' : 'Make Available'}
                         </button>
                       }
                     </div>

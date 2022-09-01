@@ -18,7 +18,7 @@ const WishlistForm = ({ setFlashMessages }) => {
   }
 
   useEffect(() => {
-    
+
   }, [])
 
   const submit = (e) => {
@@ -30,7 +30,7 @@ const WishlistForm = ({ setFlashMessages }) => {
     })
     .then(isStatusOK)
     .then(data => {
-      setFlashMessages(data.flashes);
+      setFlashMessages(data.messages);
       if (statusOK) {
         let configs;
         if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {

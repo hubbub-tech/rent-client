@@ -12,7 +12,7 @@ const Recommendation = ({ urlBase, item }) => {
             alt={item.name}
           />
           <h6 className="card-title">{item.name}</h6>
-          <p className="card-text mt-3 mb-1">From {{printMoney(item.price)}(item.price)}/day</p>
+          <p className="card-text mt-3 mb-1">From {printMoney(item.retail_price)}/day</p>
         </div>
       </div>
     </a>

@@ -5,19 +5,17 @@ import { useHistory } from 'react-router-dom';
 
 import { printDate } from '../../helper.js';
 import AddressForm from './AddressForm';
-import CheckboxList from '../inputs/CheckboxList';
+import TimeRangeInput from '../inputs/TimeRangeInput';
 
 const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
   const history = useHistory();
-  const addressDisplay = `${address.num} ${address.street}, ${address.city}, ${address.state} ${address.zip}`;
-  const timeslots = [
-    "8-9am","9-10am", "10-11am", "11-12pm", "12-1pm",
-    "1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"
-  ];
+  const addressDisplay = `${address.line_1} ${address.line_2}, ${address.city}, ${address.state} ${address.zip}`;
+  const [timeslot, setTimeslot] = useState({start: null, end: null});
+  const [isValid, setIsValid] = useState(false)
+
   const [isDefaultAddress, setIsDefaultAddress] = useState(true);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [timesChecked, setTimesChecked] = useState([]);
   const [referral, setReferral] = useState(null);
   const [notes, setNotes] = useState(null);
 
@@ -25,36 +23,63 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
     statusOK = res.ok;
     return res.json();
   }
+
+  const handleStartOnChange = (e) => {
+    setTimeslot({...timeslot, start: e.target.value});
+  }
+
+  const handleEndOnChange = (e) => {
+    setTimeslot({...timeslot, end: e.target.value});
+    console.log(timeslot)
+  }
+
   const submit = (e) => {
     e.preventDefault();
-    if (timesChecked.length > 0) {
-      setIsDisabled(true);
-      const hubbubId = Cookies.get('hubbubId');
-      const hubbubToken = Cookies.get('hubbubToken');
-      fetch(process.env.REACT_APP_SERVER + '/schedule/dropoffs/submit', {
-        method: 'POST',
-        body: JSON.stringify({
-          hubbubId,
-          hubbubToken,
-          notes,
-          orders,
-          referral,
-          timesChecked,
-          dropoffDate,
-          address
-        }),
-        headers: { 'Content-Type': 'application/json' },
-      })
-      .then(isStatusOK)
-      .then(data => {
-        setFlashMessages(data.flashes);
-        if (statusOK) {
-          history.push('/accounts/u/orders');
+
+    setIsDisabled(true);
+
+    let timeslots = [timeslot];
+
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
+    fetch(process.env.REACT_APP_SERVER + '/delivery/schedule', {
+      method: 'POST',
+      body: JSON.stringify({
+        hubbubId,
+        hubbubToken,
+        notes,
+        orders,
+        receiverId: hubbubId,
+        senderId: 32,
+        referral,
+        timeslots,
+        fromAddress: {
+          lineOne: address.line_1,
+          lineTwo: address.line_2,
+          city: address.city,
+          state: address.state,
+          zip: address.zip,
+          country: "USA"
+        },
+        toAddress: {
+          lineOne: address.line_1,
+          lineTwo: address.line_2,
+          city: address.city,
+          state: address.state,
+          zip: address.zip,
+          country: "USA"
         }
-      });
-    } else {
-      setFlashMessages(["You must select at least one availability before submitting."])
-    }
+      }),
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .then(isStatusOK)
+    .then(data => {
+      setFlashMessages(data.messages);
+      if (statusOK) {
+        history.push('/accounts/u/orders');
+      }
+    });
+
     window.scrollTo(0, 0);
   }
 
@@ -68,13 +93,19 @@ const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddres
             <div className="col-5 border-end border-dark">
               <p className="text-start fw-bold mb-1">Items</p>
               <ul className="list-group list-group-flush">
-                {orders.map((order) => <li className="list-group-item" key={order.id}>{order.item.name}</li>)}
+                {orders.map((order) => <li className="list-group-item" key={order.id}>{order.item_name}</li>)}
               </ul>
             </div>
             <div className="col-1"></div>
             <div className="col-6">
               <p className="text-start fw-bold">Timeslots</p>
-              <CheckboxList checkboxes={timeslots} onChangeCheckbox={setTimesChecked} />
+              <TimeRangeInput
+                start={timeslot.start}
+                end={timeslot.end}
+                handleStartOnChange={handleStartOnChange}
+                handleEndOnChange={handleEndOnChange}
+                setIsValid={setIsValid}
+              />
             </div>
           </div>
         </div>

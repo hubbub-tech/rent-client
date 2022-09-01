@@ -41,14 +41,14 @@ const CheckoutCard = ({
     }
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
-    fetch(process.env.REACT_APP_SERVER + `/remove/i/id=${item.id}`, {
+    fetch(process.env.REACT_APP_SERVER + `/cart/remove`, {
       method: 'POST',
-      body: JSON.stringify({ hubbubId, hubbubToken, startDate, endDate }),
+      body: JSON.stringify({ hubbubId, hubbubToken, itemId: item.id }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(res => res.json())
     .then(data => {
-      setFlashMessages(data.flashes)
+      setFlashMessages(data.messages)
       setToggle(!toggle);
     });
     let oldCartSize = Cookies.get('cartSize');
@@ -78,9 +78,9 @@ const CheckoutCard = ({
                 setFlashMessages={setFlashMessages}
               />
             }
-            {reservation && <p className="card-text">Rental Starting - {printDate(reservation.date_started)}</p>}
-            {reservation && <p className="card-text">Rental Ending - {printDate(reservation.date_ended)}</p>}
-            {reservation && <p className="card-text">Price - {printMoney(reservation.charge)}</p>}
+            {reservation && <p className="card-text">Rental Starting - {printDate(reservation.dt_started)}</p>}
+            {reservation && <p className="card-text">Rental Ending - {printDate(reservation.dt_ended)}</p>}
+            {reservation && <p className="card-text">Price - {printMoney(reservation.est_charge)}</p>}
           </div>
           <div className="btn-group mt-3" role="group" aria-label="Basic outlined example">
             <button type="button" className="btn btn-outline-dark" onClick={viewItem}>View</button>

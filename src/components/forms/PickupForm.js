@@ -10,7 +10,7 @@ import CheckboxList from '../inputs/CheckboxList';
 const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
   const history = useHistory();
-  const addressDisplay = `${address.num} ${address.street}, ${address.city}, ${address.state} ${address.zip}`;
+  const addressDisplay = `${address.line_1} ${address.line_2}, ${address.city}, ${address.state} ${address.zip}`;
   const timeslots = [
     "8-9am","9-10am", "10-11am", "11-12pm", "12-1pm",
     "1-2pm", "2-3pm", "3-4pm", "4-5pm", "5-6pm"
@@ -45,7 +45,7 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
       })
       .then(isStatusOK)
       .then(data => {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         if (statusOK) {
           history.push('/accounts/u/orders');
         }
@@ -66,7 +66,7 @@ const PickupForm = ({ orders, pickupDate, address, setFlashMessages, setAddress 
             <div className="col-5 border-end border-dark">
               <p className="text-start fw-bold mb-1">Items</p>
               <ul className="list-group list-group-flush">
-                {orders.map((order) => <li className="list-group-item" key={order.id}>{order.item.name}</li>)}
+                {orders.map((order) => <li className="list-group-item" key={order.id}>{order.item_name}</li>)}
               </ul>
             </div>
             <div className="col-1"></div>

@@ -21,19 +21,18 @@ const Dropoffs = ({ setFlashMessages }) => {
   const [address, setAddress] = useState({});
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/schedule/dropoffs/${dropoffDate}`, {
+    fetch(process.env.REACT_APP_SERVER + `/orders/schedule?dt_started=${dropoffDate}`, {
       credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
       if (statusOK) {
+        setOrders(data.orders);
         setAddress(data.address);
-        setOrders(data.orders_to_dropoff);
+        setFlashMessages(data.messages);
       } else if (statusCode === 403) {
-        setFlashMessages(data.flashes);
         history.push('/logout');
       } else if (statusCode === 404) {
-        setFlashMessages(data.flashes);
         history.push('/404');
       }
     });

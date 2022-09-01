@@ -6,44 +6,32 @@ const AddressForm = ({ address, setAddress, required = false }) => {
       <div className="col-md">
         <div className="form-floating mb-3">
           <input
-            type="number"
-            className="form-control"
-            id="addressNum"
-            name="addressNum"
-            onChange={e => setAddress({ ...address, num: e.target.value })}
-            min="0"
-            max="10000"
-            required={required}
-          />
-        <label htmlFor="addressNum">House Number</label>
-        </div>
-        <div className="form-floating mb-3">
-          <input
             type="text"
             className="form-control"
-            id="addressStreet"
-            name="addressStreet"
-            onChange={e => setAddress({ ...address, street: e.target.value })}
+            id="addressLineOne"
+            name="addressLineOne"
+            onChange={e => setAddress({ ...address, lineOne: e.target.value })}
             minLength="1"
             maxLength="90"
             required={required}
           />
-        <label htmlFor="addressStreet">Street Name</label>
+        <label htmlFor="addressLineOne">Address Line 1</label>
         </div>
-      </div>
-      <div className="col-md">
         <div className="form-floating mb-3">
           <input
             type="text"
             className="form-control"
-            id="addressApt"
-            name="addressApt"
-            onChange={e => setAddress({ ...address, apt: e.target.value })}
+            id="addressLineTwo"
+            name="addressLineTwo"
+            onChange={e => setAddress({ ...address, lineTwo: e.target.value })}
             minLength="1"
-            maxLength="19"
+            maxLength="90"
+            required={required}
           />
-          <label htmlFor="addressApt">Apartment</label>
+        <label htmlFor="addressLineTwo">Address Line 2</label>
         </div>
+      </div>
+      <div className="col-md">
         <div className="form-floating mb-3">
           <input
             type="text"

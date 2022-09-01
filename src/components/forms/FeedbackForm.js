@@ -20,7 +20,7 @@ const FeedbackForm = ({ setFlashMessages, userId = null }) => {
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
-    .then(data => setFlashMessages(data.flashes));
+    .then(data => setFlashMessages(data.messages));
     setFeedback(null);
     window.scrollTo(0, 0);
   }

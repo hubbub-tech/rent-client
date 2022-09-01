@@ -25,7 +25,6 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
   const { itemId } = useParams();
   const [item, setItem] = useState({
     "address": {},
-    "details": {},
     "calendar": {}
   });
   const [recommendations, setRecommendations] = useState([]);
@@ -42,35 +41,23 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
         setUrlBase(data.photo_url);
         setRecommendations(data.recommendations);
       } else if (statusCode === 404) {
-        setFlashMessages(data.flashes);
+        setFlashMessages(data.messages);
         history.push("/404");
       }
     });
   }, [itemId]);
 
   const addToCart = () => {
-    let startDate = null;
-    let endDate = null;
-    if (reservation !== null) {
-      startDate = reservation.date_started;
-      endDate = reservation.date_ended;
-    }
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
-    fetch(process.env.REACT_APP_SERVER + `/add/i/id=${itemId}`, {
+    fetch(process.env.REACT_APP_SERVER + `/cart/add/no-reservation`, {
       method: 'POST',
-      body: JSON.stringify({ hubbubId, hubbubToken, startDate, endDate }),
+      body: JSON.stringify({ hubbubId, hubbubToken, itemId }),
       headers: { 'Content-Type': 'application/json' },
     })
     .then(isStatusOK)
     .then(data => {
-      if (statusOK) {
-        setFlashMessages(data.flashes);
-        let oldCartSize = Cookies.get('cartSize');
-        Cookies.set('cartSize', parseInt(oldCartSize) + 1, { expires: 7 });
-      } else {
-        setFlashMessages(data.flashes);
-      }
+      setFlashMessages(data.messages)
     });
     window.scrollTo(0, 0);
   }
@@ -102,7 +89,7 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
             </p>
             <div className="card">
               <div className="card-body">
-                {reservation && <p className="text-start fs-5 fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{printMoney(reservation.charge)}</span></p>}
+                {reservation && <p className="text-start fs-5 fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{printMoney(reservation.est_charge)}</span></p>}
                 {!reservation && <p className="text-start fs-5 fw-bold">How long do you want to rent?</p>}
                 {isLoggedIn &&
                   <RentalForm
@@ -113,7 +100,7 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
                 }
                 {isLoggedIn &&
                   <div className="d-grid gap-2 my-3">
-                    <button className="btn btn-success" onClick={addToCart}>Add to Cart</button>
+                    <button className="btn btn-success" onClick={addToCart}>Add to Cart (no reservation)</button>
                   </div>
                 }
                 {!isLoggedIn &&
@@ -124,13 +111,10 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
                 }
                 <hr />
                 <p className="text-start fs-5 fw-bold">Specs</p>
-                <p className="text-start">{ item.details.description }</p>
+                <p className="text-start">{ item.description }</p>
 
               <p className="text-start fs-5 fw-bold">More Info</p>
                 <p><strong>Location</strong> - {item.address.city}, {item.address.state}</p>
-                <p><strong>Condition</strong> - { item.details.condition }/3</p>
-                <p><strong>Weight</strong> - { item.details.weight }/3</p>
-                <p><strong>Volume</strong> - { item.details.volume }/3</p>
               </div>
             </div>
           </div>
