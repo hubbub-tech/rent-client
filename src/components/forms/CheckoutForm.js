@@ -17,6 +17,9 @@ const CheckoutForm = ({ setFlashMessages, checkoutSession}) => {
   const submit = (e) => {
     e.preventDefault();
     setIsDisabled(true);
+    const hubbubId = Cookies.get('hubbubId');
+    const hubbubToken = Cookies.get('hubbubToken');
+
     fetch(process.env.REACT_APP_SERVER + `/checkout/validate?session=${checkoutSession}`, {
       credentials: 'include'
     })
@@ -24,8 +27,18 @@ const CheckoutForm = ({ setFlashMessages, checkoutSession}) => {
     .then(data => {
       setFlashMessages(data.messages);
       if (statusOK) {
-        fetch(process.env.REACT_APP_SERVER + `/checkout?txn=${1}&method=${paymentMethod}`, {
+        fetch(process.env.REACT_APP_SERVER + `/txn=${1}&method=${paymentMethod}`, {
           credentials: 'include'
+        })
+        fetch(process.env.REACT_APP_SERVER + "/checkout", {
+          method: 'POST',
+          body: JSON.stringify({
+            hubbubId,
+            hubbubToken,
+            txnToken: 1,
+            txnMethod: paymentMethod
+          }),
+          headers: { 'Content-Type': 'application/json' }
         })
         .then(isStatusOK)
         .then(data => {

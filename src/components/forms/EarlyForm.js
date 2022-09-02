@@ -12,8 +12,8 @@ const EarlyForm = ({ order, setFlashMessages }) => {
   let statusOK;
 
   let minDateStr = moment.utc().format("YYYY-MM-DD");
-  if (minDateStr < order.ext_date_start) {
-    minDateStr = order.ext_date_start
+  if (minDateStr < order.ext_dt_start) {
+    minDateStr = order.ext_dt_start
   }
 
   const [earlyDate, setEarlyDate] = useState(null);
@@ -29,13 +29,13 @@ const EarlyForm = ({ order, setFlashMessages }) => {
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
     if (window.confirm("Are you sure you want to early return this order? This is different from scheduling a pickup.")) {
-      fetch(process.env.REACT_APP_SERVER + "/accounts/o/early/submit", {
+      fetch(process.env.REACT_APP_SERVER + "/orders/early-return", {
         method: 'POST',
         body: JSON.stringify({
           hubbubId,
           hubbubToken,
-          earlyDate,
-          "orderId": order.id
+          dtEnded: earlyDate,
+          orderId: order.id
         }),
         headers: { 'Content-Type': 'application/json' }
       })

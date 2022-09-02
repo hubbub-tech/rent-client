@@ -15,10 +15,10 @@ const EditPassword = ({ setFlashMessages }) => {
     statusCode = res.status;
     return res.json();
   }
-  const [user, setUser] = useState({"address": {}, "profile": {}});
+  const [user, setUser] = useState({"address": {}});
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + "/accounts/u/edit", {
+    fetch(process.env.REACT_APP_SERVER + "/accounts/edit", {
       credentials: 'include'
     })
     .then(isStatusOK)

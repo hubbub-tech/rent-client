@@ -21,19 +21,18 @@ const Pickups = ({ setFlashMessages }) => {
   const [address, setAddress] = useState({});
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/schedule/pickups/${pickupDate}`, {
+    fetch(process.env.REACT_APP_SERVER + `/orders/schedule?dt_ended=${pickupDate}`, {
       credentials: 'include'
     })
     .then(isStatusOK)
     .then(data => {
       if (statusOK) {
+        setOrders(data.orders);
         setAddress(data.address);
-        setOrders(data.orders_to_pickup);
-      } else if (statusCode === 403) {
         setFlashMessages(data.messages);
+      } else if (statusCode === 403) {
         history.push('/logout');
       } else if (statusCode === 404) {
-        setFlashMessages(data.messages);
         history.push('/404');
       }
     });
@@ -47,7 +46,7 @@ const Pickups = ({ setFlashMessages }) => {
           <div className="col-md-10">
             <h1>Pick-up Scheduler for {printDate(pickupDate)}</h1>
             <p>Share when you will be available for us to pick up your rentals.</p>
-            <hr />
+            <hr/>
           </div>
           <div className="col-md-1"></div>
         </div>

@@ -29,7 +29,7 @@ const TimeRangeInput = ({
   return (
     <div className="row my-3">
       <input
-        type="time"
+        type="datetime-local"
         id="startTime"
         name="startTime"
         min="09:00"
@@ -39,7 +39,7 @@ const TimeRangeInput = ({
       />
       <p className="text-center mt-1 mb-0">to</p>
       <input
-        type="time"
+        type="datetime-local"
         id="endTime"
         name="endTime"
         min="09:00"

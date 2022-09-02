@@ -130,30 +130,30 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                       type="button"
                       className="btn btn-lg btn-success mx-1 my-1"
                       onClick={handleDropoffOnClick}
-                      disabled={order.dropoff_id !== null}
+                      disabled={order.dropoff_id != null}
                     >
                       Book Dropoff
                     </button>
                   </div>
-                  {(order.dropoff_id !== null) &&
+                  {(order.dropoff_id != null) &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"
                         className="btn btn-lg btn-secondary mx-1 my-1"
                         onClick={handlePickupOnClick}
-                        disabled={order.dropoff_id === null || order.pickup_id !== null}
+                        disabled={order.pickup_id != null}
                       >
                         Book Pickup
                       </button>
                     </div>
                   }
-                  {(order.dropoff_id === null) &&
+                  {(order.dropoff_id == null) &&
                     <div className="d-grid gap-2">
                       <button
                         type="button"
                         className="btn btn-lg btn-danger mx-1 my-1"
                         onClick={handleCancelOnClick}
-                        disabled={order.dropoff_id !== null}
+                        disabled={order.dropoff_id != null}
                       >
                         Cancel Order
                       </button>
@@ -165,7 +165,7 @@ const OrderCard = ({ urlBase, order, setFlashMessages }) => {
                         type="button"
                         className="btn btn-lg btn-warning mx-1 my-1"
                         onClick={handleEarlyOnClick}
-                        disabled={order.pickup_id !== null}
+                        disabled={order.pickup_id != null}
                       >
                         Early Return
                       </button>

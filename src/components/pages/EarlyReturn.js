@@ -18,12 +18,12 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
   }
   const { orderId } = useParams();
   const [order, setOrder] = useState({
-    "item": {"details": {}, "calendar": {}}
+    "item": {"calendar": {}}
   });
   const [urlBase, setUrlBase] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
+    fetch(process.env.REACT_APP_SERVER + `/api/v0/order?id=${orderId}`, {
       credentials: 'include'
     })
     .then(isStatusOK)
@@ -48,7 +48,7 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
           <div className="col-md-1"></div>
           <div className="col-md-10">
             <h2 className="text-start">Early Return for { order.item.name } Rental</h2>
-            <p className="text-start fs-4">ending on { printDate(order.ext_date_end) }</p>
+            <p className="text-start fs-4">ending on { printDate(order.ext_dt_end) }</p>
           </div>
           <div className="col-md-1"></div>
         </div>
@@ -57,7 +57,7 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
           <div className="col-md-3 mt-5">
             <img
               className="card-img img-fluid"
-              src={`${urlBase}/${order.item.id}.jpg`}
+              src={`${urlBase}/${order.item_id}.jpg`}
               alt={order.item.name}
             />
           </div>
@@ -69,10 +69,10 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
                     <h4 className="text-start fw-bold">When would you like to return?</h4>
                     <hr />
                     <h4 className="text-start fw-bold">Specs</h4>
-                    <p className="text-start">{ order.item.details.description }</p>
+                    <p className="text-start">{ order.item.description }</p>
                     <p className="text-start my-1">See the items detail page to read more about this item.</p>
                     <div className="d-grid gap-2 mt-3">
-                      <Link to={`/inventory/i/id=${order.item.id}`} className="btn btn-outline-dark">See Details</Link>
+                      <Link to={`/inventory/i/id=${order.item_id}`} className="btn btn-outline-dark">See Details</Link>
                     </div>
                   </div>
                   <div className="col-md-6">

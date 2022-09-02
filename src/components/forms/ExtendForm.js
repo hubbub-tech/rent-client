@@ -20,33 +20,26 @@ const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
     e.preventDefault();
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
-    const startDate = stringToMoment(order.ext_date_end).toDate();
-    fetch(process.env.REACT_APP_SERVER + `/validate/i/id=${order.item.id}`, {
+    const startDate = stringToMoment(order.ext_dt_end).toDate();
+    fetch(process.env.REACT_APP_SERVER + `/orders/extend/validate`, {
       method: 'POST',
       body: JSON.stringify({
         hubbubId,
         hubbubToken,
-        startDate,
-        "endDate": extendDate,
+        "orderId": order.id,
+        "dtEnded": extendDate,
         "isDiscounted": true
       }),
       headers: { 'Content-Type': 'application/json' }
     })
     .then(isStatusOK)
     .then(data => {
+      setFlashMessages(data.messages);
       if (statusOK) {
         setReservation(data.reservation);
-        setFlashMessages(["Great, you can extend this item! When you are ready to place your order, select 'Extend Rental'!"]);
       } else {
-        let newFlashes = [
-          data.messages[data.messages.length - 1],
-          `Since someone has already booked within the period you provided, it doesn't look like this item can be extended :(`,
-          `However, you can start a new rental for the requested it! Just check out the item's details page!`
-        ]
         setReservation(null);
-        setFlashMessages(newFlashes);
       }
-
     });
     window.scrollTo(0, 0);
   }
@@ -58,8 +51,8 @@ const ExtendForm = ({ order, setFlashMessages, setReservation }) => {
             setIsValid={setIsValid}
             selectedDay={extendDate}
             handleOnChange={setExtendDate}
-            minDateString={order.ext_date_end}
-            maxDateString={order.item.calendar.date_ended}
+            minDateString={order.ext_dt_end}
+            maxDateString={order.item.calendar.dt_ended}
           />
           <div className="d-grid gap-2">
             <input className="btn btn-hubbub" type='submit' value='Check Quote' disabled={!isValid} />

@@ -20,13 +20,13 @@ const ExtendRental = ({ setFlashMessages }) => {
 
   const { orderId } = useParams();
   const [order, setOrder] = useState({
-    "item": {"details": {}, "calendar": {}},
+    "item": {"calendar": {}},
   });
   const [urlBase, setUrlBase] = useState(null);
   const [reservation, setReservation] = useState(null);
 
   useEffect(() => {
-    fetch(process.env.REACT_APP_SERVER + `/accounts/o/id=${orderId}`, {
+    fetch(process.env.REACT_APP_SERVER + `/api/v0/order?id=${orderId}`, {
       credentials: 'include'
     })
     .then(isStatusOK)
@@ -48,20 +48,20 @@ const ExtendRental = ({ setFlashMessages }) => {
     let startDate = null;
     let extendDate = null;
     if (reservation !== null) {
-      startDate = reservation.date_started;
-      extendDate = reservation.date_ended;
+      startDate = reservation.dt_started;
+      extendDate = reservation.dt_ended;
     }
     const hubbubId = Cookies.get('hubbubId');
     const hubbubToken = Cookies.get('hubbubToken');
-    fetch(process.env.REACT_APP_SERVER + '/accounts/o/extend/submit', {
+    fetch(process.env.REACT_APP_SERVER + '/orders/extend', {
       method: 'POST',
       body: JSON.stringify({
         hubbubId,
         hubbubToken,
-        "itemId": order.item.id,
-        "orderId": order.id,
-        startDate,
-        extendDate
+        txnToken: 1,
+        txnMethod: "in-person",
+        orderId: order.id,
+        dtEnded: extendDate
       }),
       headers: { 'Content-Type': 'application/json' },
     })
@@ -80,7 +80,7 @@ const ExtendRental = ({ setFlashMessages }) => {
           <div className="col-md-1"></div>
           <div className="col-md-10">
             <h2 className="text-start">Extend { order.item.name } Rental</h2>
-            <p className="text-start fs-4">ending on { printDate(order.ext_date_end) }</p>
+            <p className="text-start fs-4">ending on { printDate(order.ext_dt_end) }</p>
           </div>
           <div className="col-md-1"></div>
         </div>
@@ -89,7 +89,7 @@ const ExtendRental = ({ setFlashMessages }) => {
           <div className="col-md-3 mt-5">
             <img
               className="card-img img-fluid"
-              src={`${urlBase}/${order.item.id}.jpg`}
+              src={`${urlBase}/${order.item_id}.jpg`}
               alt={order.item.name}
             />
           </div>
@@ -98,14 +98,14 @@ const ExtendRental = ({ setFlashMessages }) => {
               <div className="card-body">
                 <div className="row">
                   <div className="col-md-6 mt-4">
-                    {reservation && <h4 className="text-start fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{printMoney(reservation.charge)}</span></h4>}
+                    {reservation && <h4 className="text-start fw-bold">Rent for <span className={`${reservation && 'highlight-alert'}`}>{printMoney(reservation.est_charge)}</span></h4>}
                     {!reservation && <h4 className="text-start fw-bold">Until when do you want to extend?</h4>}
                     <hr />
                     <h4 className="text-start fw-bold">Specs</h4>
-                    <p className="text-start">{ order.item.details.description }</p>
+                    <p className="text-start">{ order.item.description }</p>
                     <p className="text-start my-1">See the items detail page to read more about this item.</p>
                     <div className="d-grid gap-2 mt-3">
-                      <Link to={`/inventory/i/id=${order.item.id}`} className="btn btn-outline-dark">See Details</Link>
+                      <Link to={`/inventory/i/id=${order.item_id}`} className="btn btn-outline-dark">See Details</Link>
                     </div>
                   </div>
                   <div className="col-md-6">
