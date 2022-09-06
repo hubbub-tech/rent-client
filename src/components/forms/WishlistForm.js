@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
 const WishlistForm = ({ setFlashMessages }) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
 
   const [user, setUser] = useState({"email": null, "password": null});
   const [errors, setErrors] = useState([]);

@@ -1,6 +1,6 @@
 import React from "react";
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import WishlistForm from "../forms/WishlistForm";

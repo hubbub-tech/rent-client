@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import { printDate } from '../../helper.js';
 import AddressForm from './AddressForm';
@@ -9,7 +9,7 @@ import TimeRangeInput from '../inputs/TimeRangeInput';
 
 const DropoffForm = ({ orders, dropoffDate, address, setFlashMessages, setAddress }) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
   const addressDisplay = `${address.line_1} ${address.line_2}, ${address.city}, ${address.state} ${address.zip}`;
   const [timeslot, setTimeslot] = useState({start: null, end: null});
   const [isValid, setIsValid] = useState(false)

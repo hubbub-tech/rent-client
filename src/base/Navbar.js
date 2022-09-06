@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { useNagivate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import CartIcon from '../icons/CartIcon';
-import SearchForm from '../forms/SearchForm';
+import CartIcon from '../components/icons/CartIcon';
+import SearchForm from '../components/forms/SearchForm';
 
 const Navbar = ({ isLoggedIn }) => {
-  const history = useNagivate();
+  const history = useNavigate();
   const hubbubId = Cookies.get('hubbubId');
   const cartSize = Cookies.get('cartSize');
 

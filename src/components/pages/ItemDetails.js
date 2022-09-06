@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import { Link, useParams, useNagivate } from 'react-router-dom';
 
 import { printDate, printMoney } from '../../helper.js';
 import FeedbackForm from '../forms/FeedbackForm';
@@ -16,7 +16,7 @@ const ItemDetails = ({ isLoggedIn, setFlashMessages }) => {
   let statusOK;
   let statusCode;
 
-  const history = useHistory();
+  const history = useNagivate();
   const isStatusOK = (res) => {
     statusOK = res.ok;
     statusCode = res.status;

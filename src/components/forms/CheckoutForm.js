@@ -1,11 +1,11 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 const CheckoutForm = ({ setFlashMessages, checkoutSession}) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
   const [paymentMethod, setPaymentMethod] = useState("in-person");
   const [isDisabled, setIsDisabled] = useState(false);
 

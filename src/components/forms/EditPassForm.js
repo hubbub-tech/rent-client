@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
 const EditPassForm = ({ user, setFlashMessages }) => {
-  const history = useHistory();
+  const history = useNagivate();
   let statusOK;
 
   const [password, setPassword] = useState({

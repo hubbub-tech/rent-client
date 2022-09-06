@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import CropInput from '../inputs/CropInput';
 import FormErrors from '../errors/FormErrors';
@@ -8,7 +8,7 @@ import FormErrors from '../errors/FormErrors';
 const EditAccountPhotoForm = ({ user, setFlashMessages }) => {
   let statusOK;
 
-  const history = useHistory();
+  const history = useNagivate();
   const formData = new FormData();
   const [selectedFile, setSelectedFile] = useState(null);
   const [isCropped, setIsCropped] = useState(false);

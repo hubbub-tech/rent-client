@@ -1,9 +1,9 @@
 import React from 'react';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SearchForm = () => {
-  const history = useHistory();
+  const history = useNavigate();
   const [search, setSearch] = useState("all");
 
   const submit = (e) => {

@@ -1,14 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import RatingInput from '../inputs/RatingInput';
 
 const ReviewItemForm = ({ item, setFlashMessages }) => {
   let statusOK;
 
-  const history = useHistory();
+  const history = useNagivate();
   const formData = new FormData();
 
   const [body, setBody] = useState(null);

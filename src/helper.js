@@ -12,7 +12,7 @@ const stringToMoment = (stringDate, formatStr = "YYYY-MM-DD") => {
   return momentDate;
 }
 
-const printDate = (stringDate, formatStr = "MMMM Do YYYY") => {
+const printDate = (stringDate, formatStr = "MMM Do YYYY") => {
   // stringDate is a 'YYYY-MM-DD format'
   const momentDate = stringToMoment(stringDate);
   const printDate = momentDate.format(formatStr);

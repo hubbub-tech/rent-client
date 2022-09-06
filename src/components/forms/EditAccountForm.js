@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
 const EditAccountForm = ({ user, setFlashMessages }) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
 
   const [hasVenmo, setHasVenmo] = useState(true);
   const [errors, setErrors] = useState({

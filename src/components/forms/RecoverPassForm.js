@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNagivate } from 'react-router-dom';
 
 const RecoverPassForm = ({ setFlashMessages }) => {
   const { resetToken } = useParams();
-  const history = useHistory();
+  const history = useNagivate();
   let statusOK;
 
   const [email, setEmail] = useState(null);

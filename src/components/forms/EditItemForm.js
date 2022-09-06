@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
 const EditItemForm = ({ item, cookies, setFlashMessages }) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
 
   const [price, setPrice] = useState(item.price);
   const [description, setDescription] = useState(item.details.description);

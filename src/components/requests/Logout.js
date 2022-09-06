@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 const Logout = ({ setFlashMessages }) => {
   useEffect(() => {
@@ -20,7 +20,7 @@ const Logout = ({ setFlashMessages }) => {
 
     setFlashMessages(["You've been logged out! Come back soon!"])
   }, []);
-  return <Redirect to='/' />
+  return <Navigate to='/' />
 }
 
 export default Logout;

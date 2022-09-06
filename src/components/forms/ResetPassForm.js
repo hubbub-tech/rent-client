@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
 const ResetPassForm = ({ resetToken, setFlashMessages }) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
 
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState({

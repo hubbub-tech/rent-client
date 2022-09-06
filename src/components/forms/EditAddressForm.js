@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors'
 import AddressForm from './AddressForm';
 
 const EditAddressForm = ({ user, setFlashMessages }) => {
-  const history = useHistory();
+  const history = useNagivate();
   let statusOK;
 
   const [address, setAddress] = useState({

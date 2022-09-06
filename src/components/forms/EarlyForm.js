@@ -3,12 +3,12 @@ import moment from 'moment';
 import React from 'react';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import SingleDateInput from '../inputs/SingleDateInput';
 
 const EarlyForm = ({ order, setFlashMessages }) => {
-  const history = useHistory();
+  const history = useNagivate();
   let statusOK;
 
   let minDateStr = moment.utc().format("YYYY-MM-DD");

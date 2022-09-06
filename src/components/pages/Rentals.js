@@ -1,6 +1,6 @@
 import React from 'react';
 import Cookies from 'js-cookie';
-import { useHistory, Link } from 'react-router-dom';
+import { useNagivate, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import AOS from 'aos';
@@ -12,7 +12,7 @@ const Rentals = ({ setFlashMessages }) => {
   let statusOK;
   let statusCode;
 
-  const history = useHistory();
+  const history = useNagivate();
   const isStatusOK = (res) => {
     statusOK = res.ok;
     statusCode = res.status;

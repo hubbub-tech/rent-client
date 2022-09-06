@@ -1,7 +1,7 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 import CheckboxList from '../inputs/CheckboxList';
@@ -15,7 +15,7 @@ const ListForm = ({ setFlashMessages }) => {
   let statusOK;
   let statusCode;
 
-  const history = useHistory();
+  const history = useNagivate();
 
   const isStatusOK = (res) => {
     statusOK = res.ok;

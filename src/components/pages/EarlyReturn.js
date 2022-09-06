@@ -1,7 +1,7 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useParams, useNagivate, Link } from 'react-router-dom';
 
 import { printDate } from '../../helper.js';
 import EarlyForm from '../forms/EarlyForm';
@@ -10,7 +10,7 @@ const EarlyReturn = ({ cookies, setFlashMessages }) => {
   let statusOK;
   let statusCode;
 
-  const history = useHistory();
+  const history = useNagivate();
   const isStatusOK = (res) => {
     statusOK = res.ok;
     statusCode = res.status;

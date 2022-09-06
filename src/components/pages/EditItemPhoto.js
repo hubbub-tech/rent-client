@@ -1,6 +1,6 @@
 import React from "react";
 import Cookies from 'js-cookie';
-import { useHistory, useParams } from 'react-router-dom';
+import { useNagivate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import ItemPhoto from '../icons/ItemPhoto';
@@ -10,7 +10,7 @@ const EditItemPhoto = ({ setFlashMessages }) => {
   let statusOK;
   let statusCode;
 
-  const history = useHistory();
+  const history = useNagivate();
   const { itemId } = useParams();
 
   const isStatusOK = (res) => {

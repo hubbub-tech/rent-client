@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import { useNagivate, Link } from 'react-router-dom';
 import ReCAPTCHA from "react-google-recaptcha";
 
 import AddressForm from './AddressForm';
@@ -8,7 +8,7 @@ import FormErrors from '../errors/FormErrors';
 
 const RegisterForm = ({ setFlashMessages }) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
   const [token, setToken] = useState(null);
   const [hasVenmo, setHasVenmo] = useState(true);
 

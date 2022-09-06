@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
 import Cookies from 'js-cookie';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNagivate } from 'react-router-dom';
 
 import FormErrors from '../errors/FormErrors';
 
 const LoginForm = ({ setFlashMessages }) => {
   let statusOK;
-  const history = useHistory();
+  const history = useNagivate();
 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
