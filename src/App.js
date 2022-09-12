@@ -15,34 +15,43 @@ import Story from './components/static/Story';
 import Faqs from './components/static/Faqs';
 import Error404 from './components/static/Error404';
 
-import { Index as Feed } from './views/items/feed';
+import { Index as ItemFeed } from './views/items/feed';
+import { Index as ItemDetails } from './views/items/details';
 
 import { parseCookies } from './helper.js'
 
+
+export const UserContext = React.createContext();
+
 const App = () => {
-  const hubbubId = Cookies.get('hubbubId');
-  const hubbubToken = Cookies.get('hubbubToken');
-  const isLoggedIn = hubbubId !== undefined && hubbubToken !== undefined;
+  const userId = Cookies.get('userId');
+  const sessionToken = Cookies.get('sessionToken');
+
   const [flashMessages, setFlashMessages] = useState([]);
 
-  useAnalytics(hubbubId);
+  useAnalytics(userId);
+
   return (
-    <div className="App">
-      <Navbar isLoggedIn={isLoggedIn} />
-      <Flash flashMessages={flashMessages} setFlashMessages={setFlashMessages} />
-      <Routes>
-        <Route exact path="/" element={<Main setFlashMessages={setFlashMessages} />} />
+    <UserContext.Provider value={{ userId , sessionToken }}>
+      <div className="App">
+        <Navbar isLoggedIn={true} />
+        <Flash flashMessages={flashMessages} setFlashMessages={setFlashMessages} />
+        <Routes>
+          <Route exact path="/" element={<Main setFlashMessages={setFlashMessages} />} />
 
-        <Route exact path="/items/feed" element={<Feed />} />
+          <Route exact path="/items/feed" element={<ItemFeed />} />
 
-        <Route exact path="/story" element={<Story />} />
+          <Route exact path="/item/:itemId" element={<ItemDetails />} />
 
-        <Route exact path="/faqs" element={<Faqs setFlashMessages={setFlashMessages} />} />
+          <Route exact path="/story" element={<Story />} />
 
-        <Route element={<Error404 setFlashMessages={setFlashMessages }/>} />
-      </Routes>
-      <Footer />
-    </div>
+          <Route exact path="/faqs" element={<Faqs setFlashMessages={setFlashMessages} />} />
+
+          <Route element={<Error404 setFlashMessages={setFlashMessages }/>} />
+        </Routes>
+        <Footer />
+      </div>
+    </UserContext.Provider>
   );
 }
 

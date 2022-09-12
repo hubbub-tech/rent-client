@@ -1,7 +1,10 @@
+import { useEffect } from 'react';
+
 import { FeedItemCard } from './FeedItemCard';
 import { FeedNotFound } from './FeedNotFound';
 
 export const FeedGrid = ({ items = [], src }) => {
+
   if (items.length > 0) {
     return (
       <div className="row row-cols-lg-3 row-cols-1">

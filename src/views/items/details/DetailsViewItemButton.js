@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-export const FeedViewItemButton = ({ itemId }) => {
+export const DetailsViewItemButton = ({ itemId }) => {
   let navigate = useNavigate();
 
   const handleOnClick = () => navigate(`/item/${itemId}`);

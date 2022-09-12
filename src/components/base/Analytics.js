@@ -2,26 +2,27 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-const useAnalytics = (hubbubId = null) => {
+export const useAnalytics = (userId) => {
   const location = useLocation();
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
       if (!window.location.href.includes("localhost")) {
-        if (hubbubId !== null) {
+        if (userId !== null) {
           ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
-            gaOptions: { userId: hubbubId }
+            gaOptions: { siteSpeedSampleRate: 100, name: 'logged-in', userId: userId }
           });
         } else {
-          ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID);
+          ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID, {
+            gaOptions: { siteSpeedSampleRate: 100, name: 'anonymous' }
+          });
         }
       }
       setInitialized(true);
   }, []);
 
   useEffect(() => {
-    ReactGA.pageview(location.pathname + location.search);
+    if (userId !== null) ReactGA.pageview(location.pathname + location.search, ['logged-in']);
+    else ReactGA.pageview(location.pathname + location.search, ['anonymous']);
   }, [location]);
 };
-
-export default useAnalytics;

@@ -1,7 +1,7 @@
 export const FeedItemBadge = () => {
   return (
-    <div className=" position-absolute top-0 start-0">
-      <span className="badge bg-danger">Featured</span>
+    <div className=" position-absolute mt-1 start-1">
+      <span className="badge badge-primary">Featured</span>
     </div>
   );
 }

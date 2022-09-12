@@ -18,7 +18,7 @@ export const FeedItemCard = ({ src, item }) => {
           <div className="col-4 mt-2">
             {item.is_featured && <FeedItemBadge />}
             <FeedItemPhoto
-              href={`/inventory/i/id=${item.id}`}
+              href={`/item/${item.id}`}
               src={src}
               className="img-fluid"
               alt={item.name}
@@ -30,7 +30,7 @@ export const FeedItemCard = ({ src, item }) => {
               <div className="row">
                 <div className="col-12 mb-1">
                   <div className="text-small mb-1">
-                    <a href="#!" className="text-decoration-none text-muted">
+                    <a href="#" className="text-decoration-none text-muted">
                       <small>Next available {printDate(item.next_available_start)}</small>
                     </a>
                   </div>
