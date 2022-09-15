@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ReactGA from 'react-ga';
 
-const useAnalytics = (hubbubId = null) => {
+export const useAnalytics = (hubbubId = null) => {
   const location = useLocation();
   const [initialized, setInitialized] = useState(false);
 
@@ -23,5 +23,3 @@ const useAnalytics = (hubbubId = null) => {
     ReactGA.pageview(location.pathname + location.search);
   }, [location]);
 };
-
-export default useAnalytics;

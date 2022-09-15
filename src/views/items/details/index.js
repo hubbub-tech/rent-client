@@ -11,13 +11,15 @@ import { DetailsItemDescription } from './DetailsItemDescription';
 import { DetailsRecommendations } from './DetailsRecommendations';
 
 import { printDate } from '../utils.js';
-import { UserContext } from '../../../App.js';
+import { useViewport } from '../../../base/Viewport';
+import { AppContext } from '../../../App.js';
 
 export const Index = () => {
 
   const { itemId } = useParams();
 
-  const { userId, sessionToken } = useContext(UserContext);
+  const viewport = useViewport();
+  const { userId, sessionToken } = useContext(AppContext);
 
   const [recommendations, setRecommendations] = useState([]);
   const [item, setItem] = useState({ calendar: {}, tags: [] });
@@ -32,6 +34,7 @@ export const Index = () => {
   const getMinDate = () => {
     const calDtStarted = Date.parse(item.calendar.dt_started);
 
+    console.log(calDtStarted, dateToday)
     if (dateToday > calDtStarted) return dateToday;
     else return calDtStarted;
   }
@@ -96,8 +99,8 @@ export const Index = () => {
                 <div className="col-md-12">
                   <div className="mb-1">
                     <DetailsReservationInput
-                      minDate={getMinDate}
-                      maxDate={getMaxDate}
+                      minDate={getMinDate()}
+                      maxDate={getMaxDate()}
                       defaultMonth={dateToday}
                       dtRange={dtRange}
                       setDtRange={setDtRange}

@@ -1,27 +1,33 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import ReactGA from 'react-ga';
+
 import { Route, Routes, Navigate } from 'react-router-dom';
 
 import Flash from './base/Flash';
 import Navbar from './base/Navbar';
 import Footer from './base/Footer';
-import useAnalytics from './base/Analytics';
 
-import Main from './components/pages/Main';
+import { Index as Cart } from './views/cart';
+import { Index as Checkout } from './views/checkout';
 
-import Story from './components/static/Story';
-import Faqs from './components/static/Faqs';
-import Error404 from './components/static/Error404';
-
+import { Index as Login } from './views/auth/login';
 import { Index as ItemFeed } from './views/items/feed';
 import { Index as ItemDetails } from './views/items/details';
+
+import { PageNotFound } from './views/errors/E404';
+import { Story } from './views/static/Story';
+import { Faqs } from './views/static/Faqs';
+
+import { useAnalytics } from './base/Analytics';
 
 import { parseCookies } from './helper.js'
 
 
-export const UserContext = React.createContext();
+export const AppContext = React.createContext({
+  userId: Cookies.get('userId'),
+  sessionToken: Cookies.get('sessionToken'),
+});
 
 const App = () => {
   const userId = Cookies.get('userId');
@@ -32,12 +38,17 @@ const App = () => {
   useAnalytics(userId);
 
   return (
-    <UserContext.Provider value={{ userId , sessionToken }}>
+    <AppContext.Provider value={{ userId , sessionToken }}>
       <div className="App">
         <Navbar isLoggedIn={true} />
         <Flash flashMessages={flashMessages} setFlashMessages={setFlashMessages} />
         <Routes>
-          <Route exact path="/" element={<Main setFlashMessages={setFlashMessages} />} />
+
+          <Route exact path="/cart" element={<Cart />} />
+
+          <Route exact path="/checkout/:status" element={<Checkout />} />
+
+          <Route exact path="/login" element={<Login />} />
 
           <Route exact path="/items/feed" element={<ItemFeed />} />
 
@@ -45,13 +56,13 @@ const App = () => {
 
           <Route exact path="/story" element={<Story />} />
 
-          <Route exact path="/faqs" element={<Faqs setFlashMessages={setFlashMessages} />} />
+          <Route exact path="/faqs" element={<Faqs />} />
 
-          <Route element={<Error404 setFlashMessages={setFlashMessages }/>} />
+          <Route element={<PageNotFound />} />
         </Routes>
         <Footer />
       </div>
-    </UserContext.Provider>
+    </AppContext.Provider>
   );
 }
 

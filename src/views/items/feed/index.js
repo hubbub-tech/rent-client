@@ -41,7 +41,7 @@ export const Index = () => {
 
     getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
     .catch(console.error);
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     const handleOrderByProximity = () => {
@@ -104,7 +104,7 @@ export const Index = () => {
           </div>
 
           <div className="row">
-            <div className="col-12 mb-6">
+            <div className="col-12 mb-md-5">
               <FeedGrid items={feedItems} src={srcUrl} />
             </div>
           </div>

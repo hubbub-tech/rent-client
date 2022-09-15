@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { FeedItemCard } from './FeedItemCard';
-import { FeedNotFound } from './FeedNotFound';
+import { FeedEmpty } from './FeedEmpty';
 
 export const FeedGrid = ({ items = [], src }) => {
 
@@ -15,7 +15,7 @@ export const FeedGrid = ({ items = [], src }) => {
     );
   } else {
     return (
-      <FeedNotFound />
+      <FeedEmpty />
     );
   }
 }
