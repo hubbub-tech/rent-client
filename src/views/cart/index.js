@@ -6,7 +6,6 @@ import { CartItemsList } from './CartItemsList';
 import { Feedback } from '../../base/Feedback';
 
 export const Index = () => {
-  const [isReady, setIsReady] = useState(false);
 
   const [cart, setCart] = useState({});
   const [reservedItems, setReservedItems] = useState([]);

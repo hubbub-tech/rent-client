@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { FeedBanner } from './FeedBanner';
@@ -7,12 +7,15 @@ import { FeedGrid } from './FeedGrid';
 import { FeedItemFilter } from './FeedItemFilter';
 import { FeedSortOptions } from './FeedSortOptions';
 
+import { AppContext } from '../../../App';
+
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 export const Index = () => {
   // NOTE: search params will include 'search', 'page', and 'limit'
   let [searchParams, setSearchParams] = useSearchParams();
+  const { userId } = useContext(AppContext);
 
   // NOTE: pass around feedItems and setFeedItems for
   const [zipCode, setZipCode] = useState();
@@ -22,7 +25,6 @@ export const Index = () => {
 
   const [srcUrl, setSrcUrl] = useState(null);
   const [orderBy, setOrderBy] = useState(null);
-  const [isFiltered, setIsFiltered] = useState(false);
 
   useEffect(() => {
     AOS.init({duration : 500, once: true});
@@ -33,7 +35,7 @@ export const Index = () => {
       const response = await fetch(url, { mode: "cors", credentials: "include" });
       const data = await response.json();
 
-      setZipCode(10027);
+      setZipCode(10003);
       setItems(data.items);
       setFeedItems(data.items);
       setSrcUrl(data.photo_url);
@@ -47,7 +49,7 @@ export const Index = () => {
     const handleOrderByProximity = () => {
       const orderByProximity = (a, b) => {
 
-        const userZipCode = 10003;
+        const userZipCode = zipCode;
 
         const zipCodeItemA = parseInt(a.address_zip);
         const zipCodeItemB = parseInt(b.address_zip);

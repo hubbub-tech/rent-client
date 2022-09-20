@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import { AppContext } from '../App';
@@ -21,9 +21,7 @@ export const Feedback = () => {
       method: 'POST',
       body: body,
       headers: { 'Content-Type': 'application/json' },
-    })
-
-    const data = await response.json();
+    });
   }
 
   return (

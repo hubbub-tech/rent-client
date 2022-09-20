@@ -2,6 +2,8 @@ import React from 'react';
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Cookies from 'js-cookie';
+
 import { AppContext } from '../App';
 import { SearchBar } from './SearchBar';
 
@@ -46,6 +48,21 @@ export const Navbar = () => {
   const handleClickOpen = () => setIsOpen(!isOpen);
   const handleClickCart = () => navigate('/cart');
 
+  const handleLogout = () => {
+    if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
+      Cookies.remove('sessionToken');
+      Cookies.remove('userId');
+    } else {
+      const configs = { domain: '.hubbub.shop'};
+      Cookies.remove('sessionToken', configs);
+      Cookies.remove('userId', configs);
+      Cookies.remove('sessionToken');
+      Cookies.remove('userId');
+    }
+
+    navigate('/login');
+  };
+
   return (
     <nav className="navbar navbar-expand-lg hubbub-background">
       <div className="container-fluid">
@@ -63,16 +80,13 @@ export const Navbar = () => {
             {userId !== undefined &&
               <>
                 <li className='nav-item'>
-                  <a className="nav-link text-dark" href={`/accounts/u/id=${ userId }`}>My Profile</a>
-                </li>
-                <li className='nav-item'>
-                  <a className="nav-link text-dark" href="/accounts/u/orders">My Rentals</a>
+                  <a className="nav-link text-dark" href="/orders/history">My Rentals</a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link text-dark" href="/cart">Cart</a>
                 </li>
                 <li className='nav-item'>
-                  <a className="nav-link text-dark" href="/logout">Logout</a>
+                  <a className="nav-link text-dark" onClick={handleLogout}>Logout</a>
                 </li>
               </>
             }
@@ -93,5 +107,3 @@ export const Navbar = () => {
     </nav>
   );
 }
-
-export default Navbar;

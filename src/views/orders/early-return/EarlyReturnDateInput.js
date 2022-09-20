@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useViewport } from '../../hooks/Viewport';
+import { useViewport } from '../../../hooks/Viewport';
 
 import { format } from 'date-fns';
 import { DateRange, DayPicker } from 'react-day-picker';
@@ -7,32 +7,21 @@ import { DateRange, DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 
 
-export const CartReservationInput = ({ minDate, maxDate, defaultMonth, dtRange, setDtRange }) => {
+export const EarlyReturnDateInput = ({ minDate, maxDate, defaultMonth, dtEnded, setDtEnded }) => {
 
-  let footer = <p>Please pick the first day.</p>;
   const viewport = useViewport();
 
-  if (dtRange.from) {
-    if (!dtRange.to) {
-      footer = <p>{format(dtRange.from, 'PP')}</p>;
-    } else if (dtRange.to) {
-      footer = (
-        <p>
-          {format(dtRange.from, 'PP')}–{format(dtRange.to, 'PP')}
-        </p>
-      );
-    }
-  }
+  const footer = dtEnded ? (
+    <p>You selected {format(dtEnded, 'PP')}.</p>
+  ) : (
+    <p>Please pick a day.</p>
+  );
 
-  const onSelectChangeRange = (e) => {
-    if (e !== undefined) setDtRange({ from: e.from, to: e.to });
-    else setDtRange({ from: null, to: null });
-}
   return (
     <>
       <style>{`
         .rdp {
-        --rdp-cell-size: ${viewport.width > 400 ? '40' : '30'}px;
+        --rdp-cell-size: ${viewport.width > 400 ? '48' : '40'}px;
         --rdp-accent-color: #0000ff;
         --rdp-background-color: #e7edff;
         --rdp-accent-color-dark: #3003e1;
@@ -44,16 +33,14 @@ export const CartReservationInput = ({ minDate, maxDate, defaultMonth, dtRange, 
       }
       `}</style>
       <DayPicker
-        mode="range"
-        min={1}
-        max={364}
+        mode="single"
         today={new Date()}
         fromDate={minDate}
         toDate={maxDate}
         defaultMonth={defaultMonth}
-        selected={dtRange}
+        selected={dtEnded}
+        onSelect={setDtEnded}
         footer={footer}
-        onSelect={onSelectChangeRange}
         styles={{
           caption: { fontSize: '75%' }
         }}

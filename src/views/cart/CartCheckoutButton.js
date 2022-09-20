@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const CartCheckoutButton = ({ disabled, cart, method }) => {
@@ -27,8 +26,7 @@ export const CartCheckoutButton = ({ disabled, cart, method }) => {
     postData(process.env.REACT_APP_SERVER + '/checkout/validate')
     .then(data => {
       if (method === 'in-person') navigate('/checkout/success');
-      else if (method === 'online') navigate(data.redirect_url);
-      else console.log("hey");
+      else window.location.href = data.redirect_url;
     })
     .catch(console.error);
   };

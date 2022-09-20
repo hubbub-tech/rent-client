@@ -1,15 +1,20 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Cookies from 'js-cookie';
 
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import Flash from './base/Flash';
-import Navbar from './base/Navbar';
-import Footer from './base/Footer';
+import { Footer } from './base/Footer';
+import { Navbar } from './base/Navbar';
 
 import { Index as Cart } from './views/cart';
 import { Index as Checkout } from './views/checkout';
+
+import { Index as OrderHistory } from './views/orders';
+
+import { Index as ExtendRental } from './views/extend';
+import { Index as ExtendCheckout } from './views/extend/checkout';
 
 import { Index as Login } from './views/auth/login';
 import { Index as ItemFeed } from './views/items/feed';
@@ -19,9 +24,7 @@ import { PageNotFound } from './views/errors/E404';
 import { Story } from './views/static/Story';
 import { Faqs } from './views/static/Faqs';
 
-import { useAnalytics } from './base/Analytics';
-
-import { parseCookies } from './helper.js'
+import { useAnalytics } from './hooks/Analytics';
 
 
 export const AppContext = React.createContext({
@@ -53,6 +56,12 @@ const App = () => {
           <Route exact path="/items/feed" element={<ItemFeed />} />
 
           <Route exact path="/item/:itemId" element={<ItemDetails />} />
+
+          <Route exact path="/orders/history" element={<OrderHistory />} />
+
+          <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
+
+          <Route exact path="/extend/:status" element={<ExtendCheckout />} />
 
           <Route exact path="/story" element={<Story />} />
 

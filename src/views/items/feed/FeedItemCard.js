@@ -24,7 +24,6 @@ export const FeedItemCard = ({ src, item }) => {
               alt={item.name}
             />
           </div>
-
           <div className="col-8">
             <div className="card-body">
               <div className="row">

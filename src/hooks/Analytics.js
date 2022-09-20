@@ -4,7 +4,6 @@ import ReactGA from 'react-ga';
 
 export const useAnalytics = (hubbubId = null) => {
   const location = useLocation();
-  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
       if (!window.location.href.includes("localhost")) {
@@ -16,7 +15,6 @@ export const useAnalytics = (hubbubId = null) => {
           ReactGA.initialize(process.env.REACT_APP_MEASUREMENT_ID);
         }
       }
-      setInitialized(true);
   }, []);
 
   useEffect(() => {

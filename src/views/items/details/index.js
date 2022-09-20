@@ -11,7 +11,7 @@ import { DetailsItemDescription } from './DetailsItemDescription';
 import { DetailsRecommendations } from './DetailsRecommendations';
 
 import { printDate } from '../utils.js';
-import { useViewport } from '../../../base/Viewport';
+import { useViewport } from '../../../hooks/Viewport';
 import { AppContext } from '../../../App.js';
 
 export const Index = () => {

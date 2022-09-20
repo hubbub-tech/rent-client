@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { Feedback } from '../../base/Feedback';
+
 export const CheckoutSuccess = () => {
 
-  let navigate = useNavigate();
-  const [messages, setMessages] = useState(['Loading...']);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getData = async(url) => {
@@ -22,6 +23,17 @@ export const CheckoutSuccess = () => {
   }, []);
 
   return (
-    <p>{ messages }</p>
+    <main>
+      <div className="container-md my-5">
+        <div className="row">
+          <div className="col-sm-3"></div>
+          <div className="col-16">
+            <h1 className="text-center text-hubbub display-3 mt-5">Reserving your items...</h1>
+            <Feedback />
+          </div>
+          <div className="col-sm-3"></div>
+        </div>
+      </div>
+    </main>
   );
 }

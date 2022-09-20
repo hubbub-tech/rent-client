@@ -1,6 +1,4 @@
-import React from 'react';
-
-const Footer = () => {
+export const Footer = () => {
   return (
     <footer
       className="font-small pt-4"
@@ -85,5 +83,3 @@ const Footer = () => {
     </footer>
   );
 }
-
-export default Footer;

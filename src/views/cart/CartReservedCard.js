@@ -31,9 +31,7 @@ export const CartReservedCard = ({ src, item }) => {
                 <div className="col-12">
                   <h1 className="fs-6 card-title">{item.name}</h1>
                   <div className="text-small mb-1">
-                    <a href="#" className="text-decoration-none text-success">
-                      <small>{ printMoney(item.reservation.est_charge) }</small>
-                    </a>
+                    <small className="text-success">{ printMoney(item.reservation.est_charge) }</small>
                   </div>
                   <hr />
                 </div>

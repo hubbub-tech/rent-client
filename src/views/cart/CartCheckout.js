@@ -14,6 +14,10 @@ export const CartCheckout = ({ cart, unreservedItems, reservedItems }) => {
     setIsReady(unreservedItems.length === 0 && reservedItems.length > 0);
   }, [unreservedItems, reservedItems]);
 
+  useEffect(() => {
+    console.log(txnMethod);
+  }, [txnMethod]);
+
   if (isReady) return (
     <div className="card">
       <div className="card-body">

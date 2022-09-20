@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
@@ -35,8 +35,8 @@ export const LoginForm = () => {
 
   return (
     <form onSubmit={postData}>
-      <div class="mb-3">
-        <label for="userEmail" class="form-label"><small>Email</small></label>
+      <div className="mb-3">
+        <label htmlFor="userEmail" className="form-label"><small>Email</small></label>
         <input
           type="email"
           className="form-control"
@@ -49,8 +49,8 @@ export const LoginForm = () => {
           required
         />
       </div>
-      <div class="mb-3">
-        <label for="userPassword" class="form-label"><small>Password</small></label>
+      <div className="mb-3">
+        <label htmlFor="userPassword" className="form-label"><small>Password</small></label>
         <input
           type="password"
           className="form-control"
@@ -61,7 +61,7 @@ export const LoginForm = () => {
           maxLength="49"
           required
         />
-        <div id="emailHelp" class="form-text d-flex justify-content-end">
+        <div id="emailHelp" className="form-text d-flex justify-content-end">
           <a href="/password/recovery">Forgot password?</a>
         </div>
       </div>

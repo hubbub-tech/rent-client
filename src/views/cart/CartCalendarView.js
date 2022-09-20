@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { CartReservationInput } from './CartReservationInput';
 import { CartEditItemButton } from './CartEditItemButton';
-import { useViewport } from '../../base/Viewport';
+import { useViewport } from '../../hooks/Viewport';
 
 export const CartCalendarView = ({ item }) => {
 

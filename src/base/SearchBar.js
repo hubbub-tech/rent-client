@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export const SearchBar = () => {
@@ -22,7 +22,7 @@ export const SearchBar = () => {
         maxLength="29"
       />
       <button
-        className="btn btn-outline-dark"
+        className="btn btn-dark"
         type="submit"
         id="button-addon1"
         onClick={handleClick}

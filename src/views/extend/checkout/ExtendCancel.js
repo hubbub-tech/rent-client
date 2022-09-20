@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Feedback } from '../../base/Feedback';
+import { Feedback } from '../../../base/Feedback';
 
-export const CheckoutCancel = () => {
+export const ExtendCancel = () => {
 
   let navigate = useNavigate();
 
@@ -14,7 +14,7 @@ export const CheckoutCancel = () => {
       return response
     };
 
-    getData(process.env.REACT_APP_SERVER + '/checkout/cancel')
+    getData(process.env.REACT_APP_SERVER + '/orders/extend/cancel')
     .then(res => navigate('/cart'))
     .catch(console.error);
   }, []);

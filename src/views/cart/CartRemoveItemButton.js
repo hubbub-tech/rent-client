@@ -11,8 +11,6 @@ export const CartRemoveItemButton = ({ itemId }) => {
         body: JSON.stringify({ itemId }),
         headers: { 'Content-Type': 'application/json' },
       });
-
-      const data = await response.json();
     };
 
     postData(process.env.REACT_APP_SERVER + '/cart/remove')
