@@ -14,14 +14,14 @@ export const EarlyReturnView = ({ order, setShowEarlyReturnView }) => {
   const [dtEnded, setDtEnded] = useState(null);
 
   const getMinDate = () => {
-    const calDtStarted = Date.parse(order.ext_dt_start);
+    const calDtStarted = new Date(order.ext_dt_start * 1000);
 
     if (dateToday > calDtStarted) return dateToday;
     else return calDtStarted;
   };
 
   const getMaxDate = () => {
-    const calDtEnded = Date.parse(order.ext_dt_end);
+    const calDtEnded = new Date(order.ext_dt_end * 1000);
     return calDtEnded;
   };
 
@@ -35,8 +35,8 @@ export const EarlyReturnView = ({ order, setShowEarlyReturnView }) => {
         credentials: 'include',
         body: JSON.stringify({
           orderId: order.id,
-          dtStarted: order.ext_dt_start,
-          dtEnded
+          dtStarted: Math.floor(order.ext_dt_start.getTime() / 1000),
+          dtEnded: Math.floor(dtEnded.getTime() / 1000)
         }),
         headers: { 'Content-Type': 'application/json' },
       });

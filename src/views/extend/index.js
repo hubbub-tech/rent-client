@@ -23,8 +23,8 @@ export const Index = () => {
 
   const [srcUrl, setSrcUrl] = useState();
 
-  const getMinDate = () => { return Date.parse(order.ext_dt_end) };
-  const getMaxDate = () => { return Date.parse(order.item.calendar.dt_ended) };
+  const [minDate, setMinDate] = useState(new Date());
+  const [maxDate, setMaxDate] = useState(new Date());
 
   useEffect(() => {
 
@@ -34,70 +34,66 @@ export const Index = () => {
 
       setOrder(data.order);
       setSrcUrl(data.photo_url);
+
+      setMinDate(new Date(data.order.ext_dt_end * 1000));
+      setMaxDate(new Date(data.order.item.calendar.dt_ended * 1000));
     };
 
     getData(process.env.REACT_APP_SERVER + `/order/${orderId}`)
     .catch(console.error);
+
   }, [orderId]);
 
   return (
     <main>
-    <div className="mt-4">
-      <div className="container">
-        <div className="row ">
-          <div className="col-12">
-            <ExtendBreadcrumbs order={order} />
+      <div className="mt-4">
+        <div className="container">
+          <div className="row ">
+            <div className="col-12">
+              <ExtendBreadcrumbs order={order} />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <section className="mt-8">
-      <div className="container">
-        <div className="row">
-          <div className="col-md-6">
-            <ExtendItemPhoto className="img-fluid px-5 py-5" src={srcUrl} alt={order.item.name} />
-          </div>
-          <div className="col-md-6">
-            <div className="ps-lg-10 mt-6 mt-md-0">
-              <a href={`/accounts/u/id=${order.item.lister_id}`} className="mb-4 d-block">{ order.item.lister_name }</a>
+      <section className="mt-8">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-6">
+              <ExtendItemPhoto className="img-fluid px-5 py-5" src={srcUrl} alt={order.item.name} />
+            </div>
+            <div className="col-md-6">
+              <div className="ps-lg-10 mt-6 mt-md-0">
+                <a href={`/accounts/u/id=${order.item.lister_id}`} className="mb-4 d-block">{ order.item.lister_name }</a>
 
-              <h1 className="fs-2 mb-1">{ order.item.name }</h1>
-              <div className="text-small mb-1">
-                <a href="#!" className="text-decoration-none text-danger">
-                  Reservation ending { printDate(order.ext_dt_end) }
-                </a>
-              </div>
-              <div className="fs-5 mt-3">
-                <span className="fw-bold text-dark">Extend your rental</span>
-              </div>
+                <h1 className="fs-2 mb-1">{ order.item.name }</h1>
+                <div className="text-small mb-1">
+                  <a href="#!" className="text-decoration-none text-danger">
+                    Reservation ending { printDate(order.ext_dt_end) }
+                  </a>
+                </div>
+                <div className="fs-5 mt-3">
+                  <span className="fw-bold text-dark">Extend your rental</span>
+                </div>
 
-              <hr className="my-6" />
+                <hr className="my-6" />
 
-              <div className="row">
-                <div className="col-md-12">
-                  <div className="mb-1">
+                <div className="row">
+                  <div className="col-md-12 mb-4">
                     <ExtendDateInput
-                      minDate={getMinDate()}
-                      maxDate={getMaxDate()}
+                      minDate={minDate}
+                      maxDate={maxDate}
                       dtEnded={dtEnded}
                       setDtEnded={setDtEnded}
-                      defaultMonth={getMinDate()}
+                      defaultMonth={minDate}
                     />
+                    <ExtendButton dtEnded={dtEnded} orderId={order.id} />
                   </div>
-
-                  <ExtendButton dtEnded={dtEnded} orderId={order.id} />
                 </div>
               </div>
-
-
             </div>
-
           </div>
-
         </div>
-      </div>
-    </section>
-
-  </main>
+      </section>
+    </main>
   );
 }

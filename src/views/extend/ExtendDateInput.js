@@ -11,11 +11,10 @@ export const ExtendDateInput = ({ minDate, maxDate, defaultMonth, dtEnded, setDt
 
   const viewport = useViewport();
 
-  const footer = dtEnded ? (
-    <p>You selected {format(dtEnded, 'PP')}.</p>
-  ) : (
-    <p>Please pick a day.</p>
-  );
+  const captionStyles = { fontSize: '75%' };
+  const footer = dtEnded
+    ? <p>You selected {format(dtEnded, 'PP')}.</p>
+    : <p>Please pick a day.</p>;
 
   return (
     <>
@@ -41,9 +40,7 @@ export const ExtendDateInput = ({ minDate, maxDate, defaultMonth, dtEnded, setDt
         selected={dtEnded}
         onSelect={setDtEnded}
         footer={footer}
-        styles={{
-          caption: { fontSize: '75%' }
-        }}
+        styles={{ caption: captionStyles }}
       />
     </>
   );

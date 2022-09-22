@@ -20,7 +20,7 @@ export const ExtendSuccess = () => {
         credentials: 'include',
         body: JSON.stringify({
           orderId: cachedData.order_id,
-          dtEnded: cachedData.ext_dt_end,
+          dtEnded: Math.floor(cachedData.ext_dt_end),
         }),
         headers: { 'Content-Type': 'application/json' },
       });

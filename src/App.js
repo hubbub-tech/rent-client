@@ -12,6 +12,7 @@ import { Index as Cart } from './views/cart';
 import { Index as Checkout } from './views/checkout';
 
 import { Index as OrderHistory } from './views/orders';
+import { Index as DeliveryDropoffs } from './views/delivery/dropoffs';
 
 import { Index as ExtendRental } from './views/extend';
 import { Index as ExtendCheckout } from './views/extend/checkout';
@@ -58,6 +59,8 @@ const App = () => {
           <Route exact path="/item/:itemId" element={<ItemDetails />} />
 
           <Route exact path="/orders/history" element={<OrderHistory />} />
+
+          <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
 
           <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
 

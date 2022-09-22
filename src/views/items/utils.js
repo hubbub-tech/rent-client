@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { format } from 'date-fns';
 
 const expDecay = (retailPrice, timeNow, discount = .50, timeTotal = 28) => {
   // Where discount is issued at timeTotal
@@ -28,16 +28,13 @@ const printMoney = (floatAmount) => {
   return `$${money}`;
 }
 
-const stringToMoment = (stringDate, formatStr = "YYYY-MM-DD") => {
-  const momentDate = moment.utc(stringDate, formatStr);
-  return momentDate;
-}
-
-const printDate = (stringDate, formatStr = "MMM Do YYYY") => {
-  // stringDate is a 'YYYY-MM-DD format'
-  const momentDate = stringToMoment(stringDate);
-  const printDate = momentDate.format(formatStr);
-  return printDate;
+const printDate = (timestamp, formatStr = "PP") => {
+  if (timestamp != null) {
+    const onDatetime = new Date(timestamp * 1000);
+    return format(onDatetime, formatStr);
+  } else {
+    return "Invalid Date"
+  }
 }
 
 

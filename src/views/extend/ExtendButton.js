@@ -12,7 +12,10 @@ export const ExtendButton = ({ dtEnded, orderId }) => {
         mode: 'cors',
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify({ orderId, dtEnded }),
+        body: JSON.stringify({
+          orderId,
+          dtEnded: Math.floor(dtEnded.getTime() / 1000)
+        }),
         headers: { 'Content-Type': 'application/json' },
       });
 

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { CartReservationInput } from './CartReservationInput';
 import { CartEditItemButton } from './CartEditItemButton';
@@ -12,17 +12,19 @@ export const CartCalendarView = ({ item }) => {
   const defaultSelected = { from: null, to: null };
   const [dtRange, setDtRange] = useState(defaultSelected);
 
-  const getMinDate = () => {
-    const calDtStarted = Date.parse(item.calendar.dt_started);
+  const [minDate, setMinDate] = useState(new Date());
+  const [maxDate, setMaxDate] = useState(new Date());
 
-    if (dateToday > calDtStarted) return dateToday;
-    else return calDtStarted;
-  }
 
-  const getMaxDate = () => {
-    const calDtEnded = Date.parse(item.calendar.dt_ended);
-    return calDtEnded;
-  }
+  useEffect(() => {
+
+    const dtToday = new Date();
+    const dtStarted = new Date(item.calendar.dt_started * 1000);
+
+    setMinDate(dtToday > dtStarted ? dtToday : dtStarted);
+    setMaxDate(new Date(item.calendar.dt_ended * 1000));
+
+  }, [item]);
 
   const handleEdit = (e) => {
     e.preventDefault();
@@ -34,8 +36,8 @@ export const CartCalendarView = ({ item }) => {
         credentials: 'include',
         body: JSON.stringify({
           itemId: item.id,
-          dtStarted: dtRange.from,
-          dtEnded: dtRange.to,
+          dtStarted: Math.floor(dtRange.from.getTime() / 1000),
+          dtEnded: Math.floor(dtRange.to.getTime() / 1000),
         }),
         headers: { 'Content-Type': 'application/json' },
       });
@@ -53,8 +55,8 @@ export const CartCalendarView = ({ item }) => {
     <div className="row">
       <div className="col-lg-6 col-md-8 col-12">
         <CartReservationInput
-          minDate={getMinDate()}
-          maxDate={getMaxDate()}
+          minDate={minDate}
+          maxDate={maxDate}
           defaultMonth={dateToday}
           dtRange={dtRange}
           setDtRange={setDtRange}

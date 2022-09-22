@@ -18,10 +18,10 @@ export const OrderCard = ({ src, order }) => {
   const [showEarlyReturnView, setShowEarlyReturnView] = useState(false);
   const [showExtendView, setShowExtendView] = useState(false);
 
-  const [dtStarted, setDtStarted] = useState(Date.parse(order.res_dt_start));
+  const [dtStarted, setDtStarted] = useState(new Date(order.res_dt_start * 1000));
 
   const dtNow = new Date();
-  const dtEnded = Date.parse(order.ext_dt_end);
+  const dtEnded = new Date(order.ext_dt_end * 1000);
 
   if (showEarlyReturnView === false) return (
     <div className="card my-2">
@@ -63,6 +63,7 @@ export const OrderCard = ({ src, order }) => {
             </div>
           </div>
         </div>
+        { console.log(typeof(order.res_dt_start)) }
         <OrderScheduleDropoffLink dtDropoff={order.res_dt_start} dropoffId={order.dropoff_id} />
         <span>|</span>
         <OrderSchedulePickupLink dtPickup={order.res_dt_end} pickupId={order.pickup_id} />

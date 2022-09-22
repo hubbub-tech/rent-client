@@ -28,7 +28,11 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
     let pkg;
     let url;
     if (dtStarted && dtEnded) {
-      pkg = { itemId, dtStarted, dtEnded };
+      pkg = {
+        itemId,
+        dtStarted: Math.floor( dtStarted.getTime() / 1000),
+        dtEnded: Math.floor( dtEnded.getTime() / 1000)
+      };
       url = '/cart/add';
     } else {
       pkg = { itemId };

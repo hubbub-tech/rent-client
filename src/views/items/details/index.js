@@ -22,27 +22,18 @@ export const Index = () => {
   const { userId, sessionToken } = useContext(AppContext);
 
   const [recommendations, setRecommendations] = useState([]);
-  const [item, setItem] = useState({ calendar: {}, tags: [] });
+
+  const defaultItem = { calendar: {}, tags: [] };
+  const [item, setItem] = useState(defaultItem);
   const [srcUrl, setSrcUrl] = useState();
 
   const [rentalCost, setRentalCost] = useState(undefined);
 
-  const dateToday = new Date();
   const defaultSelected = { from: null, to: null };
   const [dtRange, setDtRange] = useState(defaultSelected);
 
-  const getMinDate = () => {
-    const calDtStarted = Date.parse(item.calendar.dt_started);
-
-    console.log(calDtStarted, dateToday)
-    if (dateToday > calDtStarted) return dateToday;
-    else return calDtStarted;
-  }
-
-  const getMaxDate = () => {
-    const calDtEnded = Date.parse(item.calendar.dt_ended);
-    return calDtEnded;
-  }
+  const [minDate, setMinDate] = useState(new Date());
+  const [maxDate, setMaxDate] = useState(new Date());
 
   useEffect(() => {
 
@@ -53,11 +44,17 @@ export const Index = () => {
       setItem(data.item);
       setSrcUrl(data.photo_url);
       setRecommendations(data.recommendations);
+
+      const dtToday = new Date();
+      const dtStarted = new Date(item.calendar.dt_started * 1000);
+      setMinDate(dtToday > dtStarted ? dtToday : dtStarted);
+      setMaxDate(new Date(item.calendar.dt_ended * 1000));
     };
 
     getData(process.env.REACT_APP_SERVER + `/item/${itemId}`)
     .catch(console.error);
   }, [rentalCost]);
+
 
   return (
     <main>
@@ -99,9 +96,9 @@ export const Index = () => {
                 <div className="col-md-12">
                   <div className="mb-1">
                     <DetailsReservationInput
-                      minDate={getMinDate()}
-                      maxDate={getMaxDate()}
-                      defaultMonth={dateToday}
+                      minDate={minDate}
+                      maxDate={maxDate}
+                      defaultMonth={new Date()}
                       dtRange={dtRange}
                       setDtRange={setDtRange}
                     />
