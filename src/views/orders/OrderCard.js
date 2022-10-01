@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, Fragment } from 'react';
 import { OrderItemPhoto } from './OrderItemPhoto';
 
 import { OrderCancelButton } from './OrderCancelButton';
 
 import { EarlyReturnButton } from './early-return/EarlyReturnButton';
 import { OrderExtendButton } from './OrderExtendButton';
+import { OrderViewItemButton } from './OrderViewItemButton';
 
 import { OrderScheduleDropoffLink } from './OrderScheduleDropoffLink';
 import { OrderSchedulePickupLink } from './OrderSchedulePickupLink';
@@ -58,15 +59,19 @@ export const OrderCard = ({ src, order }) => {
                   {dtNow < dtEnded && <EarlyReturnButton setShowEarlyReturnView={setShowEarlyReturnView} />}
                   {dtStarted > dtNow && <OrderCancelButton orderId={order.id} />}
                   {(dtStarted <= dtNow && dtNow < dtEnded ) && <OrderExtendButton orderId={order.id} />}
+                  {dtNow > dtEnded && <OrderViewItemButton itemId={order.item_id} />}
                 </div>
               </div>
             </div>
           </div>
         </div>
-        { console.log(typeof(order.res_dt_start)) }
-        <OrderScheduleDropoffLink dtDropoff={order.res_dt_start} dropoffId={order.dropoff_id} />
-        <span>|</span>
-        <OrderSchedulePickupLink dtPickup={order.res_dt_end} pickupId={order.pickup_id} />
+        {dtNow < dtEnded &&
+          <Fragment>
+            <OrderScheduleDropoffLink dtDropoff={order.res_dt_start} dropoffId={order.dropoff_id} />
+            <span>|</span>
+            <OrderSchedulePickupLink dtPickup={order.res_dt_end} pickupId={order.pickup_id} />
+          </Fragment>
+        }
       </div>
     </div>
   )

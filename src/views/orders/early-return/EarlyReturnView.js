@@ -35,7 +35,7 @@ export const EarlyReturnView = ({ order, setShowEarlyReturnView }) => {
         credentials: 'include',
         body: JSON.stringify({
           orderId: order.id,
-          dtStarted: Math.floor(order.ext_dt_start.getTime() / 1000),
+          dtStarted: Math.floor(order.ext_dt_start),
           dtEnded: Math.floor(dtEnded.getTime() / 1000)
         }),
         headers: { 'Content-Type': 'application/json' },
@@ -49,7 +49,7 @@ export const EarlyReturnView = ({ order, setShowEarlyReturnView }) => {
     else url = process.env.REACT_APP_SERVER + '/extensions/early-return';
 
     postData(url)
-    .then(() => window.location.reload(false))
+    .then(window.location.reload(false))
     .catch(console.error);
   };
 

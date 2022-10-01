@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import { CartCheckout } from './CartCheckout';
 import { CartItemsList } from './CartItemsList';
 
 import { Feedback } from '../../base/Feedback';
+import { FlashContext } from '../../providers/FlashProvider';
 
 export const Index = () => {
 
@@ -11,7 +12,14 @@ export const Index = () => {
   const [reservedItems, setReservedItems] = useState([]);
   const [unreservedItems, setUnreservedItems] = useState([]);
 
+  const { addFlash, removeFlash } = useContext(FlashContext);
+
   useEffect(() => {
+    const renderFlash = async(message, status, timeout = 1000) => {
+      addFlash({ message, status });
+      setTimeout(() => removeFlash(), timeout);
+    }
+
     const getData = async (url) => {
       const response = await fetch(url, { mode: "cors", credentials: "include" });
       const data = await response.json();
@@ -20,8 +28,7 @@ export const Index = () => {
       setReservedItems(data.reserved_items);
       setUnreservedItems(data.unreserved_items);
 
-      console.log(data.reserved_items)
-      console.log(data.unreserved_items)
+      renderFlash("Your cart is up to date.", "info", 5000);
     };
 
     getData(process.env.REACT_APP_SERVER + '/cart')

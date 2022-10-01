@@ -11,12 +11,13 @@ export const CartRemoveItemButton = ({ itemId }) => {
         body: JSON.stringify({ itemId }),
         headers: { 'Content-Type': 'application/json' },
       });
+
+      return response;
     };
 
     postData(process.env.REACT_APP_SERVER + '/cart/remove')
+    .then(response => response.ok && window.location.reload(false))
     .catch(console.error);
-
-    window.location.reload(false);
   };
 
   return (

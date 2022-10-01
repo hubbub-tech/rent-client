@@ -4,7 +4,8 @@ import Cookies from 'js-cookie';
 
 import { Route, Routes } from 'react-router-dom';
 
-import Flash from './base/Flash';
+import { FlashProvider } from './providers/FlashProvider';
+
 import { Footer } from './base/Footer';
 import { Navbar } from './base/Navbar';
 
@@ -31,7 +32,9 @@ import { useAnalytics } from './hooks/Analytics';
 export const AppContext = React.createContext({
   userId: Cookies.get('userId'),
   sessionToken: Cookies.get('sessionToken'),
+  messages: [],
 });
+
 
 const App = () => {
   const userId = Cookies.get('userId');
@@ -44,34 +47,35 @@ const App = () => {
   return (
     <AppContext.Provider value={{ userId , sessionToken }}>
       <div className="App">
-        <Navbar isLoggedIn={true} />
-        <Flash flashMessages={flashMessages} setFlashMessages={setFlashMessages} />
-        <Routes>
+        <Navbar />
+        <FlashProvider>
+          <Routes>
 
-          <Route exact path="/cart" element={<Cart />} />
+            <Route exact path="/cart" element={<Cart />} />
 
-          <Route exact path="/checkout/:status" element={<Checkout />} />
+            <Route exact path="/checkout/:status" element={<Checkout />} />
 
-          <Route exact path="/login" element={<Login />} />
+            <Route exact path="/login" element={<Login />} />
 
-          <Route exact path="/items/feed" element={<ItemFeed />} />
+            <Route exact path="/items/feed" element={<ItemFeed />} />
 
-          <Route exact path="/item/:itemId" element={<ItemDetails />} />
+            <Route exact path="/item/:itemId" element={<ItemDetails />} />
 
-          <Route exact path="/orders/history" element={<OrderHistory />} />
+            <Route exact path="/orders/history" element={<OrderHistory />} />
 
-          <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
+            <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
 
-          <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
+            <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
 
-          <Route exact path="/extend/:status" element={<ExtendCheckout />} />
+            <Route exact path="/extend/:status" element={<ExtendCheckout />} />
 
-          <Route exact path="/story" element={<Story />} />
+            <Route exact path="/story" element={<Story />} />
 
-          <Route exact path="/faqs" element={<Faqs />} />
+            <Route exact path="/faqs" element={<Faqs />} />
 
-          <Route element={<PageNotFound />} />
-        </Routes>
+            <Route element={<PageNotFound />} />
+          </Routes>
+        </FlashProvider>
         <Footer />
       </div>
     </AppContext.Provider>

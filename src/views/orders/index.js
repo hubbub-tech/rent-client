@@ -20,6 +20,17 @@ export const Index = () => {
   }, []);
 
   return (
-    <OrderHistory orders={orders} />
+    <div className="container">
+      <div className="row">
+        <div className="col-md-2"></div>
+        <div className="col-md-8 mt-4">
+          <h1>Order History</h1>
+          <p>Manage your past, current, and future rentals from here.</p>
+          <hr />
+        </div>
+        <div className="col-md-2"></div>
+      </div>
+      <OrderHistory orders={orders} />
+    </div>
   );
 }

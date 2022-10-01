@@ -4,7 +4,7 @@ export const CartEmpty = () => {
   return (
     <div className="col my-5">
       <p className="text-center">
-        No items in cart. Check out our <Link to="/inventory" type="button" className="btn btn-hubbub btn-sm">Inventory</Link>
+        No items in cart. Check out our <Link to="/items/feed" type="button" className="btn btn-hubbub btn-sm">Inventory</Link>
       <span> ! You can also</span> <span className="fw-bold text-hubbub">request an item</span> through our form :)!
         Just click below and we'll try to help you out!
       </p>

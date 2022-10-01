@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import { CartReservationInput } from './CartReservationInput';
 import { CartEditItemButton } from './CartEditItemButton';
 import { useViewport } from '../../hooks/Viewport';
+
+import { FlashContext } from '../../providers/FlashProvider';
 
 export const CartCalendarView = ({ item }) => {
 
@@ -15,6 +17,7 @@ export const CartCalendarView = ({ item }) => {
   const [minDate, setMinDate] = useState(new Date());
   const [maxDate, setMaxDate] = useState(new Date());
 
+  const { addFlash, removeFlash } = useContext(FlashContext);
 
   useEffect(() => {
 
@@ -28,6 +31,11 @@ export const CartCalendarView = ({ item }) => {
 
   const handleEdit = (e) => {
     e.preventDefault();
+
+    const renderFlash = async(message, status, timeout = 1000) => {
+      addFlash({ message, status });
+      setTimeout(() => removeFlash(), timeout);
+    }
 
     const postData = async(url) => {
       const response = await fetch(url, {
@@ -43,12 +51,18 @@ export const CartCalendarView = ({ item }) => {
       });
 
       const data = await response.json();
+
+      if (response.ok) {
+        return true;
+      } else {
+        renderFlash(data.message, "danger", 5000)
+        return false;
+      }
     };
 
     postData(process.env.REACT_APP_SERVER + '/cart/edit')
+    .then(isOk => isOk && window.location.reload(false))
     .catch(console.error);
-
-    window.location.reload(false);
   };
 
   return (

@@ -1,9 +1,13 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+
+import { FlashContext } from '../../../providers/FlashProvider';
 
 export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
 
   const [dtStarted, setDtStarted] = useState(null);
   const [dtEnded, setDtEnded] = useState(null);
+
+  const { addFlash, removeFlash } = useContext(FlashContext);
 
   useEffect(() => {
     setDtStarted(dtRange.from);
@@ -11,6 +15,11 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
   }, [dtRange]);
 
   const handleAddItem = () => {
+
+    const renderFlash = async(message, status, timeout = 1000) => {
+      addFlash({ message, status });
+      setTimeout(() => removeFlash(), timeout);
+    }
 
     const postData = async(url, pkg) => {
       const response = await fetch(url, {
@@ -21,6 +30,10 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
         headers: { 'Content-Type': 'application/json' },
       });
       const data = await response.json();
+
+      let status = response.ok ? 'success' : 'danger';
+
+      renderFlash(data.message, status, 10000);
 
       setRentalCost(data.est_charge);
     };

@@ -1,6 +1,7 @@
 import { printDate } from '../utils.js';
 import { ItemQuoteInput } from '../ItemQuoteInput';
 
+import { DetailsRecPhoto } from './DetailsRecPhoto';
 import { DetailsViewItemButton } from './DetailsViewItemButton';
 
 
@@ -11,19 +12,18 @@ export const DetailsRecCard = ({ src, item }) => {
         <div className="card-body">
 
           <div className="text-center position-relative">
-            <a href={`/item/${item.id}`}>
-              <img
-                src={src}
-                alt={item.name}
-                className="mb-3 img-fluid"
-              />
-            </a>
+            <DetailsRecPhoto
+              href={`/item/${item.id}`}
+              src={src}
+              className="mb-3 img-fluid"
+              alt={item.name}
+            />
 
           </div>
 
           <div className="text-small mb-1">
             <a href={`/item/${item.id}`} className="text-decoration-none text-muted">
-              <small>Next available { printDate(item.next_available_start) }</small>
+              <small>Next available { printDate(item.calendar.next_avail_date_start) }</small>
             </a>
           </div>
 
