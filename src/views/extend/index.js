@@ -9,14 +9,14 @@ import { ExtendDateInput } from './ExtendDateInput';
 
 import { printDate } from '../items/utils.js';
 import { useViewport } from '../../hooks/Viewport';
-import { AppContext } from '../../App.js';
+import { SessionContext } from '../../providers/SessionProvider.js';
 
 export const Index = () => {
 
   const { orderId } = useParams();
 
   const viewport = useViewport();
-  const { userId, sessionToken } = useContext(AppContext);
+  const { userId, sessionToken } = useContext(SessionContext);
 
   const [order, setOrder] = useState({ item: { calendar: {} }, extensions: [] });
   const [dtEnded, setDtEnded] = useState(null);

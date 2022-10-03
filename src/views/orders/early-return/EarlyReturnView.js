@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { EarlyReturnDateInput } from './EarlyReturnDateInput';
-import { EarlyReturnButton } from './EarlyReturnButton';
 import { useViewport } from '../../../hooks/Viewport';
 
 import { printDate } from '../../items/utils.js';

@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DropoffForm } from './DropoffForm';
+import { PickupForm } from './PickupForm';
 import { DeliveryItem } from '../DeliveryItem';
 
 import { printDate } from '../../items/utils.js'
@@ -20,7 +20,7 @@ export const Index = () => {
       setOrders(data.orders);
     };
 
-    getData(process.env.REACT_APP_SERVER + `/orders/schedule?dt_started=${onTimestamp / 1000}`)
+    getData(process.env.REACT_APP_SERVER + `/orders/schedule?dt_ended=${onTimestamp / 1000}`)
     .catch(console.error);
   }, [onTimestamp]);
 
@@ -30,8 +30,8 @@ export const Index = () => {
         <div className="row">
           <div className="col-md-2"></div>
           <div className="col-md-8 mt-4">
-            <h1>Dropoff</h1>
-            <p>Share when you will be availability for us to deliver your rentals.</p>
+            <h1>Pickup</h1>
+            <p>Share when you will be availability for us to pickup your rentals.</p>
             <hr />
           </div>
           <div className="col-md-2"></div>
@@ -52,7 +52,7 @@ export const Index = () => {
                 ))}
               </div>
               <div className="col-md-6">
-                <DropoffForm orders={orders} />
+                <PickupForm orders={orders} />
               </div>
             </div>
           </div>

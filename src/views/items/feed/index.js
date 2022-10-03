@@ -7,7 +7,7 @@ import { FeedGrid } from './FeedGrid';
 import { FeedItemFilter } from './FeedItemFilter';
 import { FeedSortOptions } from './FeedSortOptions';
 
-import { AppContext } from '../../../App';
+import { SessionContext } from '../../../providers/SessionProvider';
 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -15,7 +15,7 @@ import 'aos/dist/aos.css';
 export const Index = () => {
   // NOTE: search params will include 'search', 'page', and 'limit'
   let [searchParams, setSearchParams] = useSearchParams();
-  const { userId } = useContext(AppContext);
+  const { userId } = useContext(SessionContext);
 
   // NOTE: pass around feedItems and setFeedItems for
   const [zipCode, setZipCode] = useState();

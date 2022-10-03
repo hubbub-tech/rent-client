@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
 
-import { AppContext } from '../App';
+import { SessionContext } from '../providers/SessionProvider';
 import { SearchBar } from './SearchBar';
 
 
@@ -41,7 +41,7 @@ const NavbarToggleButton = ({ isOpen, handleClickOpen }) => {
 export const Navbar = () => {
   const navigate = useNavigate();
 
-  const { userId } = useContext(AppContext);
+  const { userId } = useContext(SessionContext);
 
   const [isOpen, setIsOpen] = useState(false);
 

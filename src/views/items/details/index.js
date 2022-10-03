@@ -12,14 +12,14 @@ import { DetailsRecommendations } from './DetailsRecommendations';
 
 import { printDate } from '../utils.js';
 import { useViewport } from '../../../hooks/Viewport';
-import { AppContext } from '../../../App.js';
+import { SessionContext } from '../../../providers/SessionProvider';
 
 export const Index = () => {
 
   const { itemId } = useParams();
 
   const viewport = useViewport();
-  const { userId, sessionToken } = useContext(AppContext);
+  const { userId, sessionToken } = useContext(SessionContext);
 
   const [recommendations, setRecommendations] = useState([]);
 

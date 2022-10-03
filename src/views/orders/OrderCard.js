@@ -69,7 +69,7 @@ export const OrderCard = ({ src, order }) => {
           <Fragment>
             <OrderScheduleDropoffLink dtDropoff={order.res_dt_start} dropoffId={order.dropoff_id} />
             <span>|</span>
-            <OrderSchedulePickupLink dtPickup={order.res_dt_end} pickupId={order.pickup_id} />
+            <OrderSchedulePickupLink dtPickup={order.ext_dt_end} pickupId={order.pickup_id} />
           </Fragment>
         }
       </div>

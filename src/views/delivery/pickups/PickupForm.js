@@ -6,7 +6,7 @@ import { DeliveryAddressInput } from '../DeliveryAddressInput';
 
 import { FlashContext } from '../../../providers/FlashProvider';
 
-export const DropoffForm = ({ orders }) => {
+export const PickupForm = ({ orders }) => {
 
   let navigate = useNavigate();
 
@@ -19,7 +19,7 @@ export const DropoffForm = ({ orders }) => {
 
   const { addFlash, removeFlash } = useContext(FlashContext);
 
-  const handleDropoffSchedule = (e) => {
+  const handlePickupSchedule = (e) => {
     e.preventDefault();
 
     const getOrderIds = (orders) => {
@@ -44,7 +44,7 @@ export const DropoffForm = ({ orders }) => {
         mode: 'cors',
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify({ address, timeslots, referral, notes }),
+        body: JSON.stringify({ orderIds, address, timeslots, notes }),
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -57,7 +57,7 @@ export const DropoffForm = ({ orders }) => {
       return response;
     };
 
-    postData(process.env.REACT_APP_SERVER + '/dropoff/schedule')
+    postData(process.env.REACT_APP_SERVER + '/pickup/schedule')
     .then(response => response.ok && navigate('/orders/history'))
     .catch(console.error);
   }
@@ -70,26 +70,14 @@ export const DropoffForm = ({ orders }) => {
   };
 
   return (
-    <form onSubmit={handleDropoffSchedule}>
+    <form onSubmit={handlePickupSchedule}>
       <label className="mt-4 form-label">Availabilities</label>
       <DeliveryTimeslotsDisplay timeslots={timeslots} setTimeslots={setTimeslots} />
       <div id="timeHelp" className="form-text">Let us know when you're available for our couriers to come.</div>
 
-      <label className="mt-4 form-label">Dropoff Address</label>
+      <label className="mt-4 form-label">Pickup Address</label>
       <DeliveryAddressInput setAddress={setAddress} />
       <div id="addressHelp" className="form-text">Where should our couriers meet you?</div>
-
-      <div className="mt-4">
-        <label htmlFor="referralName" className="form-label">Who referred you?</label>
-        <input
-          type="text"
-          onChange={(e) => setReferral(e.target.value)}
-          className="form-control"
-          id="referralName"
-          aria-describedby="referralHelp"
-        />
-        <div id="referralHelp" className="form-text">How did you find us? Let us know who referred us to you!</div>
-      </div>
 
       <div className="mt-4">
         <label htmlFor="deliveryNotes" className="form-label">Delivery Notes</label>
@@ -101,7 +89,7 @@ export const DropoffForm = ({ orders }) => {
           onChange={e => setNotes(e.target.value)}
           required
         />
-        <div id="deliveryHelp" className="form-text">Share any details relevant to making your delivery go smoothly.</div>
+        <div id="deliveryHelp" className="form-text">Share any details relevant to making your pickup go smoothly.</div>
       </div>
 
       <div className="d-grid gap-2 my-4">
@@ -110,7 +98,7 @@ export const DropoffForm = ({ orders }) => {
           className="btn btn-success"
           disabled={disable()}
         >
-          Schedule Dropoff
+          Schedule Pickup
         </button>
       </div>
     </form>

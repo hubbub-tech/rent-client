@@ -2,11 +2,11 @@ import React from 'react';
 import { useState, useContext } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { AppContext } from '../App';
+import { SessionContext } from '../providers/SessionProvider';
 
 export const Feedback = () => {
   const location = useLocation();
-  const { userId } = useContext(AppContext);
+  const { userId } = useContext(SessionContext);
 
   const [feedback, setFeedback] = useState(null);
 

@@ -1,10 +1,9 @@
-import React from 'react';
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import React, { useState, useContext } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
 import { FlashProvider } from './providers/FlashProvider';
+import { SessionContext, SessionProvider } from './providers/SessionProvider';
 
 import { Footer } from './base/Footer';
 import { Navbar } from './base/Navbar';
@@ -14,6 +13,7 @@ import { Index as Checkout } from './views/checkout';
 
 import { Index as OrderHistory } from './views/orders';
 import { Index as DeliveryDropoffs } from './views/delivery/dropoffs';
+import { Index as DeliveryPickups} from './views/delivery/pickups';
 
 import { Index as ExtendRental } from './views/extend';
 import { Index as ExtendCheckout } from './views/extend/checkout';
@@ -29,23 +29,14 @@ import { Faqs } from './views/static/Faqs';
 import { useAnalytics } from './hooks/Analytics';
 
 
-export const AppContext = React.createContext({
-  userId: Cookies.get('userId'),
-  sessionToken: Cookies.get('sessionToken'),
-  messages: [],
-});
-
-
 const App = () => {
-  const userId = Cookies.get('userId');
-  const sessionToken = Cookies.get('sessionToken');
 
-  const [flashMessages, setFlashMessages] = useState([]);
+  const { userId } = useContext(SessionContext);
 
   useAnalytics(userId);
 
   return (
-    <AppContext.Provider value={{ userId , sessionToken }}>
+    <SessionProvider>
       <div className="App">
         <Navbar />
         <FlashProvider>
@@ -65,6 +56,8 @@ const App = () => {
 
             <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
 
+            <Route exact path="/orders/pickup/:onTimestamp" element={<DeliveryPickups />} />
+
             <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
 
             <Route exact path="/extend/:status" element={<ExtendCheckout />} />
@@ -78,7 +71,7 @@ const App = () => {
         </FlashProvider>
         <Footer />
       </div>
-    </AppContext.Provider>
+    </SessionProvider>
   );
 }
 
