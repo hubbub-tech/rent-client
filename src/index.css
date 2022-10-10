@@ -125,26 +125,28 @@ a.custom-card:hover {
   color: inherit;
 }
 
-.img-float {
+.float:hover {
   transform: translatey(0px);
   animation: float 10000ms ease-in-out infinite;
 }
 
-.img-float:hover {
-  opacity: 0.3;
-}
-
 @keyframes float {
 	0% {
-		box-shadow: 0 5px 10px 0px rgba(0,0,0,0.4);
+		box-shadow: 0 0 2px 0px rgba(0,0,0,0.4);
+    border-color: #3d4fe0;
+    border-radius: 2px;
 		transform: translatey(0px);
 	}
 	50% {
-		box-shadow: 0 10px 10px 0px rgba(0,0,0,0.2);
+		box-shadow: 0 2px 2px 0px rgba(0,0,0,0.2);
+    border-color: #69b6e7;
+    border-radius: 2px;
 		transform: translatey(-5px);
 	}
 	100% {
-		box-shadow: 0 5px 10px 0px rgba(0,0,0,0.4);
+		box-shadow: 0 0 2px 0px rgba(0,0,0,0.4);
+    border-color: #3d4fe0;
+    border-radius: 2px;
 		transform: translatey(0px);
 	}
 }

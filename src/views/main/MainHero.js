@@ -1,3 +1,5 @@
+import backgroundImg from './assets/main-banner.png';
+
 import { MainHeroBanner } from './MainHeroBanner';
 
 export const MainHero = () => {
@@ -5,7 +7,7 @@ export const MainHero = () => {
     <section className="mt-5 mb-3">
       <div className="container">
         <div className="hero-slider ">
-          <MainHeroBanner background={"#69eb67"} />
+          <MainHeroBanner image={backgroundImg} />
         </div>
       </div>
     </section>

@@ -1,20 +1,20 @@
-export const MainHeroBanner = ({ background }) => {
+export const MainHeroBanner = ({ image }) => {
   return (
     <div
       style={{
-        background,
+        backgroundImage: `url(${image})`,
+        backgroundRepeat: 'no-repeat',
         backgroundSize: "cover",
         borderRadius: ".5rem",
         backgroundPosition: "center"
       }}
     >
       <div className="ps-lg-4 py-lg-5 col-lg-5 col-md-7 py-5 px-5 text-xs-center">
-        <span className="badge text-bg-warning">Opening Sale Discount 50%</span>
+        <span className="badge text-bg-warning">New featured items available now!</span>
 
-        <h2 className="text-dark display-5 fw-bold mt-4">SuperMarket For Fresh Grocery </h2>
-        <p className="lead">Introduced a new model for online grocery shopping
-          and convenient home delivery.</p>
-        <a href="#!" className="btn btn-dark mt-3">Shop Now {"->"}</a>
+        <h2 className="text-light display-5 fw-bold mt-4"><span className="text-light">Hubbub</span> For Secondhand </h2>
+        <p className="lead text-light">Discover the better, faster, more convenient way to get the items you need.</p>
+        <a href="/items/feed" className="btn btn-dark btn-lg mt-3"><span className="text-light">Shop Now {"->"}</span></a>
       </div>
 
     </div>
