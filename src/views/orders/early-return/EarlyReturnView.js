@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { EarlyReturnDateInput } from './EarlyReturnDateInput';
 import { useViewport } from '../../../hooks/Viewport';
 
-import { printDate } from '../../items/utils.js';
+import { printDate } from '../../utils.js';
 
 export const EarlyReturnView = ({ order, setShowEarlyReturnView }) => {
 

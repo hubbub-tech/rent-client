@@ -6,9 +6,9 @@ import { FeedItemBadge } from './FeedItemBadge';
 import { FeedViewItemButton } from './FeedViewItemButton';
 
 import { ItemQuoteInput } from '../ItemQuoteInput';
-import { printDate, printMoney } from '../utils.js';
+import { printDate, printMoney } from '../../utils.js';
 
-export const FeedItemCard = ({ src, item }) => {
+export const FeedItemCard = ({ item }) => {
   const navigate = useNavigate();
   const onClick = () => navigate(`/inventory/i/id=${item.id}`);
   return (
@@ -19,7 +19,7 @@ export const FeedItemCard = ({ src, item }) => {
             {item.is_featured && <FeedItemBadge />}
             <FeedItemPhoto
               href={`/item/${item.id}`}
-              src={src}
+              src="https://storage.cloud.google.com/shop-items//test/item-622-0.jpg"
               className="img-fluid"
               alt={item.name}
             />
@@ -33,7 +33,7 @@ export const FeedItemCard = ({ src, item }) => {
                       <small>Next available {printDate(item.next_available_start)}</small>
                     </a>
                   </div>
-                  <h2 className="fs-6 card-title">{item.name}</h2>
+                  <h2 className="fs-6 card-title text-md-truncate">{item.name}</h2>
                   <ItemQuoteInput price={item.retail_price} />
                 </div>
               </div>

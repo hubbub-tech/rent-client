@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { CartCheckoutButton } from './CartCheckoutButton';
 import { CartTxnMethodRadio } from './CartTxnMethodRadio';
 
-import { printMoney } from '../items/utils.js';
+import { printMoney } from '../utils.js';
 
 export const CartCheckout = ({ cart, unreservedItems, reservedItems }) => {
 

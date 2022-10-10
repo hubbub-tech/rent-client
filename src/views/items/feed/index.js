@@ -12,18 +12,22 @@ import { SessionContext } from '../../../providers/SessionProvider';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
+// CONSTANTS
+
+
+
 export const Index = () => {
   // NOTE: search params will include 'search', 'page', and 'limit'
   let [searchParams, setSearchParams] = useSearchParams();
   const { userId } = useContext(SessionContext);
 
   // NOTE: pass around feedItems and setFeedItems for
-  const [zipCode, setZipCode] = useState();
+  const defaultZipCode = 10027;
+  const [zipCode, setZipCode] = useState(defaultZipCode);
 
   const [items, setItems] = useState([]);
   const [feedItems, setFeedItems] = useState([]);
 
-  const [srcUrl, setSrcUrl] = useState(null);
   const [orderBy, setOrderBy] = useState(null);
 
   useEffect(() => {
@@ -33,15 +37,29 @@ export const Index = () => {
 
     const getData = async(url) => {
       const response = await fetch(url, { mode: "cors", credentials: "include" });
-      const data = await response.json();
+      const responseClone = response.clone();
+      const data = await responseClone.json();
 
-      setZipCode(10003);
+      if (data.zip_code !== null) setZipCode(data.zip_code);
+
       setItems(data.items);
       setFeedItems(data.items);
-      setSrcUrl(data.photo_url);
+
+      return response;
+    };
+
+    const cacheData = async(response) => {
+      if (response.ok) {
+        const feedCache = await caches.open('feedData');
+
+        feedCache.delete(process.env.REACT_APP_SERVER + '/items/feed');
+        feedCache.put(process.env.REACT_APP_SERVER + '/items/feed', response)
+        .catch(console.error);
+      }
     };
 
     getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
+    .then(cacheData)
     .catch(console.error);
   }, [searchParams]);
 
@@ -49,7 +67,7 @@ export const Index = () => {
     const handleOrderByProximity = () => {
       const orderByProximity = (a, b) => {
 
-        const userZipCode = zipCode;
+        let userZipCode = zipCode;
 
         const zipCodeItemA = parseInt(a.address_zip);
         const zipCodeItemB = parseInt(b.address_zip);
@@ -101,13 +119,13 @@ export const Index = () => {
 
           <div className="row">
             <div className="col-lg-4 col-sm-6 col-12">
-              <FeedSortOptions setOrderBy={setOrderBy} />
+              <FeedSortOptions zipCode={zipCode} setOrderBy={setOrderBy} />
             </div>
           </div>
 
           <div className="row">
             <div className="col-12 mb-md-5">
-              <FeedGrid items={feedItems} src={srcUrl} />
+              <FeedGrid items={feedItems} />
             </div>
           </div>
         </div>

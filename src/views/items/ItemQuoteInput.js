@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 
-import { printMoney, expDecay } from './utils.js';
+import { printMoney, expDecay } from '../utils.js';
 
 export const ItemQuoteInput = ({ price }) => {
   const [quote, setQuote] = useState(0);

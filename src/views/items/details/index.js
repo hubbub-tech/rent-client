@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { addDays } from 'date-fns';
 
 import { DetailsItemPhoto } from './DetailsItemPhoto';
 import { DetailsItemTable } from './DetailsItemTable';
@@ -10,7 +9,7 @@ import { DetailsReservationInput } from './DetailsReservationInput';
 import { DetailsItemDescription } from './DetailsItemDescription';
 import { DetailsRecommendations } from './DetailsRecommendations';
 
-import { printDate } from '../utils.js';
+import { printDate } from '../../utils.js';
 import { useViewport } from '../../../hooks/Viewport';
 import { SessionContext } from '../../../providers/SessionProvider';
 
@@ -18,7 +17,6 @@ export const Index = () => {
 
   const { itemId } = useParams();
 
-  const viewport = useViewport();
   const { userId, sessionToken } = useContext(SessionContext);
 
   const [recommendations, setRecommendations] = useState([]);

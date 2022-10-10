@@ -31,11 +31,11 @@ export const FlashProvider = ({ children }) => {
 
   const addFlash = useCallback(({ message, status }) => {
     setFlash({ message, status });
-  }, [flash]);
+  }, []);
 
   const removeFlash = useCallback(() => {
     setFlash(defaultFlash);
-  }, [flash]);
+  }, []);
 
   return (
     <FlashContext.Provider value={{ flash, addFlash, removeFlash }}>

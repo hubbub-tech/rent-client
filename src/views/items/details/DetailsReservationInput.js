@@ -1,25 +1,9 @@
-import { useState, useEffect } from 'react';
 import { useViewport } from '../../../hooks/Viewport';
 
 import { format } from 'date-fns';
-import { DateRange, DayPicker } from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/dist/style.css';
-
-
-const css = `
-  .rdp {
-  --rdp-cell-size: 50px;
-  --rdp-accent-color: #0000ff;
-  --rdp-background-color: #e7edff;
-  --rdp-accent-color-dark: #3003e1;
-  --rdp-background-color-dark: #180270;
-  --rdp-outline: 2px solid var(--rdp-accent-color); /* Outline border for focused elements */
-  --rdp-outline-selected: 3px solid var(--rdp-accent-color); /* Outline border for focused _and_ selected elements */
-
-  margin: 1em;
-}
-`;
 
 export const DetailsReservationInput = ({ minDate, maxDate, defaultMonth, dtRange, setDtRange }) => {
 

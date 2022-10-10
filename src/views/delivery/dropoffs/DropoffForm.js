@@ -44,7 +44,7 @@ export const DropoffForm = ({ orders }) => {
         mode: 'cors',
         method: 'POST',
         credentials: 'include',
-        body: JSON.stringify({ address, timeslots, referral, notes }),
+        body: JSON.stringify({ orderIds, address, timeslots, referral, notes }),
         headers: { 'Content-Type': 'application/json' },
       });
 

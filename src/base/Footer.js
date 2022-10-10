@@ -77,7 +77,7 @@ export const Footer = () => {
         </div>
       </div>
       <div className="text-center py-3">
-        <span className="text-white">© 2021 Copyright: </span>
+        <span className="text-white">© 2022 Copyright: </span>
         <a href="https://www.hubbub.shop/">hubbub.shop</a>
       </div>
     </footer>

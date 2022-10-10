@@ -4,8 +4,6 @@ import { useParams } from 'react-router-dom';
 import { DropoffForm } from './DropoffForm';
 import { DeliveryItem } from '../DeliveryItem';
 
-import { printDate } from '../../items/utils.js'
-
 export const Index = () => {
 
   const { onTimestamp } = useParams();

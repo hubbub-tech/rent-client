@@ -26,8 +26,8 @@ export const LoginForm = () => {
     const data = await response.json();
 
     if (response.ok) {
-      Cookies.set('userId', data.userId);
-      Cookies.set('sessionToken', data.sessionToken);
+      Cookies.set('userId', data.user_id);
+      Cookies.set('sessionToken', data.session_token);
 
       navigate('/');
     };

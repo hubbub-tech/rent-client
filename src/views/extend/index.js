@@ -1,22 +1,16 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
-import { addDays } from 'date-fns';
 
 import { ExtendButton } from './ExtendButton';
 import { ExtendItemPhoto } from './ExtendItemPhoto';
 import { ExtendBreadcrumbs } from './ExtendBreadcrumbs';
 import { ExtendDateInput } from './ExtendDateInput';
 
-import { printDate } from '../items/utils.js';
-import { useViewport } from '../../hooks/Viewport';
-import { SessionContext } from '../../providers/SessionProvider.js';
+import { printDate } from '../utils.js';
 
 export const Index = () => {
 
   const { orderId } = useParams();
-
-  const viewport = useViewport();
-  const { userId, sessionToken } = useContext(SessionContext);
 
   const [order, setOrder] = useState({ item: { calendar: {} }, extensions: [] });
   const [dtEnded, setDtEnded] = useState(null);

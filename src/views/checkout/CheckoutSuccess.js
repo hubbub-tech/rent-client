@@ -1,17 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Feedback } from '../../base/Feedback';
+import { FlashContext } from '../../providers/FlashProvider';
 
 export const CheckoutSuccess = () => {
 
   const navigate = useNavigate();
+  const { addFlash, removeFlash } = useContext(FlashContext);
 
   useEffect(() => {
+    const renderFlash = async(message, status, timeout = 1000) => {
+      addFlash({ message, status });
+      setTimeout(() => removeFlash(), timeout);
+    };
+
     const getData = async(url) => {
 
       const response = await fetch(url, { mode: 'cors', credentials: 'include' });
-      return response
+
+      const data = response.json();
+
+      let status = response.ok ? 'success' : 'danger';
+
+      renderFlash(data.message, status, 10000);
+
+      return response;
     };
 
     getData(process.env.REACT_APP_SERVER + '/checkout')

@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-import { printDate } from '../items/utils.js';
+import { printDate } from '../utils.js';
 
 export const ExtendBreadcrumbs = ({ order }) => {
   return (

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useContext } from 'react';
 
 import { Route, Routes } from 'react-router-dom';
 
@@ -11,6 +11,9 @@ import { Navbar } from './base/Navbar';
 import { Index as Cart } from './views/cart';
 import { Index as Checkout } from './views/checkout';
 
+import { Index as Main } from './views/main';
+import { Index as ListItem } from './views/list';
+
 import { Index as OrderHistory } from './views/orders';
 import { Index as DeliveryDropoffs } from './views/delivery/dropoffs';
 import { Index as DeliveryPickups} from './views/delivery/pickups';
@@ -19,6 +22,8 @@ import { Index as ExtendRental } from './views/extend';
 import { Index as ExtendCheckout } from './views/extend/checkout';
 
 import { Index as Login } from './views/auth/login';
+import { Index as Register } from './views/auth/register';
+
 import { Index as ItemFeed } from './views/items/feed';
 import { Index as ItemDetails } from './views/items/details';
 
@@ -47,6 +52,12 @@ const App = () => {
             <Route exact path="/checkout/:status" element={<Checkout />} />
 
             <Route exact path="/login" element={<Login />} />
+
+            <Route exact path="/register" element={<Register />} />
+
+            <Route exact path="/" element={<Main />} />
+
+            <Route exact path="/list" element={<ListItem />} />
 
             <Route exact path="/items/feed" element={<ItemFeed />} />
 

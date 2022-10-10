@@ -1,17 +1,26 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Feedback } from '../../../base/Feedback';
+import { FlashContext } from '../../../providers/FlashProvider';
 
 export const ExtendSuccess = () => {
 
   const navigate = useNavigate();
+  const { addFlash, removeFlash } = useContext(FlashContext);
 
   useEffect(() => {
+    const renderFlash = async(message, status, timeout = 1000) => {
+      addFlash({ message, status });
+      setTimeout(() => removeFlash(), timeout);
+    };
+
     const postData = async(url) => {
 
       const cacheStorage = await caches.open('extensionData');
+
       const cachedResponse = await cacheStorage.match(process.env.REACT_APP_SERVER + '/extend/success');
+
       const cachedData = await cachedResponse.json();
 
       const response = await fetch(url, {
@@ -24,6 +33,12 @@ export const ExtendSuccess = () => {
         }),
         headers: { 'Content-Type': 'application/json' },
       });
+
+      const data = response.json();
+
+      let status = response.ok ? 'success' : 'danger';
+
+      renderFlash(data.message, status, 10000);
 
       return response;
     };

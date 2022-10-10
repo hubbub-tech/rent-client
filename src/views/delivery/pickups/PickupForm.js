@@ -14,7 +14,6 @@ export const PickupForm = ({ orders }) => {
   const [address, setAddress] = useState(defaultAddress);
 
   const [timeslots, setTimeslots] = useState([]);
-  const [referral, setReferral] = useState(null);
   const [notes, setNotes] = useState();
 
   const { addFlash, removeFlash } = useContext(FlashContext);

@@ -4,7 +4,7 @@ import { CartItemPhoto } from './CartItemPhoto';
 import { CartCalendarView } from './CartCalendarView';
 import { CartRemoveItemButton } from './CartRemoveItemButton';
 
-import { printMoney, printDate } from '../items/utils.js';
+import { printMoney, printDate } from '../utils.js';
 
 export const CartReservedCard = ({ src, item }) => {
 

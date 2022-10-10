@@ -1,4 +1,4 @@
-import { printDate } from '../items/utils.js'
+import { printDate } from '../utils.js'
 
 export const DeliveryItem = ({ order }) => {
   return (

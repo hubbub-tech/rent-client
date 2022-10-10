@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext } from 'react';
+import React from 'react';
 import Cookies from 'js-cookie';
 
 const defaultSession = {

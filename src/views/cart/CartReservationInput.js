@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
 import { useViewport } from '../../hooks/Viewport';
 
 import { format } from 'date-fns';
-import { DateRange, DayPicker } from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 
 import 'react-day-picker/dist/style.css';
 

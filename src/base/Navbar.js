@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
@@ -46,7 +46,6 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClickOpen = () => setIsOpen(!isOpen);
-  const handleClickCart = () => navigate('/cart');
 
   const handleLogout = () => {
     if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {

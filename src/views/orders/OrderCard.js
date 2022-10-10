@@ -11,7 +11,7 @@ import { OrderScheduleDropoffLink } from './OrderScheduleDropoffLink';
 import { OrderSchedulePickupLink } from './OrderSchedulePickupLink';
 
 import { EarlyReturnView } from './early-return/EarlyReturnView';
-import { printMoney, printDate } from '../items/utils.js';
+import { printMoney, printDate } from '../utils.js';
 
 
 export const OrderCard = ({ src, order }) => {
@@ -67,9 +67,19 @@ export const OrderCard = ({ src, order }) => {
         </div>
         {dtNow < dtEnded &&
           <Fragment>
-            <OrderScheduleDropoffLink dtDropoff={order.res_dt_start} dropoffId={order.dropoff_id} />
-            <span>|</span>
-            <OrderSchedulePickupLink dtPickup={order.ext_dt_end} pickupId={order.pickup_id} />
+            {order.dropoff_id === null && (
+              <OrderScheduleDropoffLink
+                dtDropoff={order.res_dt_start}
+                dropoffId={order.dropoff_id}
+              />
+            )}
+            {(order.dropoff_id === null && order.pickup_id === null) && <span>|</span>}
+            {order.pickup_id === null && (
+              <OrderSchedulePickupLink
+                dtPickup={order.ext_dt_end}
+                pickupId={order.pickup_id}
+              />
+            )}
           </Fragment>
         }
       </div>

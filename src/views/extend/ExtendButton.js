@@ -2,8 +2,6 @@ import { useState } from 'react';
 
 export const ExtendButton = ({ dtEnded, orderId }) => {
 
-  const [redirectUrl, setRedirectUrl] = useState(null);
-
   const handleExtend = (e) => {
     e.preventDefault();
 

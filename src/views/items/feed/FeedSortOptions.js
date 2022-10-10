@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export const FeedSortOptions = ({ zipCode = '10027', setOrderBy }) => {
+export const FeedSortOptions = ({ zipCode, setOrderBy }) => {
 
   const handleOrderBy = (e) => setOrderBy(e.target.value);
 
