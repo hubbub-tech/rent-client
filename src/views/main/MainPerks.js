@@ -19,7 +19,7 @@ export const MainPerks = () => {
           />
           <MainPerksItem
             perk={{
-              header: 'Fast delivery directly to your door',
+              header: 'Fast delivery on demand',
               description: "Tell us when and where you need it delivered or picked up, and we'll meet you there."
             }}
             src={hourglassSvg}
