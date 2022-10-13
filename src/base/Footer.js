@@ -33,9 +33,6 @@ export const Footer = () => {
             <h5 className="text-uppercase text-white">About</h5>
             <ul className="list-unstyled">
               <li>
-                <a href="/story">Our Story</a>
-              </li>
-              <li>
                 <a href="mailto:hello@hubbub.shop">Contact Us</a>
               </li>
               <li>

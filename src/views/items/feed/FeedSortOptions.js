@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export const FeedSortOptions = ({ zipCode, setOrderBy }) => {
+export const FeedSortOptions = ({ location, setOrderBy }) => {
 
   const handleOrderBy = (e) => setOrderBy(e.target.value);
 
@@ -8,7 +8,7 @@ export const FeedSortOptions = ({ zipCode, setOrderBy }) => {
     <div className="input-group input-group-reverse my-3">
       <select className="form-select" onChange={handleOrderBy} id="inputGroupSelect02">
         <option value="default" defaultValue={true}>Sort Results By...</option>
-        <option value="proximity">Proximity to Zip: { zipCode }</option>
+        {location !== null && <option value="proximity">Proximity to You</option>}
         <option value="featured">Featured</option>
         <option value="availability">Next Available Date</option>
       </select>

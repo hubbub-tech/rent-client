@@ -1,16 +1,16 @@
 import React, { useState, useCallback, useContext } from 'react';
 
-const FlashNotification = () => {
+const FlashNotification = ({ status, message }) => {
 
-  const { flash, removeFlash } = useContext(FlashContext);
+  const { removeFlash } = useContext(FlashContext);
 
   const closeNotification = () => removeFlash();
-  return flash.message !== null
-    ? <div
-        className={`alert alert-${flash.status} alert-dismissible fade show mb-0`}
+  return (
+    <div
+        className={`alert alert-${status} alert-dismissible fade show mb-0`}
         role="alert"
       >
-        { flash.message }
+        { message }
         <button
           type="button"
           onClick={closeNotification}
@@ -19,7 +19,7 @@ const FlashNotification = () => {
           aria-label="Close">
         </button>
       </div>
-    : null
+  );
 }
 
 export const FlashContext = React.createContext(null);
@@ -39,7 +39,7 @@ export const FlashProvider = ({ children }) => {
 
   return (
     <FlashContext.Provider value={{ flash, addFlash, removeFlash }}>
-      <FlashNotification />
+      { flash.message !== null && <FlashNotification status={flash.status} message={flash.message} />}
       { children }
     </FlashContext.Provider>
   );

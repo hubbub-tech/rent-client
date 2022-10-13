@@ -6,6 +6,7 @@ import { FeedBanner } from './FeedBanner';
 import { FeedGrid } from './FeedGrid';
 import { FeedItemFilter } from './FeedItemFilter';
 import { FeedSortOptions } from './FeedSortOptions';
+import { FeedCoordsInput } from './FeedCoordsInput';
 
 import { SessionContext } from '../../../providers/SessionProvider';
 
@@ -22,8 +23,8 @@ export const Index = () => {
   const { userId } = useContext(SessionContext);
 
   // NOTE: pass around feedItems and setFeedItems for
-  const defaultZipCode = 10027;
-  const [zipCode, setZipCode] = useState(defaultZipCode);
+  const defaultCoords = { "lat": null, "lng": null };
+  const [coords, setCoords ] = useState(defaultCoords);
 
   const [items, setItems] = useState([]);
   const [feedItems, setFeedItems] = useState([]);
@@ -40,7 +41,7 @@ export const Index = () => {
       const responseClone = response.clone();
       const data = await responseClone.json();
 
-      if (data.zip_code !== null) setZipCode(data.zip_code);
+      setCoords({ "lat": data.user_address_lat, "lng": data.user_address_lng });
 
       setItems(data.items);
       setFeedItems(data.items);
@@ -63,48 +64,56 @@ export const Index = () => {
     .catch(console.error);
   }, [searchParams]);
 
+
+  const handleOrderByProximity = () => {
+    const orderByProximity = (a, b) => {
+
+      const aLat = parseInt(a.address_lat);
+      const aLng = parseInt(a.address_lng);
+
+      const bLat = parseInt(b.address_lat);
+      const bLng = parseInt(b.address_lng);
+
+
+      const distToA2 = Math.pow(aLat - coords.lat, 2) + Math.pow(aLng - coords.lng, 2);
+      const distToA = Math.pow(distToA2, 0.5);
+
+      const distToB2 = Math.pow(bLat - coords.lat, 2) + Math.pow(bLng - coords.lng, 2);
+      const distToB = Math.pow(distToB2, 0.5);
+
+      return (distToA > distToB)
+        ? 1
+        : (distToA === distToB && a.is_featured && b.is_featured === false) ? 1 : -1;
+    };
+
+    setFeedItems([...feedItems].sort(orderByProximity));
+  };
+
+  const handleOrderByAvailability = () => {
+    const orderByAvailability = (a, b) => {
+      return (a.next_available_start > b.next_available_start) ? 1 : -1;
+    };
+
+    setFeedItems([...feedItems].sort(orderByAvailability));
+  };
+
+  const handleOrderByFeatured = () => {
+    const orderByFeatured = (a, b) => {
+      return (a.is_featured) && -1;
+      return 1;
+    };
+
+    setFeedItems([...feedItems].sort(orderByFeatured));
+  };
+
+
   useEffect(() => {
-    const handleOrderByProximity = () => {
-      const orderByProximity = (a, b) => {
-
-        let userZipCode = zipCode;
-
-        const zipCodeItemA = parseInt(a.address_zip);
-        const zipCodeItemB = parseInt(b.address_zip);
-
-        const distToA = Math.abs(zipCodeItemA - userZipCode);
-        const distToB = Math.abs(zipCodeItemB - userZipCode);
-
-        if (a.is_featured && b.is_featured === false) return 1;
-        return (distToA > distToB) ? 1 : -1;
-      };
-
-      setFeedItems([...feedItems].sort(orderByProximity));
-    };
-
-    const handleOrderByAvailability = () => {
-      const orderByAvailability = (a, b) => {
-        return (a.next_available_start > b.next_available_start) ? 1 : -1;
-      };
-
-      setFeedItems([...feedItems].sort(orderByAvailability));
-    };
-
-    const handleOrderByFeatured = () => {
-      const orderByFeatured = (a, b) => {
-        return (a.is_featured) && -1;
-        return 1;
-      };
-
-      setFeedItems([...feedItems].sort(orderByFeatured));
-    };
-
     if (orderBy === 'proximity') handleOrderByProximity();
     else if (orderBy === 'availability') handleOrderByAvailability();
     else if (orderBy === 'featured') handleOrderByFeatured();
     else setFeedItems([...items]);
 
-  }, [orderBy]);
+  }, [orderBy, coords]);
 
 
   return (
@@ -118,11 +127,20 @@ export const Index = () => {
           </div>
 
           <div className="row">
-            <div className="col-lg-4 col-sm-6 col-12">
-              <FeedSortOptions zipCode={zipCode} setOrderBy={setOrderBy} />
+            <div className="col-lg-4 col-md-6 col-12">
+              <FeedSortOptions
+                location={coords}
+                setOrderBy={setOrderBy}
+              />
             </div>
           </div>
-
+          {orderBy === "proximity" &&
+            <div className="row">
+              <div className="col-lg-4 col-md-6 col-12">
+                <FeedCoordsInput setCoords={setCoords} />
+              </div>
+            </div>
+          }
           <div className="row">
             <div className="col-12 mb-md-5">
               <FeedGrid items={feedItems} />

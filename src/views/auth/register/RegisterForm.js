@@ -56,7 +56,8 @@ export const RegisterForm = () => {
 
       let status = response.ok ? 'success' : 'danger';
 
-      renderFlash(data.message, status, 10000);
+      console.log(`Message: ${data.message}` )
+      renderFlash(data.message, status, 100000);
 
       if (response.ok) {
         Cookies.set('userId', data.user_id);
