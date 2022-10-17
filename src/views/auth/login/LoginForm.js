@@ -26,8 +26,15 @@ export const LoginForm = () => {
     const data = await response.json();
 
     if (response.ok) {
-      Cookies.set('userId', data.user_id);
-      Cookies.set('sessionToken', data.session_token);
+      let configs;
+      if (!window.location.href.includes("localhost")) {
+        configs = { sameSite: 'none', secure: true}
+      } else {
+        configs = { domain: '.hubbub.shop', sameSite: 'none', secure: true}
+      }
+
+      Cookies.set('userId', data.user_id, configs);
+      Cookies.set('sessionToken', data.session_token, configs);
 
       navigate('/');
     };

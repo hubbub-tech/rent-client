@@ -60,6 +60,13 @@ export const RegisterForm = () => {
       renderFlash(data.message, status, 100000);
 
       if (response.ok) {
+        let configs;
+        if (!window.location.href.includes("localhost")) {
+          configs = { sameSite: 'none', secure: true}
+        } else {
+          configs = { domain: '.hubbub.shop', sameSite: 'none', secure: true}
+        }
+
         Cookies.set('userId', data.user_id);
         Cookies.set('sessionToken', data.session_token);
 
