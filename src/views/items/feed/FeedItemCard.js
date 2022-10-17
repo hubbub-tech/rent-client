@@ -19,7 +19,7 @@ export const FeedItemCard = ({ item }) => {
             {item.is_featured && <FeedItemBadge />}
             <FeedItemPhoto
               href={`/item/${item.id}`}
-              src="https://storage.cloud.google.com/shop-items//test/item-622-0.jpg"
+              src={item.image_url}
               className="img-fluid"
               alt={item.name}
             />

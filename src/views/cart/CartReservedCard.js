@@ -20,7 +20,7 @@ export const CartReservedCard = ({ src, item }) => {
           <div className="col-lg-2 col-md-3 col-4">
             <CartItemPhoto
               href={`/item/${item.id}`}
-              src={src}
+              src={item.image_url}
               className="img-fluid"
               alt={item.name}
             />

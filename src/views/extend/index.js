@@ -27,7 +27,7 @@ export const Index = () => {
       const data = await response.json();
 
       setOrder(data.order);
-      setSrcUrl(data.photo_url);
+      setSrcUrl(data.order.item.image_url);
 
       setMinDate(new Date(data.order.ext_dt_end * 1000));
       setMaxDate(new Date(data.order.item.calendar.dt_ended * 1000));

@@ -9,7 +9,7 @@ export const OrderHistory = ({ orders }) => {
       <div className="col-md-2"></div>
       <div  className="col-md-8 col-12">
       {orders.map((order, index) => (
-        <OrderCard key={order.id} src={null} order={order} />
+        <OrderCard key={order.id} order={order} />
       ))}
       </div>
       <div className="col-md-2"></div>

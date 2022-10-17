@@ -40,7 +40,7 @@ export const Index = () => {
       const data = await response.json();
 
       setItem(data.item);
-      setSrcUrl(data.photo_url);
+      setSrcUrl(data.item.image_url);
       setRecommendations(data.recommendations);
 
       const dtToday = new Date();

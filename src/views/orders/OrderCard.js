@@ -14,7 +14,7 @@ import { EarlyReturnView } from './early-return/EarlyReturnView';
 import { printMoney, printDate } from '../utils.js';
 
 
-export const OrderCard = ({ src, order }) => {
+export const OrderCard = ({ order }) => {
 
   const [showEarlyReturnView, setShowEarlyReturnView] = useState(false);
   const [showExtendView, setShowExtendView] = useState(false);
@@ -34,7 +34,7 @@ export const OrderCard = ({ src, order }) => {
               href={`/item/${order.item_id}`}
               className="img-fluid"
               alt={order.item_name}
-              src={src}
+              src={order.item_image_url}
             />
           </div>
           <div className="col-lg-10 col-md-9 col-8">
