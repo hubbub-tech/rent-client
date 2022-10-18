@@ -62,9 +62,9 @@ export const RegisterForm = () => {
       if (response.ok) {
         let configs;
         if (!window.location.href.includes("localhost")) {
-          configs = { sameSite: 'no_restriction', secure: true}
+          configs = { sameSite: 'lax'}
         } else {
-          configs = { domain: '.hubbub.shop', sameSite: 'no_restriction', secure: true}
+          configs = { domain: '.hubbub.shop', sameSite: 'lax'}
         }
 
         Cookies.set('userId', data.user_id);
