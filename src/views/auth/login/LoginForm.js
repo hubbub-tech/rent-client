@@ -27,10 +27,10 @@ export const LoginForm = () => {
 
     if (response.ok) {
       let configs;
-      if (!window.location.href.includes("localhost")) {
-        configs = { sameSite: 'lax' }
+      if (window.location.href.includes("localhost")) {
+        configs = { sameSite: 'lax', secure: true }
       } else {
-        configs = { domain: '.hubbub.shop', sameSite: 'lax' }
+        configs = { domain: '.hubbub.shop', sameSite: 'lax', secure: true }
       }
 
       Cookies.set('userId', data.user_id, configs);
