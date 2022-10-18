@@ -28,9 +28,9 @@ export const LoginForm = () => {
     if (response.ok) {
       let configs;
       if (window.location.href.includes("localhost")) {
-        configs = { sameSite: 'lax', secure: true }
+        configs = { sameSite: 'none', secure: true }
       } else {
-        configs = { domain: '.hubbub.shop', sameSite: 'lax', secure: true }
+        configs = { domain: '.hubbub.shop', sameSite: 'none', secure: true }
       }
 
       Cookies.set('userId', data.user_id, configs);
