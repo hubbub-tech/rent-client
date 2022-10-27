@@ -15,11 +15,13 @@ import { Index as Main } from './views/main';
 import { Index as ListItem } from './views/list';
 
 import { Index as OrderHistory } from './views/orders';
+import { Index as ExtendRental } from './views/orders-extend';
+import { Index as ExtendCheckout } from './views/orders-extend/checkout';
+import { Index as EarlyReturnRental } from './views/orders-early-return';
+
 import { Index as DeliveryDropoffs } from './views/delivery/dropoffs';
 import { Index as DeliveryPickups} from './views/delivery/pickups';
 
-import { Index as ExtendRental } from './views/extend';
-import { Index as ExtendCheckout } from './views/extend/checkout';
 
 import { Index as Login } from './views/auth/login';
 import { Index as Register } from './views/auth/register';
@@ -68,6 +70,8 @@ const App = () => {
             <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
 
             <Route exact path="/orders/pickup/:onTimestamp" element={<DeliveryPickups />} />
+
+            <Route exact path="/orders/early-return/:orderId" element={<EarlyReturnRental />} />
 
             <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
 

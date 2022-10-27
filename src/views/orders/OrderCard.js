@@ -3,28 +3,24 @@ import { OrderItemPhoto } from './OrderItemPhoto';
 
 import { OrderCancelButton } from './OrderCancelButton';
 
-import { EarlyReturnButton } from './early-return/EarlyReturnButton';
 import { OrderExtendButton } from './OrderExtendButton';
 import { OrderViewItemButton } from './OrderViewItemButton';
+import { OrderEarlyReturnButton } from './OrderEarlyReturnButton';
 
 import { OrderScheduleDropoffLink } from './OrderScheduleDropoffLink';
 import { OrderSchedulePickupLink } from './OrderSchedulePickupLink';
 
-import { EarlyReturnView } from './early-return/EarlyReturnView';
 import { printMoney, printDate } from '../utils.js';
 
 
 export const OrderCard = ({ order }) => {
-
-  const [showEarlyReturnView, setShowEarlyReturnView] = useState(false);
-  const [showExtendView, setShowExtendView] = useState(false);
 
   const [dtStarted, setDtStarted] = useState(new Date(order.res_dt_start * 1000));
 
   const dtNow = new Date();
   const dtEnded = new Date(order.ext_dt_end * 1000);
 
-  if (showEarlyReturnView === false) return (
+  return (
     <div className="card my-2">
       <h5 className="fs-6 card-header">from { printDate(order.res_dt_start) } to { printDate(order.ext_dt_end) }</h5>
       <div className="card-body mb-0">
@@ -56,10 +52,10 @@ export const OrderCard = ({ order }) => {
 
               <div className="row">
                 <div className="col-12 d-grid gap-2 d-flex justify-content-end">
-                  {dtNow < dtEnded && <EarlyReturnButton setShowEarlyReturnView={setShowEarlyReturnView} />}
+                  {dtNow < dtEnded && <OrderEarlyReturnButton orderId={order.id} />}
                   {dtStarted > dtNow && <OrderCancelButton orderId={order.id} />}
-                  {(dtStarted <= dtNow && dtNow < dtEnded ) && <OrderExtendButton orderId={order.id} />}
-                  {dtNow > dtEnded && <OrderViewItemButton itemId={order.item_id} />}
+                  {dtNow < dtEnded && <OrderExtendButton orderId={order.id} />}
+                  {dtNow >= dtEnded && <OrderViewItemButton itemId={order.item_id} />}
                 </div>
               </div>
             </div>
@@ -84,8 +80,5 @@ export const OrderCard = ({ order }) => {
         }
       </div>
     </div>
-  )
-  else return (
-    <EarlyReturnView order={order} setShowEarlyReturnView={setShowEarlyReturnView} />
   );
 }

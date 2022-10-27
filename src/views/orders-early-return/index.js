@@ -1,10 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { ExtendButton } from './ExtendButton';
-import { ExtendItemPhoto } from './ExtendItemPhoto';
-import { ExtendBreadcrumbs } from './ExtendBreadcrumbs';
-import { ExtendDateInput } from './ExtendDateInput';
+import { EarlyReturnForm } from './EarlyReturnForm';
+import { EarlyReturnItemPhoto } from './EarlyReturnItemPhoto';
+import { EarlyReturnBreadcrumbs } from './EarlyReturnBreadcrumbs';
 
 import { printDate } from '../utils.js';
 
@@ -12,13 +11,9 @@ export const Index = () => {
 
   const { orderId } = useParams();
 
+  const dateToday = new Date();
   const [order, setOrder] = useState({ item: { calendar: {} }, extensions: [] });
-  const [dtEnded, setDtEnded] = useState(null);
-
   const [srcUrl, setSrcUrl] = useState();
-
-  const [minDate, setMinDate] = useState(new Date());
-  const [maxDate, setMaxDate] = useState(new Date());
 
   useEffect(() => {
 
@@ -29,8 +24,6 @@ export const Index = () => {
       setOrder(data.order);
       setSrcUrl(data.order.item.image_url);
 
-      setMinDate(new Date(data.order.ext_dt_end * 1000));
-      setMaxDate(new Date(data.order.item.calendar.dt_ended * 1000));
     };
 
     getData(process.env.REACT_APP_SERVER + `/order/${orderId}`)
@@ -44,7 +37,7 @@ export const Index = () => {
         <div className="container">
           <div className="row ">
             <div className="col-12">
-              <ExtendBreadcrumbs order={order} />
+              <EarlyReturnBreadcrumbs order={order} />
             </div>
           </div>
         </div>
@@ -53,7 +46,7 @@ export const Index = () => {
         <div className="container">
           <div className="row">
             <div className="col-md-6">
-              <ExtendItemPhoto className="img-fluid px-5 py-5" src={srcUrl} alt={order.item.name} />
+              <EarlyReturnItemPhoto className="img-fluid px-5 py-5" src={srcUrl} alt={order.item.name} />
             </div>
             <div className="col-md-6">
               <div className="ps-lg-10 mt-6 mt-md-0">
@@ -66,22 +59,13 @@ export const Index = () => {
                   </a>
                 </div>
                 <div className="fs-5 mt-3">
-                  <span className="fw-bold text-dark">Extend your rental</span>
+                  <span className="fw-bold text-dark">Return your rental early</span>
                 </div>
 
                 <hr className="my-6" />
 
                 <div className="row">
-                  <div className="col-md-12 mb-4">
-                    <ExtendDateInput
-                      minDate={minDate}
-                      maxDate={maxDate}
-                      dtEnded={dtEnded}
-                      setDtEnded={setDtEnded}
-                      defaultMonth={minDate}
-                    />
-                    <ExtendButton dtEnded={dtEnded} orderId={order.id} />
-                  </div>
+                  <EarlyReturnForm order={order} />
                 </div>
               </div>
             </div>

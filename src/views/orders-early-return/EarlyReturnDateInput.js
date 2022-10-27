@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useViewport } from '../../../hooks/Viewport';
+import { useViewport } from '../../hooks/Viewport';
 
 import { format } from 'date-fns';
 import { DateRange, DayPicker } from 'react-day-picker';
