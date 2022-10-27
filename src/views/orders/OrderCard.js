@@ -58,8 +58,8 @@ export const OrderCard = ({ order }) => {
                 <div className="col-12 d-grid gap-2 d-flex justify-content-end">
                   {dtNow < dtEnded && <EarlyReturnButton setShowEarlyReturnView={setShowEarlyReturnView} />}
                   {dtStarted > dtNow && <OrderCancelButton orderId={order.id} />}
-                  {(dtStarted <= dtNow && dtNow < dtEnded ) && <OrderExtendButton orderId={order.id} />}
-                  {dtNow > dtEnded && <OrderViewItemButton itemId={order.item_id} />}
+                  {dtNow < dtEnded  && <OrderExtendButton orderId={order.id} />}
+                  {dtNow >= dtEnded && <OrderViewItemButton itemId={order.item_id} />}
                 </div>
               </div>
             </div>
