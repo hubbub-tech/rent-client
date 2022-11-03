@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
 import { CartEmpty } from './CartEmpty';
-import { CartReservedCard } from './CartReservedCard';
-import { CartUnreservedCard } from './CartUnreservedCard';
+import { CartReservedItem } from './CartReservedItem';
+import { CartUnreservedItem } from './CartUnreservedItem';
 
 export const CartItemsList = ({ unreservedItems, reservedItems }) => {
   const [isEmpty, setIsEmpty] = useState(false);
@@ -11,17 +11,13 @@ export const CartItemsList = ({ unreservedItems, reservedItems }) => {
     setIsEmpty(unreservedItems.length === 0 && reservedItems.length === 0);
   }, [unreservedItems, reservedItems]);
   return (
-    <div className="container">
+    <div className="container my-3">
       <div className="row">
       {unreservedItems.map((item, index) => (
-        <div key={item.id} className="col-12">
-          <CartUnreservedCard item={item} />
-        </div>
+        <CartUnreservedItem key={item.id} item={item} />
       ))}
       {reservedItems.map((item, index) => (
-        <div key={item.id} className="col-12">
-          <CartReservedCard item={item} />
-        </div>
+        <CartReservedItem key={item.id} item={item} />
       ))}
       { isEmpty && <CartEmpty /> }
       </div>

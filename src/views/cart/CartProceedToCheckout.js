@@ -1,24 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
-import { CartCheckoutButton } from './CartCheckoutButton';
-import { CartTxnMethodRadio } from './CartTxnMethodRadio';
+import { CartProceedButton } from './CartProceedButton';
 
 import { printMoney } from '../utils.js';
 
-export const CartCheckout = ({ cart, unreservedItems, reservedItems }) => {
+export const CartProceedToCheckout = ({ cart }) => {
 
-  const [isReady, setIsReady] = useState(false);
-  const [txnMethod, setTxnMethod] = useState('in-person');
+  const [txnMethod, setTxnMethod] = useState('online');
 
-  useEffect(() => {
-    setIsReady(unreservedItems.length === 0 && reservedItems.length > 0);
-  }, [unreservedItems, reservedItems]);
-
-  useEffect(() => {
-    console.log(txnMethod);
-  }, [txnMethod]);
-
-  if (isReady) return (
+  return (
     <div className="card">
       <div className="card-body">
         <table className="table table-sm table-borderless mb-0">
@@ -62,8 +52,7 @@ export const CartCheckout = ({ cart, unreservedItems, reservedItems }) => {
           </tbody>
         </table>
         <hr/>
-        <CartTxnMethodRadio setTxnMethod={setTxnMethod} />
-        <CartCheckoutButton cart={cart} method={txnMethod} disabled={!isReady} />
+        <CartProceedButton cart={cart} method={txnMethod} disabled={false} />
       </div>
     </div>
   );

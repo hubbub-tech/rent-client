@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 
-import { CartCheckout } from './CartCheckout';
+import { CartIncompleteCheckout } from './CartIncompleteCheckout';
+import { CartProceedToCheckout } from './CartProceedToCheckout';
 import { CartItemsList } from './CartItemsList';
 
 import { Feedback } from '../../base/Feedback';
@@ -12,13 +13,11 @@ export const Index = () => {
   const [reservedItems, setReservedItems] = useState([]);
   const [unreservedItems, setUnreservedItems] = useState([]);
 
-  const { addFlash, removeFlash } = useContext(FlashContext);
+  const [isReady, setIsReady] = useState(false);
+
+  const { renderFlash } = useContext(FlashContext);
 
   useEffect(() => {
-    const renderFlash = async(message, status, timeout = 1000) => {
-      addFlash({ message, status });
-      setTimeout(() => removeFlash(), timeout);
-    }
 
     const getData = async (url) => {
       const response = await fetch(url, { mode: "cors", credentials: "include" });
@@ -27,6 +26,8 @@ export const Index = () => {
       setCart(data.cart);
       setReservedItems(data.reserved_items);
       setUnreservedItems(data.unreserved_items);
+
+      setIsReady((data.reserved_items.length > 0) && (data.unreserved_items.length === 0));
 
       renderFlash("Your cart is up to date.", "info", 5000);
     };
@@ -41,8 +42,8 @@ export const Index = () => {
         <div className="row">
           <div className="col-md-1"></div>
           <div className="col-md-10 mt-4">
-            <h1>Checkout</h1>
-            <p>See what's in your cart and place your order.</p>
+            <h1>Cart</h1>
+            <p>See what's in your cart and make edits to your reservations.</p>
             <p>A 25% safety deposit is charged at delivery and returned at the end of rental.</p>
             <hr />
           </div>
@@ -52,10 +53,14 @@ export const Index = () => {
         </div>
         <div className="row mb-3">
           <div className="col-md-1"></div>
-          <div className="col-md-10">
-            <CartCheckout cart={cart} unreservedItems={unreservedItems} reservedItems={reservedItems} />
+          <div className="col-md-6">
             <CartItemsList unreservedItems={unreservedItems} reservedItems={reservedItems} />
-            <Feedback />
+          </div>
+          <div className="col-md-4">
+          {isReady
+            ? <CartProceedToCheckout cart={cart} />
+            : <CartIncompleteCheckout />
+          }
           </div>
           <div className="col-md-1"></div>
         </div>
