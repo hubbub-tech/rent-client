@@ -59,9 +59,25 @@ export const Index = () => {
       }
     };
 
-    getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
-    .then(cacheData)
+    const getCachedData = async(url) => {
+      const cacheStorage = await caches.open('feedData');
+      const cachedResponse = await cacheStorage.match(url);
+      const cachedData = await cachedResponse.json();
+
+      if (cachedData) {
+        setCoords({ "lat": cachedData.user_address_lat, "lng": cachedData.user_address_lng });
+        setItems(cachedData.items);
+        setFeedItems(cachedData.items);
+      } else {
+        getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
+        .then(cacheData)
+        .catch(console.error);
+      }
+    };
+
+    getCachedData(process.env.REACT_APP_SERVER + '/items/feed')
     .catch(console.error);
+
   }, [searchParams]);
 
 

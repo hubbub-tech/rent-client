@@ -1,22 +1,43 @@
-import { useState, useEffect, useContext } from 'react';
+import { Fragment, useState, useEffect, useContext } from 'react';
+
+import shoppingSvg from '../assets/icons/shopping.svg';
 
 import { FlashContext } from '../../../providers/FlashProvider';
 
+
 export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
+
+  const [btnClassName, setBtnClassName] = useState("btn btn-hubbub");
+  const [btnLabel, setBtnLabel] = useState("Add to cart")
 
   const [dtStarted, setDtStarted] = useState(null);
   const [dtEnded, setDtEnded] = useState(null);
 
-  const { addFlash, removeFlash } = useContext(FlashContext);
+  const { flash, addFlash, removeFlash } = useContext(FlashContext);
 
   useEffect(() => {
-    setDtStarted(dtRange.from);
-    setDtEnded(dtRange.to);
+    if (dtRange === undefined) {
+      setDtStarted(null);
+      setDtEnded(null);
+    } else {
+      setDtStarted(dtRange.from);
+      setDtEnded(dtRange.to);
+    }
   }, [dtRange]);
+
+  function disabled() {
+    if (dtStarted && dtEnded) {
+      let timeElapsed = dtEnded.getTime() - dtStarted.getTime();
+      let daysElapsed = timeElapsed / (1000 * 3600 * 24);
+
+      return daysElapsed < process.env.REACT_APP_MIN_RESERVATION;
+    }
+    return false;
+  }
 
   const handleAddItem = () => {
 
-    const renderFlash = async(message, status, timeout = 1000) => {
+    const renderFlash = async(message, status, timeout = 3000) => {
       addFlash({ message, status });
       setTimeout(() => removeFlash(), timeout);
     }
@@ -34,6 +55,19 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
       let status = response.ok ? 'success' : 'danger';
 
       renderFlash(data.message, status, 10000);
+
+      if (response.ok) {
+        setBtnClassName('btn btn-success');
+        setBtnLabel('Added!');
+      } else {
+        setBtnClassName('btn btn-danger');
+        setBtnLabel('Unavailable');
+
+        setTimeout(() => {
+          setBtnClassName('btn btn-hubbub');
+          setBtnLabel('Add to cart');
+        }, 5000)
+      }
 
       setRentalCost(data.est_charge);
     };
@@ -57,25 +91,22 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
   };
 
   return (
-    <div className="col-md-6 col-10 mx-4 d-grid">
-      <button
-        type="button"
-        className="btn btn-hubbub"
-        onClick={handleAddItem}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          fill="currentColor"
-          className="bi bi-bag-plus me-2 mb-1"
-          viewBox="0 0 16 16"
+    <Fragment>
+      <div className="d-grid gap-2 mx-2">
+        <button
+          type="button"
+          className={btnClassName}
+          onClick={handleAddItem}
+          disabled={disabled()}
         >
-          <path fillRule="evenodd" d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z" />
-          <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z" />
-        </svg>
-        Add to cart
-      </button>
-    </div>
+          {btnLabel}
+        </button>
+      </div>
+      {(flash.message) &&
+        <p id="reservationHelp" className="text-muted mx-2 my-1">
+          { flash.message }
+        </p>
+      }
+    </Fragment>
   );
 }
