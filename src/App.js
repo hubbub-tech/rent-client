@@ -9,7 +9,9 @@ import { Footer } from './base/Footer';
 import { Navbar } from './base/Navbar';
 
 import { Index as Cart } from './views/cart';
-import { Index as Checkout } from './views/checkout';
+import { Index as CheckoutOverview } from './views/checkout/overview';
+import { Index as CheckoutSuccess } from './views/checkout/success';
+import { Index as CheckoutCancel } from './views/checkout/cancel';
 
 import { Index as Main } from './views/main';
 import { Index as ListItem } from './views/list';
@@ -49,10 +51,6 @@ const App = () => {
         <FlashProvider>
           <Routes>
 
-            <Route exact path="/cart" element={<Cart />} />
-
-            <Route exact path="/checkout/:status" element={<Checkout />} />
-
             <Route exact path="/login" element={<Login />} />
 
             <Route exact path="/register" element={<Register />} />
@@ -64,6 +62,14 @@ const App = () => {
             <Route exact path="/items/feed" element={<ItemFeed />} />
 
             <Route exact path="/item/:itemId" element={<ItemDetails />} />
+
+            <Route exact path="/cart" element={<Cart />} />
+
+            <Route exact path="/checkout/overview" element={<CheckoutOverview />} />
+
+            <Route exact path="/checkout/success" element={<CheckoutSuccess />} />
+
+            <Route exact path="/checkout/cancel" element={<CheckoutCancel />} />
 
             <Route exact path="/orders/history" element={<OrderHistory />} />
 
