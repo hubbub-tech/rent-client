@@ -4,8 +4,18 @@ import { ItemQuoteInput } from '../ItemQuoteInput';
 import { DetailsRecPhoto } from './DetailsRecPhoto';
 import { DetailsViewItemButton } from './DetailsViewItemButton';
 
+import { useViewport } from '../../../hooks/Viewport';
+
 
 export const DetailsRecCard = ({ src, item }) => {
+
+  const viewport = useViewport();
+
+  const getTextWidth = () => {
+    return (viewport.width > 500)
+      ? "200px" : "125px" 
+  };
+
   return (
     <div className="col">
       <div className="card card-product">
@@ -27,11 +37,17 @@ export const DetailsRecCard = ({ src, item }) => {
             </a>
           </div>
 
-          <h2 className="fs-6">
-            <a href={`/item/${item.id}`} className="text-inherit text-decoration-none">
+          <a
+            href={`/item/${item.id}`}
+            className="text-decoration-none hubbub-link"
+          >
+            <h2
+              className="fs-6 d-inline-block text-truncate"
+              style={{ maxWidth: getTextWidth() }}
+            >
               { item.name }
-            </a>
-          </h2>
+            </h2>
+          </a>
 
           <div className="d-flex justify-content-between align-items-center mt-3">
             <ItemQuoteInput price={item.retail_price} />

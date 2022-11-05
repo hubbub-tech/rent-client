@@ -60,3 +60,6 @@ export const Index = () => {
     </main>
   );
 }
+
+export { DropoffDates } from './DropoffDates'
+export { DropoffConfirmation } from './DropoffConfirmation';

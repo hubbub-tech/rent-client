@@ -13,9 +13,6 @@ import { SessionContext } from '../../../providers/SessionProvider';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-// CONSTANTS
-
-
 
 export const Index = () => {
   // NOTE: search params will include 'search', 'page', and 'limit'
@@ -59,9 +56,25 @@ export const Index = () => {
       }
     };
 
-    getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
-    .then(cacheData)
+    const getCachedData = async(url) => {
+      const cacheStorage = await caches.open('feedData');
+      const cachedResponse = await cacheStorage.match(url);
+      const cachedData = await cachedResponse.json();
+
+      if (cachedData && !paramsString) {
+        setCoords({ "lat": cachedData.user_address_lat, "lng": cachedData.user_address_lng });
+        setItems(cachedData.items);
+        setFeedItems(cachedData.items);
+      } else {
+        getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
+        .then(res => (!paramsString) && cacheData(res))
+        .catch(console.error);
+      }
+    };
+
+    getCachedData(process.env.REACT_APP_SERVER + '/items/feed')
     .catch(console.error);
+
   }, [searchParams]);
 
 

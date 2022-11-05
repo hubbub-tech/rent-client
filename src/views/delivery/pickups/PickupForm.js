@@ -57,7 +57,7 @@ export const PickupForm = ({ orders }) => {
     };
 
     postData(process.env.REACT_APP_SERVER + '/pickup/schedule')
-    .then(response => response.ok && navigate('/orders/history'))
+    .then(response => response.ok && navigate('/orders/pickup/confirmation'))
     .catch(console.error);
   }
 

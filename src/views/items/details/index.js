@@ -5,13 +5,13 @@ import { DetailsItemPhoto } from './DetailsItemPhoto';
 import { DetailsItemTable } from './DetailsItemTable';
 import { DetailsBreadcrumbs } from './DetailsBreadcrumbs';
 import { DetailsAddCartButton } from './DetailsAddCartButton';
-import { DetailsReservationInput } from './DetailsReservationInput';
 import { DetailsItemDescription } from './DetailsItemDescription';
 import { DetailsRecommendations } from './DetailsRecommendations';
 
-import { printDate } from '../../utils.js';
+import { printDate, printMoney } from '../../utils.js';
 import { useViewport } from '../../../hooks/Viewport';
 import { SessionContext } from '../../../providers/SessionProvider';
+import { DateRangePicker } from '../../../inputs/date-range';
 
 export const Index = () => {
 
@@ -27,7 +27,7 @@ export const Index = () => {
 
   const [rentalCost, setRentalCost] = useState(undefined);
 
-  const defaultSelected = { from: null, to: null };
+  const defaultSelected = { from: undefined, to: undefined };
   const [dtRange, setDtRange] = useState(defaultSelected);
 
   const [minDate, setMinDate] = useState(new Date());
@@ -58,7 +58,7 @@ export const Index = () => {
     <main>
     <div className="mt-4">
       <div className="container">
-        <div className="row ">
+        <div className="row">
           <div className="col-12">
             <DetailsBreadcrumbs item={item} />
           </div>
@@ -68,12 +68,13 @@ export const Index = () => {
     <section className="mt-8">
       <div className="container">
         <div className="row">
+          <div className="col-md-1"></div>
           <div className="col-md-6">
             <DetailsItemPhoto className="img-fluid px-5 py-5" src={srcUrl} alt={item.name} />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="ps-lg-10 mt-6 mt-md-0">
-              <a href={`/accounts/u/id=${item.lister_id}`} className="mb-4 d-block">{ item.lister_name }</a>
+              <a href={`/accounts/u/id=${item.lister_id}`} className="mb-4 d-block hubbub-link">{ item.lister_name }</a>
 
               <h1 className="fs-2 mb-1">{ item.name }</h1>
               <div className="text-small mb-1">
@@ -84,24 +85,25 @@ export const Index = () => {
               <div className="fs-5 mt-3">
                 {rentalCost === undefined
                   ? <span className="fw-bold text-dark">How long do you want to rent?</span>
-                  : <span className="fw-bold text-dark">Rent for: ${ rentalCost.toFixed(2) }</span>
+                  : <span className="fw-bold text-dark">
+                      Rent for: <span className="text-success">{ printMoney(rentalCost) }</span>
+                    </span>
                 }
               </div>
 
               <hr className="my-6" />
 
               <div className="row">
-                <div className="col-md-12">
+                <div className="col-12">
                   <div className="mb-1">
-                    <DetailsReservationInput
+                    <DateRangePicker
                       minDate={minDate}
                       maxDate={maxDate}
                       defaultMonth={new Date()}
-                      dtRange={dtRange}
-                      setDtRange={setDtRange}
+                      selectedRange={dtRange}
+                      setSelectedRange={setDtRange}
                     />
                   </div>
-
                   <DetailsAddCartButton
                     setRentalCost={setRentalCost}
                     dtRange={dtRange}
@@ -109,28 +111,18 @@ export const Index = () => {
                   />
                 </div>
               </div>
-
-              <hr className="my-6" />
-
-              <DetailsItemTable item={item} />
-
+              <div className="col-12 mt-3">
+                <DetailsItemTable item={item} />
+              </div>
             </div>
-
           </div>
+          <div className="col-md-1"></div>
 
           <DetailsItemDescription item={item} />
           <DetailsRecommendations items={recommendations} />
         </div>
       </div>
     </section>
-    <section className="mt-lg-14 mt-8 ">
-
-    </section>
-
-    <section className="my-lg-14 my-3">
-
-    </section>
-
   </main>
   );
 }

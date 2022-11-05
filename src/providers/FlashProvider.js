@@ -26,7 +26,7 @@ export const FlashContext = React.createContext(null);
 
 export const FlashProvider = ({ children }) => {
 
-  const defaultFlash = { message: null, status: 'info' };
+  const defaultFlash = { message: undefined, status: undefined };
   const [flash, setFlash] = useState(defaultFlash);
 
   const addFlash = useCallback(({ message, status }) => {
@@ -37,9 +37,14 @@ export const FlashProvider = ({ children }) => {
     setFlash(defaultFlash);
   }, []);
 
+  const renderFlash = async(message, status, timeout = 1000) => {
+    addFlash({ message, status });
+    setTimeout(() => removeFlash(), timeout);
+  };
+
   return (
-    <FlashContext.Provider value={{ flash, addFlash, removeFlash }}>
-      { flash.message !== null && <FlashNotification status={flash.status} message={flash.message} />}
+    <FlashContext.Provider value={{ flash, addFlash, removeFlash, renderFlash }}>
+      { flash.message && <FlashNotification status={flash.status} message={flash.message} />}
       { children }
     </FlashContext.Provider>
   );

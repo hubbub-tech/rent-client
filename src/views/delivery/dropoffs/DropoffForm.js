@@ -58,7 +58,7 @@ export const DropoffForm = ({ orders }) => {
     };
 
     postData(process.env.REACT_APP_SERVER + '/dropoff/schedule')
-    .then(response => response.ok && navigate('/orders/history'))
+    .then(response => response.ok && navigate('/orders/dropoff/confirmation'))
     .catch(console.error);
   }
 

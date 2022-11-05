@@ -9,17 +9,31 @@ import { Footer } from './base/Footer';
 import { Navbar } from './base/Navbar';
 
 import { Index as Cart } from './views/cart';
-import { Index as Checkout } from './views/checkout';
+import { Index as CheckoutOverview } from './views/checkout/overview';
+import { Index as CheckoutSuccess } from './views/checkout/success';
+import { Index as CheckoutCancel } from './views/checkout/cancel';
 
 import { Index as Main } from './views/main';
 import { Index as ListItem } from './views/list';
 
-import { Index as OrderHistory } from './views/orders';
-import { Index as DeliveryDropoffs } from './views/delivery/dropoffs';
-import { Index as DeliveryPickups} from './views/delivery/pickups';
+import { Index as Rentals } from './views/rentals';
 
-import { Index as ExtendRental } from './views/extend';
-import { Index as ExtendCheckout } from './views/extend/checkout';
+import {
+  Index as ExtendRental,
+  ExtendSuccessPage,
+  ExtendCancelPage
+} from './views/rentals-edit/extend';
+
+import {
+  Index as EarlyReturnRental,
+  EarlyReturnSuccessPage,
+  EarlyReturnCancelPage
+} from './views/rentals-edit/early-return';
+
+import { Index as DeliveryDropoffs, DropoffConfirmation } from './views/delivery/dropoffs';
+import { Index as DeliveryPickups, PickupConfirmation} from './views/delivery/pickups';
+import { Index as DeliveryMenu } from './views/delivery/menu';
+
 
 import { Index as Login } from './views/auth/login';
 import { Index as Register } from './views/auth/register';
@@ -47,10 +61,6 @@ const App = () => {
         <FlashProvider>
           <Routes>
 
-            <Route exact path="/cart" element={<Cart />} />
-
-            <Route exact path="/checkout/:status" element={<Checkout />} />
-
             <Route exact path="/login" element={<Login />} />
 
             <Route exact path="/register" element={<Register />} />
@@ -63,15 +73,39 @@ const App = () => {
 
             <Route exact path="/item/:itemId" element={<ItemDetails />} />
 
-            <Route exact path="/orders/history" element={<OrderHistory />} />
+            <Route exact path="/cart" element={<Cart />} />
+
+            <Route exact path="/checkout/overview" element={<CheckoutOverview />} />
+
+            <Route exact path="/checkout/success" element={<CheckoutSuccess />} />
+
+            <Route exact path="/checkout/cancel" element={<CheckoutCancel />} />
+
+            <Route exact path="/rentals" element={<Rentals />} />
+
+            <Route exact path="/rentals/schedule" element={<DeliveryMenu />} />
+
+            <Route exact path="/rentals/extend/:orderId" element={<ExtendRental />} />
+
+            <Route exact path="/extend/success" element={<ExtendSuccessPage />} />
+
+            <Route exact path="/extend/cancel" element={<ExtendCancelPage />} />
+
+            <Route exact path="/orders/early-return/:orderId" element={<EarlyReturnRental />} />
+
+            <Route exact path="/early-return/success" element={<EarlyReturnSuccessPage />} />
+
+            <Route exact path="/early-return/cancel" element={<EarlyReturnCancelPage />} />
 
             <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
 
+            <Route exact path="/orders/dropoff/confirmation" element={<DropoffConfirmation />} />
+
             <Route exact path="/orders/pickup/:onTimestamp" element={<DeliveryPickups />} />
 
-            <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
+            <Route exact path="/orders/pickup/confirmation" element={<PickupConfirmation />} />
 
-            <Route exact path="/extend/:status" element={<ExtendCheckout />} />
+            <Route exact path="/orders/early-return/:orderId" element={<EarlyReturnRental />} />
 
             <Route exact path="/story" element={<Story />} />
 

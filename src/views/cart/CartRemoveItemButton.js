@@ -24,7 +24,7 @@ export const CartRemoveItemButton = ({ itemId }) => {
     <button
       type="button"
       onClick={handleRemove}
-      className="btn btn-danger btn-sm"
+      className="btn btn-link btn-sm text-danger"
     >
       Remove
     </button>

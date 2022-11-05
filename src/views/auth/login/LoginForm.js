@@ -69,7 +69,7 @@ export const LoginForm = () => {
           required
         />
         <div id="emailHelp" className="form-text d-flex justify-content-end">
-          <a href="/password/recovery">Forgot password?</a>
+          <a className="hubbub-link" href="/password/recovery">Forgot password?</a>
         </div>
       </div>
       <div className="d-grid gap-2 mb-3">
@@ -82,7 +82,7 @@ export const LoginForm = () => {
         </button>
       </div>
       <div className="text-center">
-        <small>Not on Hubbub yet? <a href="/register">Sign up</a>!</small>
+        <small>Not on Hubbub yet? <a className="hubbub-link" href="/register">Sign up</a>!</small>
       </div>
     </form>
   );
