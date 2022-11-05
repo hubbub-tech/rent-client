@@ -1,6 +1,6 @@
 import { useViewport } from '../../hooks/Viewport';
 
-export const DateRangePickerStyle = ({}) => {
+export const DateRangePickerStyle = () => {
   const viewport = useViewport();
 
   return (

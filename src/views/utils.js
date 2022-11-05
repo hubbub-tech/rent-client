@@ -29,11 +29,11 @@ const printMoney = (floatAmount) => {
 }
 
 const printDate = (timestamp, formatStr = "PP") => {
-  if (timestamp != null) {
+  try {
     const onDatetime = new Date(timestamp * 1000);
     return format(onDatetime, formatStr);
-  } else {
-    return "Invalid Date"
+  } catch {
+    return "Invalid Date";
   }
 }
 

@@ -11,6 +11,8 @@ export const DateRangePicker = ({ minDate, maxDate, defaultMonth, selectedRange,
   const [fromValue, setFromValue] = useState('');
   const [toValue, setToValue] = useState('');
 
+  const captionStyles = { fontSize: '75%' };
+
   const handleFromChange = (e) => {
     setFromValue(e.target.value);
     const date = parse(e.target.value, 'y-MM-dd', new Date());
@@ -69,9 +71,7 @@ export const DateRangePicker = ({ minDate, maxDate, defaultMonth, selectedRange,
             handleToChange={handleToChange}
           />
         }
-        styles={{
-          caption: { fontSize: '75%'}
-        }}
+        styles={{ caption: captionStyles }}
       />
     </Fragment>
   );

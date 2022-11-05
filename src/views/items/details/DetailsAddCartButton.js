@@ -13,7 +13,7 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
   const [dtStarted, setDtStarted] = useState(null);
   const [dtEnded, setDtEnded] = useState(null);
 
-  const { flash, addFlash, removeFlash } = useContext(FlashContext);
+  const { flash, renderFlash } = useContext(FlashContext);
 
   useEffect(() => {
     if (dtRange === undefined) {
@@ -36,11 +36,6 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
   }
 
   const handleAddItem = () => {
-
-    const renderFlash = async(message, status, timeout = 3000) => {
-      addFlash({ message, status });
-      setTimeout(() => removeFlash(), timeout);
-    }
 
     const postData = async(url, pkg) => {
       const response = await fetch(url, {

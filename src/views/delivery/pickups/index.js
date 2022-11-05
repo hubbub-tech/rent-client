@@ -60,3 +60,6 @@ export const Index = () => {
     </main>
   );
 }
+
+export { PickupDates } from './PickupDates';
+export { PickupConfirmation } from './PickupConfirmation';

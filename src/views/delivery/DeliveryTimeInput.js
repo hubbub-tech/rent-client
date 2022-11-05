@@ -41,6 +41,7 @@ export const DeliveryTimeInput = ({ timeslots, setTimeslots }) => {
       </span>
       <input
         type="time"
+        step="1800"
         aria-label="Start time"
         onChange={handleStartTime}
         placeholder="From (ex: 09:00)"
@@ -48,6 +49,7 @@ export const DeliveryTimeInput = ({ timeslots, setTimeslots }) => {
       />
       <input
         type="time"
+        step="1800"
         aria-label="End time"
         onChange={handleEndTime}
         placeholder="To (ex: 11:00)"

@@ -95,12 +95,12 @@ h1, h2, h3, h4, h5, h6
   color: #000000;
 }
 
-a, .btn-link {
+a.hubbub-link, .btn-link {
   color: #69b6e7;
   text-decoration: none;
 }
 
-a:hover, .btn-link:hover {
+a.hubbub-link:hover, .btn-link:hover {
   color: #3d4fe0;
   text-decoration: none;
 }

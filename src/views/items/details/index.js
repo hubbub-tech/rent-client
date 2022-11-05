@@ -8,7 +8,7 @@ import { DetailsAddCartButton } from './DetailsAddCartButton';
 import { DetailsItemDescription } from './DetailsItemDescription';
 import { DetailsRecommendations } from './DetailsRecommendations';
 
-import { printDate } from '../../utils.js';
+import { printDate, printMoney } from '../../utils.js';
 import { useViewport } from '../../../hooks/Viewport';
 import { SessionContext } from '../../../providers/SessionProvider';
 import { DateRangePicker } from '../../../inputs/date-range';
@@ -74,7 +74,7 @@ export const Index = () => {
           </div>
           <div className="col-md-4">
             <div className="ps-lg-10 mt-6 mt-md-0">
-              <a href={`/accounts/u/id=${item.lister_id}`} className="mb-4 d-block">{ item.lister_name }</a>
+              <a href={`/accounts/u/id=${item.lister_id}`} className="mb-4 d-block hubbub-link">{ item.lister_name }</a>
 
               <h1 className="fs-2 mb-1">{ item.name }</h1>
               <div className="text-small mb-1">
@@ -85,8 +85,8 @@ export const Index = () => {
               <div className="fs-5 mt-3">
                 {rentalCost === undefined
                   ? <span className="fw-bold text-dark">How long do you want to rent?</span>
-                  : <span className="fw-bold text-dark">Rent for:
-                      <span className="text-success">${ rentalCost.toFixed(2) }</span>
+                  : <span className="fw-bold text-dark">
+                      Rent for: <span className="text-success">{ printMoney(rentalCost) }</span>
                     </span>
                 }
               </div>

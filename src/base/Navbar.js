@@ -79,7 +79,7 @@ export const Navbar = () => {
             {userId !== undefined &&
               <>
                 <li className='nav-item'>
-                  <a className="nav-link text-dark" href="/orders/history">My Rentals</a>
+                  <a className="nav-link text-dark" href="/rentals">My Rentals</a>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link text-dark" href="/cart">Cart</a>

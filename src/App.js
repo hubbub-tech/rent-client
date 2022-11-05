@@ -16,13 +16,23 @@ import { Index as CheckoutCancel } from './views/checkout/cancel';
 import { Index as Main } from './views/main';
 import { Index as ListItem } from './views/list';
 
-import { Index as OrderHistory } from './views/orders';
-import { Index as ExtendRental } from './views/orders-extend';
-import { Index as ExtendCheckout } from './views/orders-extend/checkout';
-import { Index as EarlyReturnRental } from './views/orders-early-return';
+import { Index as Rentals } from './views/rentals';
 
-import { Index as DeliveryDropoffs } from './views/delivery/dropoffs';
-import { Index as DeliveryPickups} from './views/delivery/pickups';
+import {
+  Index as ExtendRental,
+  ExtendSuccessPage,
+  ExtendCancelPage
+} from './views/rentals-edit/extend';
+
+import {
+  Index as EarlyReturnRental,
+  EarlyReturnSuccessPage,
+  EarlyReturnCancelPage
+} from './views/rentals-edit/early-return';
+
+import { Index as DeliveryDropoffs, DropoffConfirmation } from './views/delivery/dropoffs';
+import { Index as DeliveryPickups, PickupConfirmation} from './views/delivery/pickups';
+import { Index as DeliveryMenu } from './views/delivery/menu';
 
 
 import { Index as Login } from './views/auth/login';
@@ -71,17 +81,31 @@ const App = () => {
 
             <Route exact path="/checkout/cancel" element={<CheckoutCancel />} />
 
-            <Route exact path="/orders/history" element={<OrderHistory />} />
+            <Route exact path="/rentals" element={<Rentals />} />
 
-            <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
+            <Route exact path="/rentals/schedule" element={<DeliveryMenu />} />
 
-            <Route exact path="/orders/pickup/:onTimestamp" element={<DeliveryPickups />} />
+            <Route exact path="/rentals/extend/:orderId" element={<ExtendRental />} />
+
+            <Route exact path="/extend/success" element={<ExtendSuccessPage />} />
+
+            <Route exact path="/extend/cancel" element={<ExtendCancelPage />} />
 
             <Route exact path="/orders/early-return/:orderId" element={<EarlyReturnRental />} />
 
-            <Route exact path="/orders/extend/:orderId" element={<ExtendRental />} />
+            <Route exact path="/early-return/success" element={<EarlyReturnSuccessPage />} />
 
-            <Route exact path="/extend/:status" element={<ExtendCheckout />} />
+            <Route exact path="/early-return/cancel" element={<EarlyReturnCancelPage />} />
+
+            <Route exact path="/orders/dropoff/:onTimestamp" element={<DeliveryDropoffs />} />
+
+            <Route exact path="/orders/dropoff/confirmation" element={<DropoffConfirmation />} />
+
+            <Route exact path="/orders/pickup/:onTimestamp" element={<DeliveryPickups />} />
+
+            <Route exact path="/orders/pickup/confirmation" element={<PickupConfirmation />} />
+
+            <Route exact path="/orders/early-return/:orderId" element={<EarlyReturnRental />} />
 
             <Route exact path="/story" element={<Story />} />
 

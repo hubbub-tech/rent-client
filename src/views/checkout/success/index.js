@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import successSvg from '../assets/success.svg';
 
 import { SuccessReceipt } from './SuccessReceipt';
+import { SuccessScheduleButton } from './SuccessScheduleButton';
 
 import { CheckoutItem } from '../CheckoutItem';
 
@@ -69,6 +70,7 @@ export const Index = () => {
               </div>
               <div className="col-md-4 col-12 my-2 bg-light px-3 py-3">
                 <SuccessReceipt cart={cart} />
+                <SuccessScheduleButton />
               </div>
             </div>
           </div>

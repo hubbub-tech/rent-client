@@ -159,7 +159,7 @@ export const RegisterForm = () => {
         </button>
       </div>
       <div className="text-center">
-        <small>On Hubbub already? <a href="/login">Login</a>!</small>
+        <small>On Hubbub already? <a className="hubbub-link" href="/login">Login</a>!</small>
       </div>
     </form>
   );
