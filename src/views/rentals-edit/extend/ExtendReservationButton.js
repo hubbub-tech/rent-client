@@ -57,7 +57,7 @@ export const ExtendReservationButton = ({ orderId, dtEnded }) => {
         .then(tryRedirect)
         .catch(console.error);
       } else {
-        renderFlash(data.message, 'danger', 10000);
+        renderFlash(data.message, 'danger', 10000)
       }
     };
 
