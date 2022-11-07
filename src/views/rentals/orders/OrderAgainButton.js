@@ -10,7 +10,7 @@ export const OrderAgainButton = ({ itemId }) => {
     <button
       type="button"
       onClick={viewItem}
-      className="btn btn-success btn-sm mx-1"
+      className="btn btn-hubbub btn-sm mx-1"
     >
       Rent Again
     </button>
