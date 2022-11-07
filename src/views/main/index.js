@@ -15,7 +15,7 @@ export const Index = () => {
       <MainHero />
       <MainFeatured />
       <section>
-        <div className="container">
+        <div className="container ">
           <div className="row">
             <MainSecondhandSell image={sectionBgImg1} />
             <MainRequestItem image={sectionBgImg2} />
