@@ -45,6 +45,12 @@ import { PageNotFound } from './views/errors/E404';
 import { Story } from './views/static/Story';
 import { Faqs } from './views/static/Faqs';
 
+import {
+  LegacyFeed,
+  LegacyDetails,
+  LegacyRentals
+} from './views/legacy';
+
 import { useAnalytics } from './hooks/Analytics';
 
 
@@ -110,6 +116,14 @@ const App = () => {
             <Route exact path="/story" element={<Story />} />
 
             <Route exact path="/faqs" element={<Faqs />} />
+
+            <Route exact path="/inventory" element={<LegacyFeed />} />
+
+            <Route exact path="/inventory/search=:searchTerm" element={<LegacyFeed />} />
+
+            <Route exact path="/inventory/i/id=:itemId" element={<LegacyDetails />} />
+
+            <Route exact path="/accounts/u/orders" element={<LegacyRentals />} />
 
             <Route element={<PageNotFound />} />
           </Routes>
