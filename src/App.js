@@ -48,7 +48,8 @@ import { Faqs } from './views/static/Faqs';
 import {
   LegacyFeed,
   LegacyDetails,
-  LegacyRentals
+  LegacyRentals,
+  LegacyCart
 } from './views/legacy';
 
 import { useAnalytics } from './hooks/Analytics';
@@ -124,6 +125,8 @@ const App = () => {
             <Route exact path="/inventory/i/id=:itemId" element={<LegacyDetails />} />
 
             <Route exact path="/accounts/u/orders" element={<LegacyRentals />} />
+
+            <Route exact path="/checkout" element={<LegacyCart />} />
 
             <Route element={<PageNotFound />} />
           </Routes>
