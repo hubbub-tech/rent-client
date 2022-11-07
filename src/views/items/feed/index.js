@@ -59,9 +59,10 @@ export const Index = () => {
     const getCachedData = async(url) => {
       const cacheStorage = await caches.open('feedData');
       const cachedResponse = await cacheStorage.match(url);
-      const cachedData = await cachedResponse.json();
 
-      if (cachedData && !paramsString) {
+      if (cachedResponse && !paramsString) {
+        const cachedData = await cachedResponse.json();
+
         setCoords({ "lat": cachedData.user_address_lat, "lng": cachedData.user_address_lng });
         setItems(cachedData.items);
         setFeedItems(cachedData.items);
