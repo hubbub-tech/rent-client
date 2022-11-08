@@ -20,7 +20,7 @@ export const DetailsItemTable = ({ item }) => {
             <span key={tag}>
               <button
                 type="button"
-                onClick={() => navigate(`/items/feed`)}
+                onClick={() => navigate(`/items/feed?search=${tag}`)}
                 className="btn btn-outline-secondary btn-sm mx-1 my-1"
               >
                 { tag }
