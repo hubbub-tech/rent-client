@@ -3,6 +3,7 @@ import { redirect } from 'react-router-dom';
 
 export const useCredentials = () => {
   const userId = Cookies.get('userId');
-  if (!userId) return redirect('/login');
+  const sessionToken = Cookies.get('sessionToken');
+  if (!userId || !sessionToken) return redirect('/login');
   return;
 }

@@ -41,7 +41,7 @@ const NavbarToggleButton = ({ isOpen, handleClickOpen }) => {
 export const Navbar = () => {
   const navigate = useNavigate();
 
-  const { userId } = useContext(SessionContext);
+  const { userId, sessionToken } = useContext(SessionContext);
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -76,7 +76,7 @@ export const Navbar = () => {
             <li className='nav-item'>
               <a className="nav-link active fw-bold text-dark" aria-current="page" href="/items/feed">Rent Now</a>
             </li>
-            {userId &&
+            {(userId && sessionToken) &&
               <>
                 <li className='nav-item'>
                   <a className="nav-link text-dark" href="/rentals">My Rentals</a>
@@ -89,12 +89,12 @@ export const Navbar = () => {
                 </li>
               </>
             }
-            {!userId &&
+            {(!userId || !sessionToken) &&
               <li className='nav-item'>
                 <a className="nav-link text-dark" href="/login">Login</a>
               </li>
             }
-            {!userId &&
+            {(!userId || !sessionToken) &&
               <li className='nav-item'>
                 <a className="nav-link text-dark" href="/register">Sign Up</a>
               </li>
