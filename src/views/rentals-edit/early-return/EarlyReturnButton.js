@@ -12,21 +12,22 @@ export const EarlyReturnButton = ({ orderId, dtEnded }) => {
   const [btnClassName, setBtnClassName] = useState("btn btn-hubbub");
 
   const defaultBtnLabel = 'Return Rental Early';
-  const [btnLabel, setBtnLabel] = useState(defaultBtnLabel)
+  const [btnLabel, setBtnLabel] = useState(defaultBtnLabel);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const { flash, renderFlash } = useContext(FlashContext);
+
 
   useEffect(() => {
     if (dtEnded) {
       const dtEndedFormatted = printDate(dtEnded.getTime() / 1000);
       setBtnLabel(`Return on ${dtEndedFormatted}`);
+      setIsDisabled(false);
     } else {
       setBtnLabel(defaultBtnLabel);
+      setIsDisabled(true);
     }
   }, [dtEnded]);
-
-
-  function disabled() { return (dtEnded) ? false : true };
 
 
   const handleEarlyReturn = (e) => {
@@ -71,7 +72,7 @@ export const EarlyReturnButton = ({ orderId, dtEnded }) => {
           type="button"
           className={btnClassName}
           onClick={handleEarlyReturn}
-          disabled={disabled()}
+          disabled={isDisabled}
         >
           {btnLabel}
         </button>

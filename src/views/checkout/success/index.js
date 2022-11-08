@@ -31,20 +31,16 @@ export const Index = () => {
       setCart(cachedData.cart);
     };
 
-    getCachedData(process.env.REACT_APP_SERVER + '/checkout/overview')
-    .catch(console.error);
-
-
     const getData = async(url) => {
       const response = await fetch(url, { mode: 'cors', credentials: 'include' });
-      const data = response.json();
-      let status = response.ok ? 'success' : 'danger';
+      const status = response.ok ? 'success' : 'danger';
+      const data = await response.json();
 
-      removeFlash();
-      renderFlash(data.message, status, 10000);
+      // renderFlash(data.message, status, 10000);
     };
 
-    getData(process.env.REACT_APP_SERVER + '/checkout')
+    getCachedData(process.env.REACT_APP_SERVER + '/checkout/overview')
+    .then(() => getData(process.env.REACT_APP_SERVER + '/checkout'))
     .catch(console.error);
   }, []);
 

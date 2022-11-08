@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export const DeliveryTimeInput = ({ timeslots, setTimeslots }) => {
 
   const defaultTimeRange = { start: null, end: null };
   const [timeRange, setTimeRange] = useState(defaultTimeRange);
   const [btnClassName, setBtnClassName] = useState("btn btn-outline-success")
+
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const handleStartTime = (e) => setTimeRange({ ...timeRange, start: e.target.value });
   const handleEndTime = (e) => setTimeRange({ ...timeRange, end: e.target.value });
@@ -14,7 +16,8 @@ export const DeliveryTimeInput = ({ timeslots, setTimeslots }) => {
     setTimeRange(defaultTimeRange);
   };
 
-  const disabled = () => {
+
+  useEffect(() => {
     const isValid = timeRange.start && timeRange.end;
 
     (isValid)
@@ -23,11 +26,12 @@ export const DeliveryTimeInput = ({ timeslots, setTimeslots }) => {
 
     if (isValid) {
       const isValidRange = timeRange.start < timeRange.end;
-      return !isValidRange;
+      setIsDisabled(!isValidRange);
+    } else {
+      setIsDisabled(false);
     }
+  }, [timeRange]);
 
-    return true;
-  };
 
   return (
     <div className="input-group">
@@ -65,7 +69,7 @@ export const DeliveryTimeInput = ({ timeslots, setTimeslots }) => {
         className={btnClassName}
         onClick={handleAppend}
         type="button"
-        disabled={disabled()}
+        disabled={isDisabled}
       >
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-plus" viewBox="0 0 16 16">
           <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>

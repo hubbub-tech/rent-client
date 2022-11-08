@@ -13,6 +13,8 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
   const [dtStarted, setDtStarted] = useState(null);
   const [dtEnded, setDtEnded] = useState(null);
 
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const { flash, renderFlash } = useContext(FlashContext);
 
   useEffect(() => {
@@ -25,15 +27,18 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
     }
   }, [dtRange]);
 
-  function disabled() {
+
+  useEffect(() => {
     if (dtStarted && dtEnded) {
       let timeElapsed = dtEnded.getTime() - dtStarted.getTime();
       let daysElapsed = timeElapsed / (1000 * 3600 * 24);
 
-      return daysElapsed < process.env.REACT_APP_MIN_RESERVATION;
+      setIsDisabled(daysElapsed < process.env.REACT_APP_MIN_RESERVATION);
+    } else {
+      setIsDisabled(false);
     }
-    return false;
-  }
+  }, [dtStarted, dtEnded]);
+
 
   const handleAddItem = () => {
 
@@ -92,7 +97,7 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
           type="button"
           className={btnClassName}
           onClick={handleAddItem}
-          disabled={disabled()}
+          disabled={isDisabled}
         >
           {btnLabel}
         </button>

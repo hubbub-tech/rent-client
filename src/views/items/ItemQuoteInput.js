@@ -21,7 +21,7 @@ export const ItemQuoteInput = ({ price }) => {
     <div className="row g-1 align-items-center">
       <div className="col-auto my-1">
         <span id="priceEstimateHelpInline">
-          <small>{printMoney(quote)} est. for</small>
+          <small>{printMoney(quote)} for</small>
         </span>
       </div>
       <div className="col-auto my-1">

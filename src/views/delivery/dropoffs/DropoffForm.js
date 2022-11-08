@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { DeliveryTimeslotsDisplay } from '../DeliveryTimeslotsDisplay';
@@ -17,7 +17,14 @@ export const DropoffForm = ({ orders }) => {
   const [referral, setReferral] = useState(null);
   const [notes, setNotes] = useState();
 
-  const { addFlash, removeFlash } = useContext(FlashContext);
+  const [isDisabled, setIsDisabled] = useState(true);
+
+  useEffect(() => {
+    setIsDisabled(!address.formatted && timeslots.length === 0);
+  }, [address, timeslots]);
+
+
+  const { renderFlash } = useContext(FlashContext);
 
   const handleDropoffSchedule = (e) => {
     e.preventDefault();
@@ -33,11 +40,6 @@ export const DropoffForm = ({ orders }) => {
     }
 
     const orderIds = getOrderIds(orders);
-
-    const renderFlash = async(message, status, timeout = 1000) => {
-      addFlash({ message, status });
-      setTimeout(() => removeFlash(), timeout);
-    }
 
     const postData = async(url) => {
       const response = await fetch(url, {
@@ -62,12 +64,6 @@ export const DropoffForm = ({ orders }) => {
     .catch(console.error);
   }
 
-  const disable = () => {
-    if (address.formatted === null) return true;
-    if (timeslots.length === 0) return true;
-
-    return false;
-  };
 
   return (
     <form onSubmit={handleDropoffSchedule}>
@@ -108,7 +104,7 @@ export const DropoffForm = ({ orders }) => {
         <button
           type="submit"
           className="btn btn-success"
-          disabled={disable()}
+          disabled={isDisabled}
         >
           Schedule Dropoff
         </button>

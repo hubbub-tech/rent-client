@@ -23,14 +23,14 @@ export const Index = () => {
   const [minDate, setMinDate] = useState(dateToday);
   const [maxDate, setMaxDate] = useState(dateToday);
 
-  const getMinDate = () => {
+  const getMinDate = (order) => {
     const calDtStarted = new Date(order.res_dt_start * 1000);
 
     if (dateToday > calDtStarted) return dateToday;
     else return calDtStarted;
   };
 
-  const getMaxDate = () => {
+  const getMaxDate = (order) => {
     const calDtEnded = new Date(order.ext_dt_end * 1000);
     return calDtEnded;
   };
@@ -44,8 +44,8 @@ export const Index = () => {
       setOrder(data.order);
       setSrcUrl(data.order.item.image_url);
 
-      setMinDate(getMinDate());
-      setMaxDate(getMaxDate());
+      setMinDate(getMinDate(data.order));
+      setMaxDate(getMaxDate(data.order));
     };
 
     getData(process.env.REACT_APP_SERVER + `/order/${orderId}`)

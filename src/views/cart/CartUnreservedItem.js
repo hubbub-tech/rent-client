@@ -62,7 +62,7 @@ export const CartUnreservedItem = ({ src, item, index, items }) => {
               <CartEditItemButton
                 toggle={toggle}
                 onClick={handleToggle}
-                disabled={() => false}
+                disabled={false}
                 form="editItemForm"
               />
             </div>

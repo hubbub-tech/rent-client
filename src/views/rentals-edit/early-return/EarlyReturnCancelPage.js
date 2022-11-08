@@ -13,8 +13,8 @@ export const EarlyReturnCancelPage = () => {
 
     const getData = async(url) => {
       const response = await fetch(url, { mode: 'cors', credentials: 'include' });
-      const data = response.json();
-      let status = response.ok ? 'success' : 'danger';
+      const status = response.ok ? 'success' : 'danger';
+      const data = await response.json();
 
       renderFlash(data.message, status, 10000);
       return response;

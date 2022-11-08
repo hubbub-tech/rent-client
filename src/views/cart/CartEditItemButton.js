@@ -9,7 +9,7 @@ export const CartEditItemButton = ({ toggle, onClick, disabled, form }) => {
         className="btn btn-dark btn-sm"
         type="button"
         onClick={onClick}
-        disabled={disabled()}
+        disabled={disabled}
       >
         Edit
       </button>

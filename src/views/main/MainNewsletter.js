@@ -41,8 +41,7 @@ export const MainNewsletter = () => {
   return (
     <div className="row mt-5">
       <div className="col-sm-9 col mx-auto">
-        <h3 className="text-center mb-0">Subscribe to our</h3>
-        <h1 className="text-center mb-3"><span className="text-hubbub">Newsletter</span></h1>
+        <h1 className="text-center mb-3"><span className="text-hubbub">Stay in the Loop</span></h1>
         <form onSubmit={subscribe}>
           <div className="mb-3">
             <label htmlFor="newsletterName" className="form-label">Your Name</label>

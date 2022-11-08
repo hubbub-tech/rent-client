@@ -1,8 +1,14 @@
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { FlashContext } from '../../../providers/FlashProvider';
 
 export const OverviewOrderNowButton = ({ disabled, cart }) => {
 
-  let navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const { renderFlash } = useContext(FlashContext);
+
 
   const handleCheckoutRequest = (e) => {
     e.preventDefault();
@@ -20,11 +26,17 @@ export const OverviewOrderNowButton = ({ disabled, cart }) => {
       });
 
       const data = await response.json();
-      return data
+      return data;
     };
 
+    const tryRedirect = (data) => {
+      (data.redirect_url)
+        ? window.location.href = data.redirect_url
+        : renderFlash(data.message, 'danger', 5000);
+    }
+
     postData(process.env.REACT_APP_SERVER + '/checkout/validate')
-    .then(data => window.location.href = data.redirect_url)
+    .then(tryRedirect)
     .catch(console.error);
   };
 
@@ -36,7 +48,7 @@ export const OverviewOrderNowButton = ({ disabled, cart }) => {
       onClick={handleCheckoutRequest}
       disabled={disabled}
     >
-      Order Now
+      Continue to Payment
     </button>
   );
 }

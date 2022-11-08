@@ -10,7 +10,7 @@ export const DetailsRecommendations = ({ items }) => {
       </div>
       <div className="row g-4 row-cols-lg-5 row-cols-2 row-cols-md-2 mt-2">
         {items.map((item) => (
-          <DetailsRecCard key={item.id} src={null} item={item} />
+          <DetailsRecCard key={item.id} src={item.image_url} item={item} />
         ))}
       </div>
     </div>

@@ -44,9 +44,12 @@ export const Index = () => {
       setRecommendations(data.recommendations);
 
       const dtToday = new Date();
-      const dtStarted = new Date(item.calendar.dt_started * 1000);
+      const dtStarted = new Date(data.item.calendar.dt_started * 1000);
       setMinDate(dtToday > dtStarted ? dtToday : dtStarted);
-      setMaxDate(new Date(item.calendar.dt_ended * 1000));
+      setMaxDate(new Date(data.item.calendar.dt_ended * 1000));
+
+      console.log(dtToday > dtStarted ? dtToday : dtStarted);
+      console.log(new Date(data.item.calendar.dt_ended * 1000));
     };
 
     getData(process.env.REACT_APP_SERVER + `/item/${itemId}`)
@@ -74,8 +77,6 @@ export const Index = () => {
           </div>
           <div className="col-md-4">
             <div className="ps-lg-10 mt-6 mt-md-0">
-              <a href={`/accounts/u/id=${item.lister_id}`} className="mb-4 d-block hubbub-link">{ item.lister_name }</a>
-
               <h1 className="fs-2 mb-1">{ item.name }</h1>
               <div className="text-small mb-1">
                 <a href="#!" className="text-decoration-none text-muted">

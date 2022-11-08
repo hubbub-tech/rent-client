@@ -12,7 +12,7 @@ export const Faqs = () => {
         </div>
         <div className="col-sm-2"></div>
         <div className="col-sm-8" data-aos="fade-up">
-          <img src="../static/backgrounds/faq.jpeg" className="img-fluid rounded" alt="Central Park" />
+          {/*<img src="../static/backgrounds/faq.jpeg" className="img-fluid rounded" alt="Central Park" />*/}
         </div>
         <div className="col-sm-2"></div>
       </div>

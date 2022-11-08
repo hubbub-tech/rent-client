@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import Cookies from 'js-cookie';
@@ -19,12 +19,13 @@ export const RegisterForm = () => {
   const [password, setPassword] = useState(null);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
 
-  const disabled = () => {
-    if (password === null) return true;
-    if (recaptchaToken === null) return true;
+  const [isDisabled, setIsDisabled] = useState(true);
 
-    return false;
-  }
+
+  useEffect(() => {
+    setIsDisabled(!password && !recaptchaToken);
+  }, [password, recaptchaToken]);
+
 
   const handleRegistration = (e) => {
     e.preventDefault();
@@ -153,7 +154,7 @@ export const RegisterForm = () => {
           className="next-step-2 btn btn-hubbub"
           type='submit'
           value='Submit'
-          disabled={disabled()}
+          disabled={isDisabled}
         >
           Sign up
         </button>

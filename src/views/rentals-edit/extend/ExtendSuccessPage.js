@@ -44,10 +44,10 @@ export const ExtendSuccessPage = () => {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      const data = response.json();
-      let status = response.ok ? 'success' : 'danger';
+      const status = response.ok ? 'success' : 'danger';
+      const data = await response.json();
 
-      renderFlash(data.message, status, 10000);
+      // renderFlash(data.message, status, 10000);
       return response;
     };
 
