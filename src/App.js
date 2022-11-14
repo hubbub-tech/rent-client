@@ -51,6 +51,8 @@ import { PageNotFound } from './views/errors/E404';
 import { Story } from './views/static/Story';
 import { Faqs } from './views/static/Faqs';
 
+import { StreamTest } from './views/items/feed/StreamTest';
+
 import {
   LegacyFeed,
   LegacyDetails,
@@ -85,6 +87,8 @@ const AppProviderLayout = () => {
 
 const routes = createRoutesFromElements(
   <Route element={<AppProviderLayout />} errorElement={<PageNotFound />}>
+
+    <Route exact path="/items/stream" element={<StreamTest />} />
 
     <Route exact path="/login" element={<Login />} />
 

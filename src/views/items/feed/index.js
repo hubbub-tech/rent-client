@@ -46,6 +46,30 @@ export const Index = () => {
       return response;
     };
 
+    const postData = async(url) => {
+      const response = await fetch(url, {
+        mode: 'cors',
+        method: 'POST',
+        credentials: 'include',
+        body: JSON.stringify({
+          dtStarted: parseInt(searchParams.get('dt_started')),
+          dtEnded: parseInt(searchParams.get('dt_ended')),
+          search: searchParams.get('search')
+        }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const responseClone = response.clone();
+      const data = await responseClone.json();
+
+      setCoords({ "lat": data.user_address_lat, "lng": data.user_address_lng });
+
+      setItems(data.items);
+      setFeedItems(data.items);
+
+      return response;
+    };
+
+
     const cacheData = async(response) => {
       if (response.ok) {
         const feedCache = await caches.open('feedData');
@@ -66,6 +90,12 @@ export const Index = () => {
         setCoords({ "lat": cachedData.user_address_lat, "lng": cachedData.user_address_lng });
         setItems(cachedData.items);
         setFeedItems(cachedData.items);
+
+      } else if (searchParams.get('dt_started') || searchParams.get('dt_ended')) {
+        postData(process.env.REACT_APP_SERVER + '/items/feed/dates')
+        .then(res => (!paramsString) && cacheData(res))
+        .catch(console.error);
+
       } else {
         getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
         .then(res => (!paramsString) && cacheData(res))
