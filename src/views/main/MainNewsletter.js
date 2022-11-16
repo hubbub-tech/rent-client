@@ -1,6 +1,6 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useCallback, useEffect, useContext } from 'react';
 
-import ReCAPTCHA from "react-google-recaptcha";
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
 import { FlashContext } from '../../providers/FlashProvider';
 
@@ -10,12 +10,22 @@ export const MainNewsletter = () => {
   const [email, setEmail] = useState();
   const [token, setToken] = useState();
 
-  const { addFlash, removeFlash } = useContext(FlashContext);
+  const { executeRecaptcha } = useGoogleReCaptcha();
 
-  const renderFlash = async(message, status, timeout = 1000) => {
-    addFlash({ message, status });
-    setTimeout(() => removeFlash(), timeout);
-  };
+  const handleReCaptchaVerify = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available');
+      return;
+    }
+    const recaptchaToken = await executeRecaptcha('yourAction');
+    setToken(recaptchaToken);
+  }, [executeRecaptcha]);
+
+  useEffect(() => {
+    handleReCaptchaVerify();
+  }, [handleReCaptchaVerify]);
+
+  const { renderFlash } = useContext(FlashContext);
 
   const subscribe = (e) => {
     e.preventDefault();
@@ -68,15 +78,10 @@ export const MainNewsletter = () => {
             />
 
           </div>
-          <ReCAPTCHA
-            sitekey={process.env.REACT_APP_RECAPTCHA_API_KEY}
-            onChange={(token) => setToken(token)}
-            onExpired={e => setToken(null)}
-            className="mb-3 mx-3"
-          />
           <div className="d-grid gap-2">
             <input
               className="btn btn-dark"
+              onClick={handleReCaptchaVerify}
               type='submit'
               value='Join'
             />

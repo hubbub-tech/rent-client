@@ -13,7 +13,7 @@ export const MainPerks = () => {
           <MainPerksItem
             perk={{
               header: 'Flexible ownership is here',
-              description: "Rent for as short as a day or as a day or as long as a year. You can cancel with no problem up to 24 hours before, and you can extend longer in a pinch."
+              description: "Rent for as short as a day or as long as a year. You can cancel with no problem up to 24 hours before, and you can extend longer in a pinch."
             }}
             src={calendarSvg}
           />

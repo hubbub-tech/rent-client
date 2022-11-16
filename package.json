@@ -20,7 +20,7 @@
     "react-day-picker": "^8.2.1",
     "react-dom": "^18.2.0",
     "react-ga": "^3.3.0",
-    "react-google-recaptcha": "^2.1.0",
+    "react-google-recaptcha-v3": "^1.10.0",
     "react-image-crop": "^9.0.4",
     "react-router-dom": "6",
     "react-scripts": "4.0.3",

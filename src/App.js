@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 
 import {
   Route,
@@ -68,17 +69,19 @@ const AppProviderLayout = () => {
   useAnalytics(userId);
 
   return (
-    <SessionProvider>
-      <div className="App">
-        <Navbar />
-        <FlashProvider>
+    <GoogleReCaptchaProvider reCaptchaKey={process.env.REACT_APP_RECAPTCHA_API_KEY}>
+      <SessionProvider>
+        <div className="App">
+          <Navbar />
+          <FlashProvider>
 
-          <Outlet />
+            <Outlet />
 
-        </FlashProvider>
-        <Footer />
-      </div>
-    </SessionProvider>
+          </FlashProvider>
+          <Footer />
+        </div>
+      </SessionProvider>
+    </GoogleReCaptchaProvider>
   );
 }
 
