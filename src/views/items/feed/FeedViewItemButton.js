@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-export const FeedViewItemButton = ({ itemId }) => {
+export const FeedViewItemButton = ({ itemId, disabled }) => {
   let navigate = useNavigate();
 
   const handleOnClick = () => navigate(`/item/${itemId}`);
@@ -11,6 +11,7 @@ export const FeedViewItemButton = ({ itemId }) => {
         type="button"
         onClick={handleOnClick}
         className="btn btn-hubbub btn-sm"
+        disabled={disabled}
       >
         See Details
       </button>

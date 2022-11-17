@@ -4,7 +4,6 @@ import { CartIncompleteCheckout } from './CartIncompleteCheckout';
 import { CartProceedToCheckout } from './CartProceedToCheckout';
 import { CartItemsList } from './CartItemsList';
 
-import { Feedback } from '../../base/Feedback';
 import { FlashContext } from '../../providers/FlashProvider';
 
 export const Index = () => {
