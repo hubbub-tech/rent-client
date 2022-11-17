@@ -47,7 +47,7 @@ export const RegisterForm = () => {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
-          user: {
+          user: { 
             firstName,
             lastName,
             email,
