@@ -1,8 +1,8 @@
-import Skeleton from 'react-loading-skeleton'
+import Skeleton from 'react-loading-skeleton';
 
 import { FeedViewItemButton } from './FeedViewItemButton';
 
-import 'react-loading-skeleton/dist/skeleton.css'
+import 'react-loading-skeleton/dist/skeleton.css';
 
 export const FeedSkeletonCard = () => {
 

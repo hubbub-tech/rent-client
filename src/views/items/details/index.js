@@ -13,6 +13,9 @@ import { useViewport } from '../../../hooks/Viewport';
 import { SessionContext } from '../../../providers/SessionProvider';
 import { DateRangePicker } from '../../../inputs/date-range';
 
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 export const Index = () => {
 
   const { itemId } = useParams();
@@ -76,12 +79,18 @@ export const Index = () => {
             <DetailsItemPhoto className="img-fluid px-5 py-5" src={srcUrl} alt={item.name} />
           </div>
           <div className="col-md-4">
-            <div className="ps-lg-10 mt-6 mt-md-0">
-              <h1 className="fs-2 mb-1">{ item.name }</h1>
-              <div className="text-small mb-1">
-                <a href="#!" className="text-decoration-none text-muted">
-                  Next available { printDate(item.calendar.next_avail_date_start) }
-                </a>
+            <div className="ps-lg-10 mt-4 mt-md-0 mb-2">
+              {item.name
+                ? <h1 className="fs-2">{ item.name }</h1>
+                : <Skeleton height="50px" />
+              }
+
+              <div className="text-small text-muted mb-2">
+                {item.calendar.next_avail_date_start && <span>Next available: </span>}
+                {item.calendar.next_avail_date_start
+                  ? printDate(item.calendar.next_avail_date_start)
+                  : <Skeleton />
+                }
               </div>
               <div className="fs-5 mt-3">
                 {rentalCost === undefined
