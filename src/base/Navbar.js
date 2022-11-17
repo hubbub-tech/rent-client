@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
@@ -45,6 +45,15 @@ export const Navbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const defaultNavClassName = 'collapse navbar-collapse';
+  const [navClassName, setNavClassName] = useState(defaultNavClassName);
+
+  useEffect(() => {
+    isOpen
+      ? setNavClassName('navbar-collapse')
+      : setNavClassName(defaultNavClassName);
+  }, [isOpen]);
+
   const handleClickOpen = () => setIsOpen(!isOpen);
 
   const handleLogout = () => {
@@ -71,7 +80,7 @@ export const Navbar = () => {
 
         <NavbarToggleButton isOpen={isOpen} handleClickOpen={handleClickOpen} />
 
-        <div className={`${!isOpen && 'collapse'} navbar-collapse`} id="navbarNavDropdown">
+        <div className={navClassName} id="navbarNavDropdown">
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
             <li className='nav-item'>
               <a className="nav-link active fw-bold text-dark" aria-current="page" href="/items/feed">Rent Now</a>

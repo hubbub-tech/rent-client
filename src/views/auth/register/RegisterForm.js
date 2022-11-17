@@ -1,6 +1,8 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useCallback, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ReCAPTCHA from 'react-google-recaptcha';
+
+import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
+
 import Cookies from 'js-cookie';
 
 import { RegisterPassInput } from  './RegisterPassInput';
@@ -9,8 +11,9 @@ import { FlashContext } from '../../../providers/FlashProvider';
 
 export const RegisterForm = () => {
 
-  let navigate = useNavigate();
-  const { addFlash, removeFlash } = useContext(FlashContext);
+  const navigate = useNavigate();
+  const { executeRecaptcha } = useGoogleReCaptcha();
+  const { renderFlash } = useContext(FlashContext);
 
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
@@ -21,19 +24,22 @@ export const RegisterForm = () => {
 
   const [isDisabled, setIsDisabled] = useState(true);
 
+  const handleReCaptchaVerify = useCallback(async () => {
+    if (!executeRecaptcha) {
+      console.log('Execute recaptcha not yet available');
+      return;
+    }
+    const token = await executeRecaptcha('yourAction');
+    setRecaptchaToken(token);
+  }, [executeRecaptcha]);
 
   useEffect(() => {
+    handleReCaptchaVerify();
     setIsDisabled(!password && !recaptchaToken);
-  }, [password, recaptchaToken]);
-
+  }, [handleReCaptchaVerify, password]);
 
   const handleRegistration = (e) => {
     e.preventDefault();
-
-    const renderFlash = async(message, status, timeout = 1000) => {
-      addFlash({ message, status });
-      setTimeout(() => removeFlash(), timeout);
-    };
 
     const postData = async(url) => {
       const response = await fetch(url, {
@@ -41,7 +47,7 @@ export const RegisterForm = () => {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
-          user: {
+          user: { 
             firstName,
             lastName,
             email,
@@ -56,20 +62,15 @@ export const RegisterForm = () => {
       const data = await response.json();
 
       let status = response.ok ? 'success' : 'danger';
-
-      console.log(`Message: ${data.message}` )
       renderFlash(data.message, status, 100000);
 
       if (response.ok) {
-        let configs;
-        if (window.location.href.includes("localhost")) {
-          configs = { sameSite: 'none', secure: true }
-        } else {
-          configs = { domain: '.hubbub.shop', sameSite: 'none', secure: true }
-        }
+        let configs = (window.location.href.includes("localhost"))
+          ? { sameSite: 'none', secure: true }
+          : { domain: '.hubbub.shop', sameSite: 'none', secure: true }
 
-        Cookies.set('userId', data.user_id);
-        Cookies.set('sessionToken', data.session_token);
+        Cookies.set('userId', data.user_id, configs);
+        Cookies.set('sessionToken', data.session_token, configs);
 
         navigate('/items/feed');
       };
@@ -141,17 +142,10 @@ export const RegisterForm = () => {
 
       <RegisterPassInput setPassword={setPassword} />
 
-      <div className="mt-3">
-        <ReCAPTCHA
-          sitekey={process.env.REACT_APP_RECAPTCHA_API_KEY}
-          onChange={token => setRecaptchaToken(token)}
-          onExpired={e => setRecaptchaToken(null)}
-        />
-      </div>
-
       <div className="d-grid gap-2 my-3">
         <button
           className="next-step-2 btn btn-hubbub"
+          onClick={handleReCaptchaVerify}
           type='submit'
           value='Submit'
           disabled={isDisabled}
