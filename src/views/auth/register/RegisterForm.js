@@ -8,7 +8,7 @@ import Cookies from 'js-cookie';
 import { RegisterPassInput } from  './RegisterPassInput';
 import { FlashContext } from '../../../providers/FlashProvider';
 
-
+ 
 export const RegisterForm = () => {
 
   const navigate = useNavigate();
@@ -47,7 +47,7 @@ export const RegisterForm = () => {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify({
-          user: { 
+          user: {
             firstName,
             lastName,
             email,
