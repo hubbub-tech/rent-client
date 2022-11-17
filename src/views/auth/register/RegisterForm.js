@@ -33,12 +33,10 @@ export const RegisterForm = () => {
     setRecaptchaToken(token);
   }, [executeRecaptcha]);
 
-
   useEffect(() => {
     handleReCaptchaVerify();
     setIsDisabled(!password && !recaptchaToken);
   }, [handleReCaptchaVerify, password]);
-
 
   const handleRegistration = (e) => {
     e.preventDefault();
