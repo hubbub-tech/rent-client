@@ -16,14 +16,13 @@ export const StreamTest = () => {
 
   const handleConnectionOpen = () => {
     setIsConnectionOpen(true);
+    console.log("connection made")
   }
 
   const handleStreamedData = (e) => {
-    const message = e.data;
-
-    (messages.length < 10)
-      ? setMessages([...messages, message])
-      : eventSource.close();
+    const data = JSON.parse(e.data);
+    // const message = e.data;
+    console.log(data.message)
   }
 
   const handleConnectionClose = () => {
