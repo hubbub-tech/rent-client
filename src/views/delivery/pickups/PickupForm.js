@@ -1,9 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { DeliveryTimeslotsDisplay } from '../DeliveryTimeslotsDisplay';
 import { DeliveryAddressInput } from '../DeliveryAddressInput';
 
+import { TimeRangeSelector } from '../../../inputs/time-range';
 import { FlashContext } from '../../../providers/FlashProvider';
 
 export const PickupForm = ({ orders }) => {
@@ -20,7 +20,7 @@ export const PickupForm = ({ orders }) => {
   const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    setIsDisabled(!address.formatted && timeslots.length === 0);
+    setIsDisabled(!address.formatted || timeslots.length === 0);
   }, [address, timeslots]);
 
 
@@ -68,7 +68,7 @@ export const PickupForm = ({ orders }) => {
   return (
     <form onSubmit={handlePickupSchedule}>
       <label className="mt-4 form-label">Availabilities</label>
-      <DeliveryTimeslotsDisplay timeslots={timeslots} setTimeslots={setTimeslots} />
+      <TimeRangeSelector timeRanges={timeslots} setTimeRanges={setTimeslots} />
       <div id="timeHelp" className="form-text">Let us know when you're available for our couriers to come.</div>
 
       <label className="mt-4 form-label">Pickup Address</label>

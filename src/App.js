@@ -38,7 +38,7 @@ import {
 } from './views/rentals-edit/early-return';
 
 import { Index as DeliveryDropoffs, DropoffConfirmation } from './views/delivery/dropoffs';
-import { Index as DeliveryPickups, PickupConfirmation} from './views/delivery/pickups';
+import { Index as DeliveryPickups, PickupConfirmation } from './views/delivery/pickups';
 import { Index as DeliveryMenu } from './views/delivery/menu';
 
 

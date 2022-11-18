@@ -1,7 +1,5 @@
 import React from 'react';
 
-import { Feedback } from '../../base/Feedback';
-
 export const Faqs = () => {
   return (
     <div className="container-md my-5">
@@ -194,7 +192,6 @@ export const Faqs = () => {
                 below for quick ways to contact us! We’re always responsive and love helping out :)
               </p>
             </div>
-            <Feedback />
           </div>
         </div>
         <div className="col-sm-1"></div>
