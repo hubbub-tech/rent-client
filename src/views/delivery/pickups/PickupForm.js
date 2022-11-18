@@ -20,7 +20,7 @@ export const PickupForm = ({ orders }) => {
   const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    setIsDisabled(!address.formatted && timeslots.length === 0);
+    setIsDisabled(!address.formatted || timeslots.length === 0);
   }, [address, timeslots]);
 
 
