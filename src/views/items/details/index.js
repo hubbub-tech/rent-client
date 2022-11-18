@@ -26,7 +26,6 @@ export const Index = () => {
 
   const defaultItem = { calendar: {}, tags: [] };
   const [item, setItem] = useState(defaultItem);
-  const [srcUrl, setSrcUrl] = useState();
 
   const [rentalCost, setRentalCost] = useState(undefined);
 
@@ -43,7 +42,6 @@ export const Index = () => {
       const data = await response.json();
 
       setItem(data.item);
-      setSrcUrl(data.item.image_url);
       setRecommendations(data.recommendations);
 
       const dtToday = new Date();
@@ -76,7 +74,7 @@ export const Index = () => {
         <div className="row">
           <div className="col-md-1"></div>
           <div className="col-md-6">
-            <DetailsItemPhoto className="img-fluid px-5 py-5" src={srcUrl} alt={item.name} />
+            <DetailsItemPhoto className="img-fluid px-5 py-5" src={item.image_url} alt={item.name} />
           </div>
           <div className="col-md-4">
             <div className="ps-lg-10 mt-4 mt-md-0 mb-2">

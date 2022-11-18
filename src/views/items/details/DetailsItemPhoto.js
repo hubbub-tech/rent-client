@@ -25,7 +25,7 @@ export const DetailsItemPhoto = (props) => {
     (window.location.href.includes("localhost"))
       ? setImgSrc("/static/items/stock.jpg")
       : setImgSrc(props.src);
-  }, [imgSrc]);
+  }, [props.src]);
 
   return (imgSrc)
     ? <a href={props.href}>
