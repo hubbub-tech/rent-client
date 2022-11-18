@@ -1,3 +1,8 @@
+import { useState, useEffect } from 'react';
+
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 export const RentalEditItemPhotoLg = (props) => {
 
   const onMouseMove = (e) => {
@@ -14,29 +19,23 @@ export const RentalEditItemPhotoLg = (props) => {
     };
   };
 
-  if (window.location.href.includes("localhost")) {
-    return (
-      <a href={props.href}>
+  const [imgSrc, setImgSrc] = useState(undefined);
+
+  useEffect(() => {
+    (process.env.REACT_APP_DEBUG === "true")
+      ? setImgSrc("/static/items/stock.jpg")
+      : setImgSrc(props.src);
+  }, [props.src]);
+
+  return (imgSrc)
+    ? <a href={props.href}>
         <img
-          src="/static/items/stock.jpg"
+          src={imgSrc}
           onMouseMove={onMouseMove}
           className={`zoom ${props.className}`}
           onClick={props.onClick}
           alt={props.alt}
         />
       </a>
-    );
-  } else {
-    return (
-      <a href={props.href}>
-        <img
-          src={props.src}
-          onMouseMove={onMouseMove}
-          className={`zoom ${props.className}`}
-          onClick={props.onClick}
-          alt={props.alt}
-        />
-      </a>
-    );
-  }
+    : <Skeleton height="100%"  className={props.className} />
 }

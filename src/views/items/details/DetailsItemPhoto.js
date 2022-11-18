@@ -22,7 +22,7 @@ export const DetailsItemPhoto = (props) => {
   const [imgSrc, setImgSrc] = useState(undefined);
 
   useEffect(() => {
-    (window.location.href.includes("localhost"))
+    (process.env.REACT_APP_DEBUG === "true")
       ? setImgSrc("/static/items/stock.jpg")
       : setImgSrc(props.src);
   }, [props.src]);
@@ -37,5 +37,5 @@ export const DetailsItemPhoto = (props) => {
           alt={props.alt}
         />
       </a>
-    : <Skeleton height="100%" className="img-fluid py-3 px-3" />
+    : <Skeleton height="100%"  className={props.className} />
 }

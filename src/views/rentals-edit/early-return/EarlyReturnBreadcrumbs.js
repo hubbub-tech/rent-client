@@ -4,7 +4,7 @@ export const EarlyReturnBreadcrumbs = ({ order }) => {
   return (
     <nav aria-label="breadcrumb">
       <ol className="breadcrumb mb-0">
-        <li className="breadcrumb-item"><a href="/orders/history" className="hubbub-link">Rentals</a></li>
+        <li className="breadcrumb-item"><a href="/rentals" className="hubbub-link">Rentals</a></li>
         <li className="breadcrumb-item">{ printDate(order.res_dt_start) } - { printDate(order.res_dt_end) }</li>
         {order.extensions.map((extension, index) => (
           <li
