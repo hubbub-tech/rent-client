@@ -1,12 +1,12 @@
-import { ListImagePhoto } from './ListImagePhoto';
+import { ImageUploadPreview } from './ImageUploadPreview';
 
-export const ListImageOutput = ({ imageURLs, setImageURLs }) => {
+export const ImageUploadOutput = ({ imageURLs, setImageURLs }) => {
   return (
     <div className="container">
       <div className="row">
       {imageURLs.map((imageURL, index) => (
         <div className="col-4" key={imageURL}>
-          <ListImagePhoto
+          <ImageUploadPreview
             index={index}
             imageURL={imageURL}
             imageURLs={imageURLs}

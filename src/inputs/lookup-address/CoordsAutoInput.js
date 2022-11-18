@@ -13,7 +13,7 @@ import {
 import "@reach/combobox/styles.css";
 
 
-export const FeedCoordsInput = ({ setCoords }) => {
+export const CoordsAutoInput = ({ setCoords }) => {
   const {
     ready,
     value,

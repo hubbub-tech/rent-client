@@ -15,7 +15,7 @@ export const TimeRangeOutput = ({ index, timeRange, timeRanges, setTimeRanges })
         <button type="button" className="btn btn-danger btn-sm me-3" onClick={handleRemove}>
           <img src={cancelSvg} alt="cancel" />
         </button>
-        <span className="my-0 fw-bold text-muted">{timeRange.start} to {timeRange.end}</span>
+        <span className="my-0 fw-bold text-muted">from: {timeRange.start} to: {timeRange.end}</span>
       </div>
     </div>
   );

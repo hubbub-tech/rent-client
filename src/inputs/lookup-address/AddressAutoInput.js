@@ -13,7 +13,7 @@ import {
 import "@reach/combobox/styles.css";
 
 
-export const DeliveryAddressInput = ({ setAddress }) => {
+export const AddressAutoInput = ({ setAddress }) => {
   const {
     ready,
     value,

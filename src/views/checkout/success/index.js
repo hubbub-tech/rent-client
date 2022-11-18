@@ -52,7 +52,8 @@ export const Index = () => {
           <div className="col-sm-8 col-12">
             <h1>Confirmation</h1>
             <p>We've received your payment and are processing your rentals.</p>
-            <p>For next steps, please schedule a dropoff date for your items.</p>
+            <p>For next steps, please provide your availability to schedule your dropoff and pickup.</p>
+            <SuccessScheduleButton />
             <hr />
             <div className="row mt-5">
               <div className="col-md-1 col-4 align-middle mx-auto my-2">

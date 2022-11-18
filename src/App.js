@@ -95,13 +95,13 @@ const routes = createRoutesFromElements(
 
     <Route exact path="/" element={<Main />} />
 
-    <Route exact path="/list" element={<ListItem />} />
-
     <Route exact path="/items/feed" element={<ItemFeed />} />
 
     <Route exact path="/item/:itemId" element={<ItemDetails />} />
 
     <Route exact path="/cart" loader={useCredentials} element={<Cart />} />
+
+    <Route exact path="/list" loader={useCredentials} element={<ListItem />} />
 
     <Route exact path="/checkout/overview" loader={useCredentials} element={<CheckoutOverview />} />
 

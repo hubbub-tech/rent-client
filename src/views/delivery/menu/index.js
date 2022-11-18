@@ -36,7 +36,7 @@ export const Index = () => {
           <div className="col-md-2"></div>
           <div className="col-md-8 mt-4">
             <h1>Schedule Dropoffs & Pickups</h1>
-            <p>Select a date for your orders to be delivered or picked up from the location of your choice.</p>
+            <p>Provide your availability for each day an item will be dropped off or picked up from the location of your choice.</p>
             <ul className="nav nav-tabs">
               <MenuTabNavItem id='Dropoffs' activeTab={activeTab} setActiveTab={setActiveTab} />
               <MenuTabNavItem id='Pickups' activeTab={activeTab} setActiveTab={setActiveTab} />

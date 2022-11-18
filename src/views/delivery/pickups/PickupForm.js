@@ -1,8 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { DeliveryAddressInput } from '../DeliveryAddressInput';
-
+import { AddressAutoInput } from '../../../inputs/lookup-address';
 import { TimeRangeSelector } from '../../../inputs/time-range';
 import { FlashContext } from '../../../providers/FlashProvider';
 
@@ -69,10 +68,13 @@ export const PickupForm = ({ orders }) => {
     <form onSubmit={handlePickupSchedule}>
       <label className="mt-4 form-label">Availabilities</label>
       <TimeRangeSelector timeRanges={timeslots} setTimeRanges={setTimeslots} />
-      <div id="timeHelp" className="form-text">Let us know when you're available for our couriers to come.</div>
+      <div id="timeHelp" className="form-text">
+        Let us know when you're available for our couriers to come.
+        A signature will be required at dropoff to ensure safe delivery.
+      </div>
 
       <label className="mt-4 form-label">Pickup Address</label>
-      <DeliveryAddressInput setAddress={setAddress} />
+      <AddressAutoInput setAddress={setAddress} />
       <div id="addressHelp" className="form-text">Where should our couriers meet you?</div>
 
       <div className="mt-4">

@@ -5,6 +5,8 @@ import { DayPicker } from 'react-day-picker';
 import { DateSingleInputBase } from './DateSingleInput';
 import { DateSinglePickerStyle } from './DateSinglePickerStyle';
 
+import 'react-day-picker/dist/style.css';
+
 export const DateSinglePicker = ({ minDate, maxDate, defaultMonth, selectedDate, setSelectedDate }) => {
 
   const [dateFormatted, setDateFormatted] = useState('');

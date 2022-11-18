@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import { DateRangeInputBase } from './DateRangeInput';
 import { DateRangePickerStyle } from './DateRangePickerStyle';
 
+import 'react-day-picker/dist/style.css';
 
 export const DateRangePicker = ({ minDate, maxDate, defaultMonth, selectedRange, setSelectedRange }) => {
   const [fromValue, setFromValue] = useState('');

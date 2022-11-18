@@ -1,12 +1,16 @@
-import { useState, useEffect, useMemo, Fragment } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 
-export const ListImageInput = ({ imageURLs, setImageURLs, imageBase64s, setImageBase64s }) => {
-  const [image, setImage] = useState(null);
+export const ImageUploadInput = ({ imageURLs, setImageURLs, imageBase64s, setImageBase64s, maxUpload }) => {
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  useEffect(() => {
+    setIsDisabled(imageURLs.length >= maxUpload);
+  }, [imageURLs]);
 
   const addImageURL = (e) => {
     const image = e.target.files[0];
 
-    if (image !== null) {
+    if (image) {
       let newImageURL = URL.createObjectURL(image);
       setImageURLs([...imageURLs, newImageURL]);
 
@@ -17,16 +21,16 @@ export const ListImageInput = ({ imageURLs, setImageURLs, imageBase64s, setImage
         let newImageBase64 = reader.result;
         setImageBase64s([...imageBase64s, newImageBase64]);
       };
-    }
+    };
   };
 
   return (
     <input
-      className="mb-3"
       type="file"
       accept="image/*"
+      className="mb-3"
       onChange={addImageURL}
-      disabled={imageURLs.length >= 3}
+      disabled={isDisabled}
     />
   );
 }

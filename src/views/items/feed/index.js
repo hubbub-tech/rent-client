@@ -6,8 +6,8 @@ import { FeedBanner } from './FeedBanner';
 import { FeedGrid } from './FeedGrid';
 import { FeedItemFilter } from './FeedItemFilter';
 import { FeedSortOptions } from './FeedSortOptions';
-import { FeedCoordsInput } from './FeedCoordsInput';
 
+import { CoordsAutoInput } from '../../../inputs/lookup-address';
 import { SessionContext } from '../../../providers/SessionProvider';
 
 import AOS from 'aos';
@@ -151,7 +151,7 @@ export const Index = () => {
           {orderBy === "proximity" &&
             <div className="row">
               <div className="col-lg-4 col-md-6 col-12">
-                <FeedCoordsInput setCoords={setCoords} />
+                <CoordsAutoInput setCoords={setCoords} />
               </div>
             </div>
           }

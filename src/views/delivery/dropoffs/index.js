@@ -29,7 +29,9 @@ export const Index = () => {
           <div className="col-md-2"></div>
           <div className="col-md-8 mt-4">
             <h1>Dropoff</h1>
-            <p>Share when you will be availability for us to deliver your rentals.</p>
+            <p>
+              Share when you will be available for us to deliver your rentals.
+            </p>
             <hr />
           </div>
           <div className="col-md-2"></div>
