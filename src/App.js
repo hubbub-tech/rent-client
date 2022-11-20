@@ -15,7 +15,7 @@ import { SessionContext, SessionProvider } from './providers/SessionProvider';
 import { Footer } from './base/Footer';
 import { Navbar } from './base/Navbar';
 
-import { Index as Cart } from './views/cart';
+import { Index as Cart } from './views/cart'; 
 import { Index as CheckoutOverview } from './views/checkout/overview';
 import { Index as CheckoutSuccess } from './views/checkout/success';
 import { Index as CheckoutCancel } from './views/checkout/cancel';
