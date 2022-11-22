@@ -26,6 +26,7 @@ export const Index = () => {
   const [items, setItems] = useState([]);
   const [feedItems, setFeedItems] = useState([]);
 
+  const [isLoading, setIsLoading] = useState(true);
   const [orderBy, setOrderBy] = useState(null);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export const Index = () => {
 
       setItems(data.items);
       setFeedItems(data.items);
+      setIsLoading(false);
 
       return response;
     };
@@ -66,6 +68,7 @@ export const Index = () => {
         setCoords({ "lat": cachedData.user_address_lat, "lng": cachedData.user_address_lng });
         setItems(cachedData.items);
         setFeedItems(cachedData.items);
+        setIsLoading(false);
       } else {
         getData(process.env.REACT_APP_SERVER + `/items/feed?${paramsString}`)
         .then(res => (!paramsString) && cacheData(res))
@@ -73,6 +76,7 @@ export const Index = () => {
       }
     };
 
+    setIsLoading(true);
     getCachedData(process.env.REACT_APP_SERVER + '/items/feed')
     .catch(console.error);
 
@@ -157,7 +161,7 @@ export const Index = () => {
           }
           <div className="row">
             <div className="col-12 mb-md-5">
-              <FeedGrid items={feedItems} />
+              <FeedGrid items={feedItems} isLoading={isLoading} />
             </div>
           </div>
         </div>
