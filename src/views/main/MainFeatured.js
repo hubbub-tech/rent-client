@@ -13,8 +13,8 @@ export const MainFeatured = () => {
       <div className="container">
 
         <div className="row">
-          <div className="col-12 my-3">
-            <h3 className="mb-0">Featured Categories</h3>
+          <div className="col-12 my-3 text-center">
+            <h3 className="mb-0 fw-bold">Featured Categories</h3>
           </div>
         </div>
 
