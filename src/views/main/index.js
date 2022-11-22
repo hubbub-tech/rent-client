@@ -1,4 +1,4 @@
-import { MainHero } from './MainHero';
+import { MainBanner } from './MainBanner';
 import { MainFeatured } from './MainFeatured';
 import { MainPerks } from './MainPerks';
 import { MainMission } from './MainMission';
@@ -9,10 +9,14 @@ import { MainRequestItem } from './MainRequestItem';
 import sectionBgImg1 from './assets/section-banner-1.png';
 import sectionBgImg2 from './assets/section-banner-2.png';
 
+import { DateSearchForm } from '../../inputs/date-search';
+
 export const Index = () => {
   return (
     <main>
-      <MainHero />
+      <MainBanner />
+      <DateSearchForm />
+      <br />
       <MainFeatured />
       <section>
         <div className="container ">

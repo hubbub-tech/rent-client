@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { SessionContext } from '../providers/SessionProvider';
-import { SearchBar } from './SearchBar';
+import { ItemSearchInput } from '../inputs/item-search';
 
 
 const NavbarToggleButton = ({ isOpen, handleClickOpen }) => {
@@ -109,7 +109,7 @@ export const Navbar = () => {
               </li>
             }
           </ul>
-          <SearchBar />
+          <ItemSearchInput />
         </div>
       </div>
     </nav>
