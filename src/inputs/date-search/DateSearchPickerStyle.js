@@ -14,7 +14,7 @@ export const DateSearchPickerStyle = () => {
       --rdp-outline: 2px solid var(--rdp-accent-color); /* Outline border for focused elements */
       --rdp-outline-selected: 3px solid var(--rdp-accent-color); /* Outline border for focused _and_ selected elements */
 
-      margin: 2em;
+      margin: 1em;
     }
     `}</style>
   );
