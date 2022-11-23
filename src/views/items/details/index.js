@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { DetailsItemPhoto } from './DetailsItemPhoto';
 import { DetailsItemTable } from './DetailsItemTable';
@@ -11,6 +11,7 @@ import { DetailsRecommendations } from './DetailsRecommendations';
 import { printDate, printMoney } from '../../utils.js';
 import { useViewport } from '../../../hooks/Viewport';
 import { SessionContext } from '../../../providers/SessionProvider';
+import { FlashContext } from '../../../providers/FlashProvider';
 import { DateRangePicker } from '../../../inputs/date-range';
 
 import Skeleton from 'react-loading-skeleton';
@@ -19,8 +20,10 @@ import 'react-loading-skeleton/dist/skeleton.css';
 export const Index = () => {
 
   const { itemId } = useParams();
+  const navigate = useNavigate();
 
   const { userId, sessionToken } = useContext(SessionContext);
+  const { renderFlash } = useContext(FlashContext);
 
   const [recommendations, setRecommendations] = useState([]);
 
@@ -38,8 +41,13 @@ export const Index = () => {
   useEffect(() => {
 
     const getData = async(url) => {
-      const response = await fetch(url, { mode: "cors", credentials: "include" });
+      const response = await fetch(url, { mode: "cors", credentials: "include", redirect: "follow" });
       const data = await response.json();
+
+      if (!response.ok) {
+        renderFlash(data.message, "warning", 10000);
+        navigate("/items/feed");
+      }
 
       setItem(data.item);
       setRecommendations(data.recommendations);
