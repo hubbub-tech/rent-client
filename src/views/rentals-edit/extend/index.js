@@ -62,8 +62,6 @@ export const Index = () => {
             </div>
             <div className="col-md-4">
               <div className="ps-lg-10 mt-6 mt-md-0">
-                <a href={`/accounts/u/id=${order.item.lister_id}`} className="hubbub-link mb-4 d-block">{ order.item.lister_name }</a>
-
                 <h1 className="fs-2 mb-1">{ order.item.name }</h1>
                 <div className="text-small mb-1">
                   <p className="text-danger">Reservation ending { printDate(order.ext_dt_end) }</p>
