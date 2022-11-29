@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { TimeRangeInput } from './TimeRangeInput';
+import { TimeRangeMenuInput, TimeRangeTextInput } from './TimeRangeInput';
 import { TimeRangeOutput } from './TimeRangeOutput';
 
 export const TimeRangeSelector = ({ timeRanges, setTimeRanges }) => {
@@ -20,7 +20,7 @@ export const TimeRangeSelector = ({ timeRanges, setTimeRanges }) => {
           setTimeRanges={setTimeRanges}
         />
       ))}
-      <TimeRangeInput timeRanges={timeRanges} setTimeRanges={setTimeRanges} />
+      <TimeRangeMenuInput timeRanges={timeRanges} setTimeRanges={setTimeRanges} />
     </div>
   );
 }

@@ -160,7 +160,7 @@ export const ListItemForm = ({ tags }) => {
         <div id="itemDescription" className="form-text">Share any details relevant future renters.</div>
       </div>
 
-      <label className="mt-4 form-label">List Item</label>
+      <label className="mt-4 form-label">Image Upload</label>
       <ImageUploader
         imageURLs={imageURLs}
         setImageURLs={setImageURLs}

@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
 
-import shoppingSvg from '../assets/icons/shopping.svg';
+import shoppingSvg from '../assets/shopping.svg';
 
 import { FlashContext } from '../../../providers/FlashProvider';
 
