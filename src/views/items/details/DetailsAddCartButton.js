@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import shoppingSvg from '../assets/shopping.svg';
 
@@ -7,6 +8,8 @@ import { FlashContext } from '../../../providers/FlashProvider';
 
 export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
 
+  const navigate = useNavigate();
+  
   const [btnClassName, setBtnClassName] = useState("btn btn-hubbub");
   const [btnLabel, setBtnLabel] = useState("Add to cart")
 
@@ -59,6 +62,8 @@ export const DetailsAddCartButton = ({ itemId, setRentalCost, dtRange }) => {
       if (response.ok) {
         setBtnClassName('btn btn-success');
         setBtnLabel('Added!');
+      } else if (response.status === 403) {
+        navigate(`/login?redirect=${window.location.pathname + window.location.search}`);
       } else {
         setBtnClassName('btn btn-danger');
         setBtnLabel('Unavailable');

@@ -13,9 +13,9 @@ import { FlashProvider } from './providers/FlashProvider';
 import { SessionContext, SessionProvider } from './providers/SessionProvider';
 
 import { Footer } from './base/Footer';
-import { Navbar } from './base/Navbar';
+import { Index as Navbar } from './base/navbar';
 
-import { Index as Cart } from './views/cart'; 
+import { Index as Cart } from './views/cart';
 import { Index as CheckoutOverview } from './views/checkout/overview';
 import { Index as CheckoutSuccess } from './views/checkout/success';
 import { Index as CheckoutCancel } from './views/checkout/cancel';
@@ -51,6 +51,8 @@ import { Index as ItemDetails } from './views/items/details';
 import { PageNotFound } from './views/errors/E404';
 import { Story } from './views/static/Story';
 import { Faqs } from './views/static/Faqs';
+
+import { Index as Feedback } from './views/feedback';
 
 import {
   LegacyFeed,
@@ -138,6 +140,8 @@ const routes = createRoutesFromElements(
     <Route exact path="/story" element={<Story />} />
 
     <Route exact path="/faqs" element={<Faqs />} />
+
+    <Route exact path="/feedback" element={<Feedback />} />
 
     <Route exact path="/inventory" element={<LegacyFeed />} />
 

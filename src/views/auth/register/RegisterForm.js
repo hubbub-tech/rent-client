@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3';
 
@@ -8,10 +8,12 @@ import Cookies from 'js-cookie';
 import { RegisterPassInput } from  './RegisterPassInput';
 import { FlashContext } from '../../../providers/FlashProvider';
 
- 
+
 export const RegisterForm = () => {
 
+  let [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
   const { executeRecaptcha } = useGoogleReCaptcha();
   const { renderFlash } = useContext(FlashContext);
 
@@ -72,13 +74,19 @@ export const RegisterForm = () => {
         Cookies.set('userId', data.user_id, configs);
         Cookies.set('sessionToken', data.session_token, configs);
 
-        navigate('/items/feed');
+        const redirectSlug = searchParams.get("redirect");
+        (redirectSlug) ? navigate(redirectSlug) : navigate('/items/feed');
       };
     };
 
     postData(process.env.REACT_APP_SERVER + '/register')
     .catch(console.error);
   };
+
+  const getPathname = () => {
+    const redirectSlug = searchParams.get("redirect");
+    (redirectSlug) ? navigate(`/login?redirect=${redirectSlug}`) : navigate('/login');
+  }
 
   return (
     <form onSubmit={handleRegistration}>
@@ -154,7 +162,7 @@ export const RegisterForm = () => {
         </button>
       </div>
       <div className="text-center">
-        <small>On Hubbub already? <a className="hubbub-link" href="/login">Login</a>!</small>
+        <small>On Hubbub already? <a className="hubbub-link" onClick={getPathname}>Login</a>!</small>
       </div>
     </form>
   );

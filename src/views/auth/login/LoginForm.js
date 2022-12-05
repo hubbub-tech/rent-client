@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import Cookies from 'js-cookie';
 
 export const LoginForm = () => {
 
-  let navigate = useNavigate();
+  let [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -36,8 +37,14 @@ export const LoginForm = () => {
       Cookies.set('userId', data.user_id, configs);
       Cookies.set('sessionToken', data.session_token, configs);
 
-      navigate('/');
+      const redirectSlug = searchParams.get("redirect");
+      (redirectSlug) ? navigate(redirectSlug) : navigate('/items/feed');
     };
+  }
+
+  const getPathname = () => {
+    const redirectSlug = searchParams.get("redirect");
+    (redirectSlug) ? navigate(`/register?redirect=${redirectSlug}`) : navigate('/register');
   }
 
   return (
@@ -82,7 +89,7 @@ export const LoginForm = () => {
         </button>
       </div>
       <div className="text-center">
-        <small>Not on Hubbub yet? <a className="hubbub-link" href="/register">Sign up</a>!</small>
+        <small>Not on Hubbub yet? <a className="hubbub-link" onClick={getPathname}>Sign up</a>!</small>
       </div>
     </form>
   );

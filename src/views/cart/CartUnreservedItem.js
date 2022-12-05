@@ -43,7 +43,7 @@ export const CartUnreservedItem = ({ src, item, index, items }) => {
           <div className="row">
             <div className="col-lg-8 col-md-8 col-10">
               <h2 className="fs-6 fw-bold">{item.name}</h2>
-              <span className="d-inline-block text-truncate text-muted" style={{maxWidth: getTextWidth() }}>
+              <span className="d-inline-block text-truncate text-muted" style={{ maxWidth: getTextWidth() }}>
                 <small>{ item.description }</small>
               </span>
             </div>
