@@ -12,6 +12,7 @@ import {
 import { FlashProvider } from './providers/FlashProvider';
 import { SessionContext, SessionProvider } from './providers/SessionProvider';
 
+import { Notice } from './base/Notice';
 import { Footer } from './base/Footer';
 import { Index as Navbar } from './base/navbar';
 
@@ -75,6 +76,7 @@ const AppProviderLayout = () => {
       <SessionProvider>
         <div className="App">
           <Navbar />
+          <Notice show={false} />
           <FlashProvider>
 
             <Outlet />
