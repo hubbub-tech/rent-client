@@ -114,7 +114,7 @@ export const ListItemForm = ({ tags }) => {
           id="itemName"
           name="name"
           minLength="1"
-          maxLength="20"
+          maxLength="50"
           onChange={e => setItem({ ...item, name: e.target.value })}
           required
         />
