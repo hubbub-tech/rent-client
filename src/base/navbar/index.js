@@ -50,25 +50,29 @@ export const Index = () => {
           <h2 className="text-start text-white">HUBBUB</h2>
         </a>
 
-        <NavbarToggleButton isOpen={isOpen} handleClickOpen={handleClickOpen} />
+        {/*
 
-        <div className={navClassName} id="navbarNavDropdown">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <NavbarLink className="nav-link active fw-bold text-dark" to="/items/feed">Rent Now</NavbarLink>
-            {(userId && sessionToken)
-              ? <>
-                  <NavbarLink className="nav-link text-dark" to="/rentals">My Rentals</NavbarLink>
-                  <NavbarLink className="nav-link text-dark" to="/cart">Cart</NavbarLink>
-                  <NavbarLink className="nav-link text-dark" onClick={handleLogout}>Logout</NavbarLink>
-                </>
-              : <>
-                  <NavbarLink className="nav-link text-dark" to="/login">Login</NavbarLink>
-                  <NavbarLink className="nav-link text-dark" to="/register">Sign Up</NavbarLink>
-                </>
-            }
-          </ul>
-          <ItemSearchInput />
-        </div>
+        
+          <NavbarToggleButton isOpen={isOpen} handleClickOpen={handleClickOpen} />
+
+          <div className={navClassName} id="navbarNavDropdown">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <NavbarLink className="nav-link active fw-bold text-dark" to="/items/feed">Rent Now</NavbarLink>
+              {(userId && sessionToken)
+                ? <>
+                    <NavbarLink className="nav-link text-dark" to="/rentals">My Rentals</NavbarLink>
+                    <NavbarLink className="nav-link text-dark" to="/cart">Cart</NavbarLink>
+                    <NavbarLink className="nav-link text-dark" onClick={handleLogout}>Logout</NavbarLink>
+                  </>
+                : <>
+                    <NavbarLink className="nav-link text-dark" to="/login">Login</NavbarLink>
+                    <NavbarLink className="nav-link text-dark" to="/register">Sign Up</NavbarLink>
+                  </>
+              }
+            </ul>
+            <ItemSearchInput />
+          </div>
+        */}
       </div>
     </nav>
   );

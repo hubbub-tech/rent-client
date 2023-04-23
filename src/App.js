@@ -55,6 +55,8 @@ import { Faqs } from './views/static/Faqs';
 
 import { Index as Feedback } from './views/feedback';
 
+import { Index as PendingPage } from './views/pending';
+
 import {
   LegacyFeed,
   LegacyDetails,
@@ -89,7 +91,13 @@ const AppProviderLayout = () => {
   );
 }
 
+const routes = createRoutesFromElements(
+  <Route element={<AppProviderLayout />} errorElement={<PendingPage />}>
+    <Route exact path="/" element={<PendingPage />} />
+  </Route>
+);
 
+/*
 const routes = createRoutesFromElements(
   <Route element={<AppProviderLayout />} errorElement={<PageNotFound />}>
 
@@ -157,7 +165,7 @@ const routes = createRoutesFromElements(
 
   </Route>
 );
-
+*/
 
 const router = createBrowserRouter(routes);
 
